@@ -311,7 +311,7 @@ const treeData = useMemo(() => {
             null
           ),
         ];
-  setExpandedKeys([...newExpandedKeys, "tuya_root"]);
+  setExpandedKeys([...newExpandedKeys, "com_root"]);
   setTimeout(() => {
     setLoading(false);
   }, 100);
