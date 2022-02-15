@@ -1,0 +1,167 @@
+{
+    "workbench.iconTheme": "vscode-icons",
+    "editor.fontLigatures": null,
+    "terminal.integrated.fontFamily": "Meslo LG M for Powerline",
+    "leek-fund.funds": [
+      "320007",
+      "161725",
+      "004851",
+      "161726",
+      "400015",
+      "003853",
+      "270042",
+      "160634",
+      "002190"
+    ],
+    "leek-fund.fundSort": -1,
+    "leek-fund.stocks": [
+      "sh512480",
+      "sh512170",
+      "sh600132",
+      "sh000001",
+      "sz399006",
+      "hk03690",
+      "hk00700",
+      "usr_ixic",
+      "usr_dji",
+      "usr_inx",
+      "sh513050",
+      "sz159929",
+      "sh512290",
+      "sh512690",
+      "sh512760",
+      "sh515030",
+      "sh512400",
+      "sh600438",
+      "sz000825",
+      "sz002511",
+      "sh515790",
+      "sh600600",
+      "sh601012",
+      "sz399997",
+      "sh600188",
+      "sh603501",
+      "sz000568",
+      "sh600197",
+      "sz002594",
+      "sh600702",
+      "hk02359",
+      "sh603259",
+      "sh512660",
+      "sz300750",
+      "sz002241"
+    ],
+    "leek-fund.stockSort": -1,
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.codeActionsOnSave": null,
+    "workbench.colorCustomizations": {
+      // "editor.selectionBackground": "#0099cc",
+      "editor.selectionBackground": "#5851bb" // 选中后背景色
+    },
+    "editor.tokenColorCustomizations": {
+      // "comments": "#16e716" // 注释
+      // "keywords": "#0a0", // 关键字
+      // "variables": "#f00" // 变量名
+      // "strings": "#e2d75dbd", // 字符串
+      // "functions": "#5b99fcc9", // 函数名
+      // "numbers": "#AE81FF", // 数字
+    },
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.formatOnSave": true,
+    "git.suggestSmartCommit": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "leek-fund.fundAmount": {
+      "160634": {
+        "name": "鹏华中证环保产业指数(LOF)",
+        "amount": 6162.07,
+        "price": "1.6520",
+        "unitPrice": 1.8228,
+        "earnings": -171.58,
+        "priceDate": "2022-01-05"
+      },
+      "161725": {
+        "name": "招商中证白酒指数(LOF)A",
+        "amount": 34115.76,
+        "price": "1.2899",
+        "unitPrice": 1.3195,
+        "earnings": -201.01,
+        "priceDate": "2022-01-05"
+      },
+      "161726": {
+        "name": "招商国证生物医药指数(LOF)A",
+        "amount": 11932.77,
+        "price": "0.8015",
+        "unitPrice": 0.9571,
+        "earnings": -318.6,
+        "priceDate": "2022-01-05"
+      },
+      "270042": {
+        "name": "广发纳斯达克100指数A",
+        "amount": 12090.66,
+        "price": "4.5985",
+        "unitPrice": 4.4473,
+        "earnings": 0,
+        "priceDate": "2022-01-04"
+      },
+      "320007": {
+        "name": "诺安成长混合",
+        "amount": 10281.95,
+        "price": "1.9910",
+        "unitPrice": 2.1668,
+        "earnings": -206.57,
+        "priceDate": "2022-01-05"
+      },
+      "400015": {
+        "name": "东方新能源汽车混合",
+        "amount": 12558.04,
+        "price": "4.0097",
+        "unitPrice": 4.5132,
+        "earnings": -306.93,
+        "priceDate": "2022-01-05"
+      },
+      "003853": {
+        "name": "金鹰信息产业股票A",
+        "amount": 12590.2,
+        "price": "4.2047",
+        "unitPrice": 4.5152,
+        "earnings": -272.18,
+        "priceDate": "2022-01-05"
+      },
+      "002190": {
+        "name": "农银新能源主题",
+        "amount": 0,
+        "price": "4.3489",
+        "unitPrice": 0,
+        "earnings": 0,
+        "priceDate": "2021-12-30"
+      },
+      "004851": {
+        "name": "广发医疗保健股票A",
+        "amount": 17129.34,
+        "price": "2.9212",
+        "unitPrice": 3.5618,
+        "earnings": -816.24,
+        "priceDate": "2022-01-05"
+      }
+    },
+    "[javascriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "markdown-preview-enhanced.previewTheme": "github-light.css",
+    "leek-fund.statusBarStock": ["sh512690", "sh515030", "sh512480", "sh515790"],
+    "leek-fund.fallColor": "#52c41a",
+    "leek-fund.riseColor": "#ff4d4f",
+    "leek-fund.iconType": "arrow"
+  }
+  

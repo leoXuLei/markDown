@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <title>导出excel文件示例</title>
+  </head>
+
+  <body>
+    <!-- <script src="https://www.kkkk1000.com/js/xlsx.full.min.js"></script> -->
+    <script type="text/javascript" src="./xlsx.full.min.js"></script>
+    <script>
+      //如果发请求获取数据，需要把请求到的数据转成和 value_list 一样的数据格式，在作为参数，传入 downloadExl 方法中
+      // value_list 中一个数组表示excel中一行数据
+      var value_list = [
+        ["工资表", "", "", "", "", "", "", "", "", "", "", "", ""],
+        [
+          "员工总数：4人",
+          "",
+          "",
+          "",
+          "应发总金：14000元",
+          "",
+          "",
+          "",
+          "时间：2000/01/3",
+          "",
+          "",
+          "",
+          "",
+        ],
+        [
+          "工号",
+          "姓名",
+          "职位",
+          "出勤",
+          "实出勤",
+          "基本工资",
+          "绩效补贴",
+          "奖金",
+          "加班天数",
+          "应发工资",
+          "罚款",
+          "实发工资",
+          "备注",
+        ],
+        [
+          "1",
+          "张三",
+          "保洁",
+          "22",
+          "22",
+          "3000",
+          "500",
+          "0",
+          "0",
+          "3500",
+          "0",
+          "3500",
+          "",
+        ],
+        [
+          "2",
+          "李四",
+          "保安",
+          "22",
+          "22",
+          "3000",
+          "500",
+          "0",
+          "0",
+          "3500",
+          "0",
+          "3500",
+          "",
+        ],
+        [
+          "3",
+          "王麻子",
+          "保镖",
+          "22",
+          "22",
+          "3000",
+          "500",
+          "0",
+          "0",
+          "3500",
+          "0",
+          "3500",
+          "",
+        ],
+        [
+          "4",
+          "赵六",
+          "保姆",
+          "22",
+          "22",
+          "3000",
+          "500",
+          "0",
+          "0",
+          "3500",
+          "0",
+          "3500",
+          "",
+        ],
+      ];
+
+      function downloadExl(value_list, filename, type) {
+        //编码单元格
+        var tmp_data = {};
+        value_list.forEach(function (value, r) {
+          value.forEach(function (v, c) {
+            var cell_obj = { c: c, r: r };
+            var cell_text = XLSX.utils.encode_cell(cell_obj);
+            tmp_data[cell_text] = {
+              v: v,
+            };
+          });
+        });
+
+        console.log("tmp_data", JSON.stringify(tmp_data));
+        var white_border = {
+          style: "medium",
+          color: {
+            rgb: "FFFFFFFF",
+          },
+        };
+        // 第一行样式
+        var first_line_style = {
+          font: {
+            sz: 24,
+          },
+          alignment: {
+            horizontal: "center",
+          },
+        };
+        //第三行样式（表头）
+        var third_line_style = {
+          fill: {
+            fgColor: {
+              rgb: "ff0188FB",
+            },
+          },
+          font: {
+            sz: 14,
+            color: {
+              rgb: "ffffffff",
+            },
+          },
+          border: {
+            right: white_border,
+          },
+        };
+        //设置A1单元格样式
+        tmp_data["A1"].s = first_line_style;
+
+        //设置第三行的样式
+        var col_list = [];
+        var length = value_list[0].length;
+        for (var i = 0; i < length; i++) {
+          var col_text = XLSX.utils.encode_col(i);
+          col_list.push(col_text);
+        }
+        console.log(`设置第三行的样式`, col_list);
+        col_list.forEach(function (value, index) {
+          var attr3 = value + "3";
+          tmp_data[attr3].s = third_line_style;
+        });
+
+        //获取所有单元格编码,比如["A1", "B1", "C1", "D1", "E1", "F1"]
+        var output_pos = Object.keys(tmp_data);
+        var workbook = {
+          SheetNames: ["sheet1"], //保存工作表的名称
+          Sheets: {
+            sheet1: Object.assign(
+              {},
+              tmp_data, //单元格内容
+              {
+                "!ref": output_pos[0] + ":" + output_pos[output_pos.length - 1], //工作表范围
+              }
+            ),
+          },
+        };
+        //合并单元格
+        workbook.Sheets["sheet1"]["!merges"] = [
+          {
+            s: { c: 0, r: 0 }, //A1
+            e: { c: 12, r: 0 }, //M1
+          },
+          {
+            s: { c: 0, r: 1 }, //A2
+            e: { c: 3, r: 1 }, //D2
+          },
+          {
+            s: { c: 4, r: 1 }, //E2
+            e: { c: 7, r: 1 }, //H2
+          },
+          {
+            s: { c: 8, r: 1 }, //I2
+            e: { c: 12, r: 1 }, //M2
+          },
+        ];
+
+        //设置列宽
+        workbook.Sheets["sheet1"]["!cols"] = [
+          { wch: 8 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 20 },
+        ];
+
+        //导出文件
+        var type = type || "xlsx";
+        var filename = filename || "文件名";
+        filename += "." + type;
+        var wopts = {
+          bookType: type,
+          type: "binary",
+        };
+        var wbout = XLSX.write(workbook, wopts);
+        function s2ab(s) {
+          var buf = new ArrayBuffer(s.length);
+          var view = new Uint8Array(buf);
+          for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
+          return buf;
+        }
+        var blob = new Blob([s2ab(wbout)], {
+          type: "application/octet-stream",
+        });
+        function saveAs(obj, filename) {
+          var link = document.createElement("a");
+          link.download = filename;
+          link.href = URL.createObjectURL(obj);
+          link.click();
+          URL.revokeObjectURL(obj);
+        }
+        saveAs(blob, filename);
+      }
+    </script>
+    <button onclick="downloadExl(value_list)">导出</button>
+  </body>
+</html>
