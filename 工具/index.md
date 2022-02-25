@@ -37,3 +37,17 @@
 - [录屏制作 gif-ScreentoGif](https://pc.qq.com/detail/13/detail_23913.html)
 - [mac 录屏制作 Gif](https://www.jianshu.com/p/7a54d47b6aa0)
 - [录制-ApowerREC]()
+
+# 博客
+
+- **为什么要写博客**
+  [为什么你应该（从现在开始就）写博客](http://mindhacks.cn/2009/02/15/why-you-should-start-blogging-now/)
+
+- **写博客平台**
+
+  - 如果你觉得你写的东西自己看就好了，主要想找个地方管理你写过的笔记(文章)，那就可以使用 GitHub/GitBook
+  - 如果你觉得上述的页面风格都太难看了，想动手搭一个自己喜欢的博客，那么可以使用 Hexo+GitHub 或者 WordPress。要想省事，还能别人家的平台(比如 Bitcron 等)，特点：如果你不做推广，基本没啥流量(没人会检索到你的文章)，算是写给自己看的。
+
+  - 如果不嫌弃博客园的风格，可以选择博客园。否则建议选择：掘金/SegmentFault。
+  - 只想管理自己写过的文章，选择：GitHub/GitBook
+  - 喜欢折腾：Hexo+GitHub 或者 WordPress

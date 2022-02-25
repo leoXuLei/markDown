@@ -271,6 +271,26 @@ const fetchTable = async (
   }
 ```
 
+## scroll
+
+table 未设置 scroll，则列太多后会超出布局显示，设置`scroll.x`即可
+
+```jsx
+// const w = columns.reduce((p, n) => p + +(n?.width || 120), 0)
+
+
+const width = (columns as any).reduce((total, cur) => {
+  total += cur.width
+
+  return total
+}, 0)
+
+scroll={{
+  y: 600,
+  x: width
+}}
+```
+
 ## 功能
 
 ### 导出

@@ -1,10 +1,14 @@
-# 分支
+# 分支管理
 
 - master 是线上稳定分支、develop 是开发分支
 - 日常需求都是以 develop 为基准分支新建需求分支，==开发自测时（用需求分支部署 或 只将需求分支合并到 develop，develop 不合并到需求分支因为 develop 不干净有别人开发测试的东西，==）
   验收后可以上线了，两种做法：
+
   - （==最好这种==）切换到 master 分支，拉取远程最新代码、再回到需求分支在需求分支合并 master 代码`merge master`，有冲突解决冲突，然后再回到 master 分支，在 master 分支合并需求分支代码`merge feature/xxx`, 推送远程。
-  - 切换到 develop 拉取远程最新代码、再回到需求分支在需求分支合并 dev 代码`merge develop`，有冲突解决冲突，然后再回到 develop 分支，在 develop 分支合并需求分支代码`merge feature/xxx`, 推送远程。
+  - 切换到 develop 拉取远程最新代码，在 develop 分支合并需求分支代码`merge feature/xxx`, 有冲突则解决冲突，推送远程部署测试，注意在开发分支不要拉 dev 的代码，原因如上。
+
+  - 参考链接
+    - [git 分支管理方式对比](https://mp.weixin.qq.com/s/vqiN1pR6cKdkO_6smFIPew)
 
 ## git log 分支图
 
@@ -135,7 +139,7 @@ doc/*.txt
 
 # 其它
 
-## 提交代码不走 precommit 校验`
+## 提交代码不走 precommit 校验
 
 ```powerShell
 git commit -m '' --no-verify

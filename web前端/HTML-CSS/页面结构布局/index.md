@@ -20,6 +20,7 @@
 二．常用类/ID 命名规范
 页　眉：header
 内　容：content
+主 体：body
 
 容　器：container
 页　脚：footer

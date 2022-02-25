@@ -252,7 +252,93 @@ a[src$=".pdf"] {
 /* 选择每一个 src 属性的值包含子字符串"W3Cschool" 的元素 */
 a[src*="W3Cschool"] {
 }
+
+/* 选择class名包含'col-'的标签 */
+[class*="clo-"] {
+}
 ```
+
+- `.X:not(selector)` 取反选择器
+
+```css
+div:not(#container) {
+} // 把除id为container之外的所有div标签都选中
+
+:not(p) {
+} // 把除了p标签之外的所有标签都选中
+```
+
+### 其它
+
+```css
+/* 删除ul下除了第一个和最后一个li */
+li:not(":first,:last") {
+}
+
+/* 删除ul下除了最后一个li */
+li:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+/* 选择最后一个li标签两种写法 */
+li:last-child {
+}
+li:nth-last-child(1) {
+}
+
+/* 选择除了最后一个li标签 */
+li:not(: last-child) {
+}
+```
+
+```html
+<!-- 分别选择前三个元素 -->
+<ul class="hot_game_list">
+  <li class="hot_game_item">
+    <span class="hot_game_item_left">1</span>
+  </li>
+  <li class="hot_game_item">
+    <span class="hot_game_item_left">2</span>
+  </li>
+  <li class="hot_game_item">
+    <span class="hot_game_item_left">3</span>
+  </li>
+</ul>
+<style>
+  .hot_game_list  li:nth-child(1) .hot_game_item_left  {
+      color: rgba(255, 78, 59, 1);
+  }
+  .hot_game_list  li:nth-child(2) .hot_game_item_left {
+      color: rgba(243, 131, 0, 1);
+  }
+  .hot_game_list  li:nth-child(3) .hot_game_item_left {
+      color: rgba(255, 191, 24, 1);
+  }
+</style>
+```
+
+### `nth-chid`和`nth-of-type`的区别
+
+- 链接
+  [深入理解 css3 中 nth-child 和 nth-of-type 的区别
+  ](https://www.cnblogs.com/peakleo/p/6232384.html)
+
+- 解释
+
+  > 在 css3 中有两个新的选择器可以选择父元素下对应的子元素，一个是:nth-child 另一个是:nth-of-type。 但是它们到底有什么区别呢？
+  >
+  > 其实区别很简单：:nth-of-type 为什么要叫:nth-of-type？因为它是以"type"来区分的。也就是说：==ele:nth-of-type(n)是指父元素下第 n 个 ele 元素==，
+  > ==而 ele:nth-child(n)是指父元素下第 n 个元素且这个元素为 ele==，若不是，则选择失败。
+  > 不指定标签类型时，:nth-type-of(2)会选中所有类型标签的第二个。
+  > nth-of-type(n)与 nth-child(n)中的 n 可以是数字、关键词或公式。
+
+- 公式
+  - 前面有标签
+    - `xx:nth-child` 父标签下第几个子标签且是 xx 标签
+    - `xx:nth-of-type` 父标签下 xx 这类标签的第几个
+  - 前面无标签
+    - `:nth-child` 父标签下第几个子标签
+    - `:nth-of-type` 父标签下每类子标签的第几个
 
 ## 盒子模型
 
@@ -280,6 +366,32 @@ CSS 盒模型本质上是一个盒子，封装周围的 HTML 元素，它包括�
 - IE 盒子模型`box-sizing: border-box`
   宽高分别对应到元素的 border，内边距和边框在宽高之内渲染。
   ==布局所占宽高=content 的宽高决定（boder+padding 包含在 content 的宽高里面）==
+
+## 定位
+
+**概念：**
+
+- 定位：定义元素框相对于其正常位置应该出现的位置，或者相对于父元素、另一个元素甚至浏览器窗口本身的位置。
+- css 定位机制：有三种基本的定位机制：普通流、浮动和绝对定位。
+- 定位属性
+  - `position`: 把元素放置到一个静态的、相对的、绝对的、或固定的位置中。
+    - static：元素框正常生成。块级元素生成一个矩形框，作为文档流的一部分，行内元素则会创建一个或多个行框，置于其父元素中。
+    - relative：
+    - absolute：
+    - fixed：元素框的表现类似于将 position 设置为 absolute，不过其包含块是视窗本身。
+  - `top、bottom、left、right`
+  - `overflow`: 设置当元素的内容溢出其区域时发生的事情。
+  - `clip`: 设置元素的形状。元素被剪入这个形状之中，然后显示出来。
+
+**`relative`相对定位：**
+
+- 解释
+  相对定位是“相对于”元素在文档中的初始位置，==即相对于原来的位置进行上下左右偏移，原来的位置仍占空间==。
+
+**`absolute`绝对定位：**
+
+- 解释
+  绝对定位是“相对于”第一个非静态定位（satic）的父元素进行定位，如果不存在已定位的祖先元素，那么“相对于”最初的包含块 HTML，原来的位置空间从文档流删除不再占据空间 。
 
 # Tips
 
@@ -345,6 +457,34 @@ currentColor 关键字代表原始的 color 属性的计算值。它允许让继
     color: #1b9aee;
   }
 }
+```
+
+## 滚动条样式
+
+```css
+::-webkit-scrollbar {
+  display: none;
+}
+```
+
+[用 CSS 修改滚动条样式](https://www.cnblogs.com/liulangbxc/p/15200433.html)
+
+## 点击 a 元素 b 元素添加样式
+
+```jsx
+
+.high-light {
+  background-color: #fff;
+  transition: background-color 0.5s ease-in 0.5s;
+  animation: changebackgroundcolor 0.5s ease-in-out 0s 1 alternate running forwards;
+}
+
+const onClickFormula = useCallback((ref: React.RefObject<HTMLDivElement>) => {
+  ref?.current?.classList?.add("high-light");
+  setTimeout(() => {
+    ref?.current?.classList?.remove("high-light");
+  }, 500);
+}, []);
 ```
 
 ## 其它
