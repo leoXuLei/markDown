@@ -110,8 +110,6 @@ const filterAppRoute = mapRoutes(appRoute);
 }
 */
 
-<<<<<<< HEAD
-=======
 function mapTree(node, cb, fieldName = "children", parent = null) {
   return cb(
     {
@@ -126,7 +124,6 @@ function mapTree(node, cb, fieldName = "children", parent = null) {
   );
 }
 
->>>>>>> e1032d7e8688c5f6a2e6f3f28bfb83d88a1fa521
 export const treeData = (pageId) => {
   const data = mapTree(
     filterAppRoute,
@@ -487,7 +484,7 @@ const getSubMenu = (arr) => {
 getSubMenu(treeData);
 // 结果如下
 const res = [
-  ({
+  {
     parentMenuTitle: "我的任务",
     title: "我的审批单",
     key: "approvalProcessManagement",
@@ -499,15 +496,19 @@ const res = [
 
 // 若 `t.push({ title: v.title, key: v.key });` 不用else包着则结果如下
 const res = [
-{parentMenuTitle: "我的任务", title: "我的审批单", key: "approvalProcessManagement"},
-{parentMenuTitle: "我的任务", title: "交易事件提醒", key: "notifications"},
-{title: "我的任务", key: "myTask"},
-{parentMenuTitle: "定价簿记", title: "试定价", key: "pricing"},
-{parentMenuTitle: "定价簿记", title: "场外簿记", key: "booking"},
-{title: "定价簿记", key: "pricingBooking"}
-]
-
+  {
+    parentMenuTitle: "我的任务",
+    title: "我的审批单",
+    key: "approvalProcessManagement",
+  },
+  { parentMenuTitle: "我的任务", title: "交易事件提醒", key: "notifications" },
+  { title: "我的任务", key: "myTask" },
+  { parentMenuTitle: "定价簿记", title: "试定价", key: "pricing" },
+  { parentMenuTitle: "定价簿记", title: "场外簿记", key: "booking" },
+  { title: "定价簿记", key: "pricingBooking" },
+];
 ```
+
 #### 实例五： 见`典型需求/excel导出数据处理`
 
 ## 其它

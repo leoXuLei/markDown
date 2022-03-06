@@ -487,6 +487,18 @@ const onClickFormula = useCallback((ref: React.RefObject<HTMLDivElement>) => {
 }, []);
 ```
 
+## 用纯 CSS 禁止鼠标点击事件
+
+[链接](https://www.cnblogs.com/karajanking/p/5889300.html)
+
+```css
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
+```
+
 ## 其它
 
 - scss 文件悬浮到选择器上可以看到匹配当前选择器的 html 结构

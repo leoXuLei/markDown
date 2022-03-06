@@ -12,7 +12,7 @@ import {
   moveResource,
   copyResource,
   ICopyOrMoveResourceProps,
-} from "@/ekko/services/works";
+} from "@/service/works";
 import { selectFiles } from "@/utils/selectFiles";
 import { useResourceList } from "./hooks";
 import {

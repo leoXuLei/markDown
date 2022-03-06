@@ -36,7 +36,7 @@ import {
   IBusinessLineSprintItem,
   IProjectTaskRqOv,
   IProjectTaskItem,
-} from "@/ekko/services/team-member";
+} from "@/service/team-member";
 import StaffSearchSelect from "client/components/staff-org-staff-select";
 import { getBugDetailColumns, bugStateOptions } from "./config";
 

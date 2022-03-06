@@ -20,7 +20,7 @@ import { deleteClassify } from "client/ekko/services/task";
 import { useLink } from "../link";
 import { Tooltip } from "@com/sun";
 import { ItemTypes } from "./ItemTypes";
-import { taskTypeSortAndChangeParent } from "@/ekko/services/task";
+import { taskTypeSortAndChangeParent } from "@/service/task";
 import produce from "immer";
 
 const buildDocTree = (item: IClassifyType) => ({
