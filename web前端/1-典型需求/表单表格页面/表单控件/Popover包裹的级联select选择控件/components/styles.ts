@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Select } from "@com/sun";
+import { Select } from "antd";
 
 export const PopoverContentWrapper = styled.div`
   width: 560px;

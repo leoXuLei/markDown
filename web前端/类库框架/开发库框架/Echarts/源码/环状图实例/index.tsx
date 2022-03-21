@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { Col } from "@com/sun";
+import { Col } from "antd";
 import TeamSprintSaturation from "./team-sprint-saturation";
 import FunctionalLinesOverview from "./overview";
 import { IOverviewProps } from "@/blocks/resource/sprint/resource-input";

@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useContext,
 } from "react";
-import { Empty, Spin, Input, Tooltip } from "@com/sun";
+import { Empty, Spin, Input, Tooltip } from "antd";
 import classnames from "classnames";
 import { Icon } from "@com/omps-ui";
 import useDebounce from "@/hooks/use-debounce";

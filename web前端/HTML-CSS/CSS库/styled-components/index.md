@@ -349,7 +349,7 @@ render(
 
 ```jsx
 import styled from "@emotion/styled";
-import { Table } from "@com/sun";
+import { Table } from "antd";
 
 export const StyledTable = styled(Table)`
   .ant-table-column-sorters {
@@ -380,6 +380,58 @@ export const StyledTable = styled(Table)`
 
   .ant-table-tbody > tr.ant-table-row:hover > td {
     background: rgb(247, 247, 247);
+  }
+`;
+```
+
+## 父组件修改子组件的样式
+
+```jsx
+export const ResourceAction = styled.div`
+  font-size: 14px;
+  line-height: 18px;
+  color: #262626;
+  cursor: pointer;
+
+  :hover {
+    color: #1890ff;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+  &.disabled {
+    cursor: not-allowed;
+    color: #e5e5e5;
+  }
+`;
+
+const HeaderWrapper = styled.div`
+  position: relative;
+  display: grid;
+  grid-gap: 8px;
+  grid-template-columns: ${(props: any) =>
+    judgeViewTypeIsDirectory(props?.viewType)
+      ? "auto auto 1fr auto auto"
+      : "auto auto 72px 1fr"};
+  align-items: center;
+  padding: 18px 20px;
+  .actions {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 24px;
+
+    ${ResourceAction} {
+      color: #1890ff;
+    }
+  }
+
+  .arrow {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    cursor: pointer;
   }
 `;
 ```

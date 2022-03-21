@@ -38,6 +38,15 @@
 - [mac 录屏制作 Gif](https://www.jianshu.com/p/7a54d47b6aa0)
 - [录制-ApowerREC]()
 
+## QQ 录屏快捷键
+
+屏幕截图 Ctrl + Alt+ A
+屏幕识图 Ctrl + Alt + 0
+屏幕录制 Ctrl + Alt+ S
+截图时隐藏当前窗口
+
+- [Mac 版 QQ 的 OCR 文字识别功能究竟有多好用？](https://www.jianshu.com/p/a5e30639ed39)
+
 # 博客
 
 - **为什么要写博客**

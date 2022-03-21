@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect, useCallback } from "react";
-import { Modal, Table, Input } from "@com/sun";
+import { Modal, Table, Input } from "antd";
 import { ModalTitleContainer } from "client/blocks/resource/style";
 import {
   sprintIntervalWorkloadColumns,

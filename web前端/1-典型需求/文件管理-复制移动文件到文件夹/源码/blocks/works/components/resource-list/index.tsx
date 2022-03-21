@@ -7,7 +7,7 @@ import {
   FileMarkdownOutlined,
   CopyOutlined,
 } from "@ant-design/icons";
-import { Empty, Spin } from "@com/sun";
+import { Empty, Spin } from "antd";
 import { downloadResource, sortResource } from "client/blocks/works/utils";
 import Loading from "client/components/loading";
 import { toArray } from "client/utils/to-array";

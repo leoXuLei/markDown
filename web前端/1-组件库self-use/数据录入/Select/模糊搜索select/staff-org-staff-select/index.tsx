@@ -5,10 +5,10 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
-import { Select } from "@com/sun";
+import { Select } from "antd";
 import { searchOrgAndStaff } from "client/ekko/services/project";
 import useDebounce from "@/hooks/use-debounce";
-import { SelectProps, SelectValue } from "@com/sun/dist/select";
+import { SelectProps, SelectValue } from "antd/dist/select";
 
 const { Option } = Select;
 

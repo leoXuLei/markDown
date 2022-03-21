@@ -1,7 +1,7 @@
 import React from "react";
 import { ConditionComponent } from "client/upark/components/conditions";
 import classnames from "classnames";
-import { Tooltip, Dropdown, Menu, Popconfirm } from "@com/sun";
+import { Tooltip, Dropdown, Menu, Popconfirm } from "antd";
 import { LinkOutlined, DownOutlined } from "@ant-design/icons";
 
 interface IProjectGroupProps {

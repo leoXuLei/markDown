@@ -62,7 +62,9 @@ Popover 包裹 tree select 组件选择空间下 bug 分类如下
 <PopoverSelect
   open={false}
   allowClear
-  value={selfValue}
++ value={selfValue} // 为什么能实现，就是点击x的时候改变的是value，
++ // 而此处select的value是selfValue，是在value的useEffect中才改变的，若将
++ // 此处select的value改成value，则失效。
   className={className}
   placeholder={placeholder}
   onClick={(e) => {

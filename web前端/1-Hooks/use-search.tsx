@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { Input } from "@com/sun";
+import { Input } from "antd";
 import useDebounce from "@/hooks/use-debounce";
 import useAppLocales from "@/hooks/use-app-locales";
 

@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { css, jsx } from "@emotion/core";
-import { Button } from "@com/sun";
+import { Button } from "antd";
 import {
   DatabaseOutlined,
   LayoutOutlined,

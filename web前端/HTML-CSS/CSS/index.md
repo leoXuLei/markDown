@@ -317,6 +317,27 @@ li:not(: last-child) {
 </style>
 ```
 
+> :focus-within 是一个 CSS 伪类 ，表示一个元素获得焦点，或，该元素的后代元素获得焦点。换句话说，元素自身或者它的某个后代匹配 :focus 伪类。
+
+```css
+.input-search {
+  flex: 1 1 auto;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  transition: border-color 0.3s ease;
+  background-color: #fff;
+  &:hover {
+    border-color: #1b9aee;
+  }
+  &:focus-within {
+    .input-search-result {
+      display: block;
+    }
+  }
+}
+```
+
 ### `nth-chid`和`nth-of-type`的区别
 
 - 链接
@@ -348,14 +369,15 @@ CSS 盒模型本质上是一个盒子，封装周围的 HTML 元素，它包括�
 
 ![](./imgs/css-box-model-1.gif)
 
-**解释：**
+> **解释：**
 
 - content（内容）就是盒子里装的东西
 - padding（内边距）就是怕盒子里装的东西损坏而添加的泡沫或者其他抗震防挤压的辅料
 - border（边框）就是盒子本身了
 - margin（外边距）则说明盒子摆放的时候不能全部堆在一起，要留一定空隙。
 
-**分类：**
+> **分类：**
+
 分为 W3c 标准盒子（默认）和 IE 盒子模型。通过`box-sizing: `属性设置。
 
 - W3c 标准盒子模型`box-sizing: content-box`（默认）
@@ -369,7 +391,7 @@ CSS 盒模型本质上是一个盒子，封装周围的 HTML 元素，它包括�
 
 ## 定位
 
-**概念：**
+> **概念：**
 
 - 定位：定义元素框相对于其正常位置应该出现的位置，或者相对于父元素、另一个元素甚至浏览器窗口本身的位置。
 - css 定位机制：有三种基本的定位机制：普通流、浮动和绝对定位。
@@ -391,7 +413,125 @@ CSS 盒模型本质上是一个盒子，封装周围的 HTML 元素，它包括�
 **`absolute`绝对定位：**
 
 - 解释
-  绝对定位是“相对于”第一个非静态定位（satic）的父元素进行定位，如果不存在已定位的祖先元素，那么“相对于”最初的包含块 HTML，原来的位置空间从文档流删除不再占据空间 。
+  绝对定位是“相对于”第一个非静态定位（satic）的父元素进行定位，如果不存在已定位的祖先元素，那么“相对于”最初的包含块 HTML。==原来的位置空间从文档流删除不再占据空间==。
+
+### 浮动
+
+> **解释**
+
+浮动：浮动的框可以向左或向右移动，直到它的外边缘碰到包含框或另一个浮动框的边框为止。==不保留原来的位置的，漂浮在标准流的上方==
+
+> **目的**
+
+就是可以让多个块级元素一行内显示从而实现布局效果。
+由于浮动框不在文档的普通流中，所以文档的普通流中的块框表现得就像浮动框不存在一样。
+
+[效果链接](https://blog.csdn.net/qq_40894300/article/details/89785279)
+
+> **引起的问题：**
+
+- 父元素的高度无法被撑开（因为浮动元素脱离了标准文档流，所以在父元素中不再占据空间），影响与父元素同级的元素。
+- 与父元素同级的非浮动元素（内联元素）会跟随其后
+- 如果不是第一个元素浮动，那么浮动元素之前的元素也需要浮动，否则会影响页面显示的结构。
+
+> **解决浮动的方法：**
+
+- **一：加高法：给父元素设置一个高度**
+
+  浮动的元素，只能被有高度的盒子关住。只要浮动在一个有高度的盒子中，那么这个浮动就不会影响后面的浮动元素。所以就是清除浮动带来的影响了。==网页制作中，高度 height 很少出现。所以这种方法很少用，因为网页都是希望高度随内容自适应==。
+
+- **二：空标签清除浮动**
+
+  - 在所有浮动标签后面添加一个空标签，定义样式 `clear：both`,缺点是增加了空标签。不易于加载和 seo。
+
+  - 还有一种是给受浮动元素影响的元素设置 `clear:both`， clear 就是清除，both 指的是左浮动、右浮动都要清除。意思就是:清除别人对我的影响，这个方法有一个非常大的并且致命的问题，margin 失效了！两个 div 之间没有任何的间隙了。
+
+- **三：给浮动元素的父元素加一个 `overflow：auto/hidden`**
+  这个属性的本意，就是将所有溢出盒子的内容隐藏掉。但是我们发现这个东西能够用于浮动的清除。
+  我们知道，一个父盒子不能被自己浮动的儿子撑出高度，但是，如果这个父亲加上了 `overflow:hidden；`，那么这个父亲就能够被浮动的儿子撑出高度了。==这个现象原理是触发了父元素的 BFC。并且`overflow:hidden;`能够让 margin 生效==。
+  <br/>
+
+  让父盒子形成 BFC 解决浮动：
+  ==BFC(Block formatting context)直译为”块级格式化上下文”。它是一个独立的渲染区域（区域里面你爱怎么动怎么动，定位也好，浮动也好，正常显示也好，都行，但是不能影响区域外的别人）==，只有 Block-level box 参与， 它规定了内部的 Block-level Box 如何布局，并且与这个区域外部毫不相干.
+  overflow 不为 visible 的块框即可触发 BFC。这就是为什么我们经常用 `overflow:hidden` 去清除内部浮动的原因
+
+- **四：给父元素加 clearfix 属性，after 伪对象清除浮动**
+  `div:after`：在 div （父元素）内容的后面插入一些内容 。 其实就是==变异的额外标签法==。
+
+  ```css
+  .clearfix:after {
+    content: "";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    clear: both;
+  }
+
+  // 必须在伪对象中设置content属性，属性值可以为空，如“content: "";”。
+  // 必须为需要清除浮动的元素伪对象设置“height:0;”样式，否则该元素会比其实际高度高出若干像素。
+  ```
+
+## 响应式设计
+
+> **解释：**
+
+页面的设计与开发根据用户行为以及设备环境(系统平台、屏幕尺寸、屏幕定向等)进行相应的响应和调整称之为响应式 Web 设计。
+
+- 响应式 Web 设计让你的网页能在所有设备上友好显示。
+- 响应式 Web 设计只使用 HTML 和 CSS。
+- 响应式 Web 设计不是一个程序或 JS 脚本
+
+> **原理**
+
+基本原理是==通过媒体查询检测不同的设备屏幕尺寸做相应的样式处理==。
+
+友好的用户体验是网页可以在任何设备上展示和操作，设备包括桌面系统设备，平板电脑，iPhone 等手机等。
+网页应该根据设备的大小自动调整内容。
+
+> **viewport**
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+```
+
+- 解释
+  viewport 是用户网页的可视区域。翻译为中文可以叫做"视区"。
+  手机浏览器是把页面放在一个虚拟的"窗口"（viewport）中，==通常这个虚拟的"窗口"比屏幕宽，这样就不用把每个网页挤到很小的窗口中（这样会破坏没有针对手机浏览器优化的网页的布局），用户可以通过平移和缩放来看网页的不同部分==。
+
+- 设置 Viewport
+  一个常用的针对移动网页优化过的页面的 viewport meta 标签大致如下
+  - width：控制 viewport 的大小，可以指定为一个值，如 600，或者特殊的值，如 `device-width` 为设备的宽度。
+  - height：和 width 相对应，指定高度。
+  - initial-scale：初始缩放比例，也即是当页面第一次 load 的时候缩放比例。
+  - maximum-scale：允许用户缩放到的最大比例。
+  - minimum-scale：允许用户缩放到的最小比例。
+  - user-scalable：用户是否可以手动缩放。
+
+> **媒体查询**
+
+见 CSS3 多媒体查询
+
+> **图片**
+
+不管图片大小尺寸是什么，只要给它设置 width 和 height，就会按照这个宽高显示，（即原图会放大或缩小）
+为了满足响应式设计 需要设置 `width 100%，height：auto`
+
+- 如果 width 属性设置为 100%，图片会根据上下范围实现响应式功能
+
+- 如果 max-width 属性设置为 100%，图片永远不会大于其原始大小
+
+  ```css
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  ```
 
 # Tips
 
@@ -538,48 +678,6 @@ height: calc(100vh - 260px); // 有时候用100%受到父元素影响不如vh方
 
 - [MDN-sticky 定位](https://developer.mozilla.org/zh-CN/docs/Web/CSS/position)
 
-# 属性
-
-## div:focus-within
-
-> :focus-within 是一个 CSS 伪类 ，表示一个元素获得焦点，或，该元素的后代元素获得焦点。换句话说，元素自身或者它的某个后代匹配 :focus 伪类。
-
-```css
-.oui-linked-content-add-row-search-container-input-search {
-  flex: 1 1 auto;
-  color: #979797;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  margin: 0px 6px;
-  font-size: 14px;
-  border-radius: 18px;
-  border: 1px solid #e5e5e5;
-  transition: border-color 0.3s ease;
-  background-color: #fff;
-  &:hover {
-    border-color: #1b9aee;
-  }
-  &:focus-within {
-    .oui-linked-content-add-row-search-container-input-search-result {
-      display: block;
-    }
-  }
-  .ant-input-suffix {
-    margin-left: 10px;
-  }
-  &-result {
-    width: 100%;
-    position: absolute;
-    top: 100%;
-    left: 0px;
-    background-color: #09c;
-    display: none;
-  }
-}
-```
-
 # 常见效果
 
 ## 文本超出显示省略号
@@ -681,6 +779,49 @@ const ApprovalItem = (props) => {
 };
 
 export default ApprovalItem;
+```
+
+```jsx
+const StaffsRender = (props: { staffList: IStaff[] }) => {
+  const { staffList } = props;
+
+  const staffsStr = staffList
+    ?.map((staffItem: IStaff) =>
+      staffItem ? `${staffItem?.tyName}(${staffItem?.name})` : ""
+    )
+    ?.filter(Boolean)
+    ?.join("、");
+
+  if (!staffsStr) {
+    return null;
+  }
+  return (
+    <Tooltip title={staffsStr}>
+      <div
+        style={{
+          maxWidth: "100%",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+        }}
+      >
+        {staffsStr}
+      </div>
+    </Tooltip>
+  );
+};
+```
+
+## 静态字符串文本换行
+
+```jsx
+// 几个\n，就换几行
+const info = '点击“全部成员”，可以根据角色来查看成员列表\n\n鼠标移过某个成员，右侧可以看到下拉图标，点击可以设置成员的角色\n权限说明：'
+
+
+<Tooltip title={<div style={{ whiteSpace: 'pre-line' }}>{i18n.useInfo}</div>}>
+  <InfoCircleOutlined />
+</Tooltip>
 ```
 
 # CSS 模块化

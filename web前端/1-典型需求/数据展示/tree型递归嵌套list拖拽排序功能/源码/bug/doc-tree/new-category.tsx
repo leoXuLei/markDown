@@ -1,4 +1,4 @@
-import { Modal, HookForm as Form, Input, Button } from "@com/sun";
+import { Modal, HookForm as Form, Input, Button } from "antd";
 import { addClassify, updateClassify } from "client/ekko/services/task";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 

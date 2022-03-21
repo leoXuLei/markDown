@@ -95,7 +95,7 @@ const series = [
 
 ```jsx
 import ReactEchartsCore from "echarts-for-react";
-import { Empty } from "@com/sun";
+import { Empty } from "antd";
 
 export const EmptyText = styled.span`
   color: #8c8c8c;

@@ -1,5 +1,5 @@
 import React, { memo, useState } from "react";
-import { Button, Row, Col, Radio, Tooltip } from "@com/sun";
+import { Button, Row, Col, Radio, Tooltip } from "antd";
 import { ChartContainer } from "@/blocks/teams/style";
 import { EachEndInputPie } from "./input-pie";
 import EachEndInputModal from "./input-modal";

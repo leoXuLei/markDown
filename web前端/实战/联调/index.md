@@ -199,6 +199,35 @@ result: {
 }
 ```
 
+## 页面访问报错
+
+### 请求状态 status:failed + ERR_NAME_NOT_RESOLVED
+
+[参考链接](https://caihongtengxu.github.io/2018/20181203/index.html)
+
+今天公司项目发了个小版本，发到线上后我看了一眼发现主页加载不全（应该是 HTML 文件），看了下控制台有几个接口请求报错了，而且不是服务器出错，都是请求状态 failed + ERR_NAME_NOT_RESOLVED 连忙问了下别的同事，他们请求都是正常加载的，只有我的 Chrome 下会有这个问题。后面我切换 Firefox 后一切正常 然后找了一圈解决办法 又折腾。
+
+> **原因**
+> 基本上，都是的 DNS 地址问题导致 ERR_NAME_NOT_RESOLVED 错误。
+
+由于各种原因，您的 Internet DNS 地址被阻止，因此发生此 ERR_NAME_NOT_RESOLVED 错误。
+
+> **解决办法如下**
+
+- 清除 Chrome 缓存
+
+浏览器 Cookie 可能会阻止您的 Internet DNS，然后导致 ERR_NAME_NOT_RESOLVED 错误。 您可以尝试清除浏览器 cookie 以修复此错误。
+
+在 Chrome 下使用快捷键 Ctrl + Shift + Delete 或者 在地址栏输入 chrome://settings/clearBrowserData 然后选择 高级 清除数据即可
+
+- 清除 Chrome-DNS 缓存
+
+当更改了操作系统的 DNS 设置时，如果只清除操作系统的 DNS 缓存不一定会修复 Chrome 的连接问题，手动刷新 Chrome DNS 缓存会比较有用。
+
+浏览器 DNS 缓存通常用于存储你访问的每个网站的域名所对应的服务器 IP 地址数据库，这个小数据库本质上可以加快访问网站的速度。但是，当一个网站更换了新 IP 地址时，再通过 Chrome DNS 缓存中的 IP 来访问时就会遇到访问错误。此种情况下，刷新清除 Chrome DNS 缓存可以帮助解决连接错误。
+
+在 Chrome 地址栏 输入 chrome://net-internals/#dns 即可打开页面 然后全部清除即可
+
 ## 前端 mock 数据
 
 使用 RAP2

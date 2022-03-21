@@ -1,5 +1,5 @@
 import React from "react";
-import { InputNumber } from "@com/sun";
+import { InputNumber } from "antd";
 
 export interface IDoubleInputNumberProps {
   value?: Array<number | undefined>;

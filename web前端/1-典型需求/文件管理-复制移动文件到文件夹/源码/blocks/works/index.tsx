@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
 import produce from "immer";
 import styled from "@emotion/styled";
-import { Modal, notification } from "@com/sun";
+import { Modal, notification } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import {
   createFolder,

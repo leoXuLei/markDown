@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Popover, Avatar, Empty, Spin, TreeSelect } from "@com/sun";
+import { Popover, Avatar, Empty, Spin, TreeSelect } from "antd";
 import { useSearch } from "@/hooks";
 import { IProjectSimpleItem, getClassifyTree } from "@/service/team-member";
 import { CheckOutlined } from "@ant-design/icons";

@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect, useCallback, useRef } from "react";
-import { Select, Avatar } from "@com/sun";
+import { Select, Avatar } from "antd";
 import styled from "@emotion/styled";
 import { Container } from "@/style";
 import {

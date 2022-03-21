@@ -7,15 +7,7 @@ import React, {
   useRef,
   useMemo,
 } from "react";
-import {
-  Table,
-  Input,
-  Select,
-  Button,
-  Avatar,
-  Cascader,
-  Radio,
-} from "@com/sun";
+import { Table, Input, Select, Button, Avatar, Cascader, Radio } from "antd";
 import styled from "@emotion/styled";
 import { DataContext } from "@/blocks/common/report-form/data";
 import { Container, Header } from "@/blocks/resource/style";

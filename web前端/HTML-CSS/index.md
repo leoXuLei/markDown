@@ -72,4 +72,5 @@ web 前端三层来说：
 - [w3c school 详细全面](https://www.w3cschool.cn/html5/html5-intro.html)
 - [W3 school](https://www.w3school.com.cn/h.asp)
 - [MDN - HTML](https://developer.mozilla.org/zh-CN/docs/Web/HTML)
-- [CSS3新特性](https://segmentfault.com/a/1190000010780991)
+- [MDN - CSS](https://developer.mozilla.org/zh-CN/docs/Web/CSS/cursor)
+- [CSS3 新特性](https://segmentfault.com/a/1190000010780991)

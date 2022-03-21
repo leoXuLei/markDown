@@ -18,7 +18,7 @@ import NewModal from "./new-category";
 import AddChildModal from "@/components/doc-tree-demand/add-child-modal";
 import { deleteClassify } from "client/ekko/services/task";
 import { useLink } from "../link";
-import { Tooltip } from "@com/sun";
+import { Tooltip } from "antd";
 import { ItemTypes } from "./ItemTypes";
 import { taskTypeSortAndChangeParent } from "@/service/task";
 import produce from "immer";

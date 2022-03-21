@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { Cascader, Tag, Tooltip, Divider, Spin } from "@com/sun";
+import { Cascader, Tag, Tooltip, Divider, Spin } from "antd";
 import React, { useEffect, useState, useCallback } from "react";
 import {
   getProjectBasicListByList,

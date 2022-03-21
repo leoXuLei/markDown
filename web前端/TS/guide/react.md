@@ -375,7 +375,7 @@ export interface IFilterItemProps<T = any> {
 ```
 
 ```jsx
-import { ColumnsType } from '@com/sun/dist/table'
+import { ColumnsType } from 'antd/dist/table'
 
 // 表格列
 const list: ColumnsType<any> = [

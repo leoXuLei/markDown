@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from "react";
-import { Modal, Image } from "@com/sun";
+import { Modal, Image } from "antd";
 import useAppSelector from "client/hooks/use-app-selector";
 import { YoutubeOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";

@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
-import { Button, Spin, Modal, Input, Empty } from "@com/sun";
+import { Button, Spin, Modal, Input, Empty } from "antd";
 import { Icon } from "@com/omps-ui";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import {

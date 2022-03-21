@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback } from "react";
 import styled from "@emotion/styled";
-import { Checkbox as OriginCheckbox } from "@com/sun";
+import { Checkbox as OriginCheckbox } from "antd";
 import { trackingRender } from "client/utils/wdyr";
 import { judgeViewTypeIsDirectory } from "client/blocks/works/utils";
 import { ConditionComponent } from "client/components/conditions";

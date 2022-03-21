@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useContext,
 } from "react";
-import { Button, Tooltip } from "@com/sun";
+import { Button, Tooltip } from "antd";
 import { trackingRender } from "client/utils/wdyr";
 import { handledSelectedFilesInfo } from "client/blocks/works/utils";
 import ProjectList, { ISelectProject } from "./project-list";

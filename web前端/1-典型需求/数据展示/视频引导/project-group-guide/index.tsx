@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Modal } from "@com/sun";
+import { Modal } from "antd";
 import { YoutubeOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 

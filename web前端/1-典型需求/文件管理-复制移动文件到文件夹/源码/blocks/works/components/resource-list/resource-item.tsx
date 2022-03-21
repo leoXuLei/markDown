@@ -7,7 +7,7 @@ import {
   CloudUploadOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import { Input, Tooltip } from "@com/sun";
+import { Input, Tooltip } from "antd";
 import { trackingRender } from "client/utils/wdyr";
 import { useResourceLink } from "client/blocks/works/hooks";
 import { formatSize } from "client/utils/format-size";
