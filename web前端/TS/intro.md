@@ -325,6 +325,83 @@ WebStorm 和 VS Code 等主流 IDE 对 TS 都支持的十分完善，VS Code 甚
 
 ![tsVscodeConfig](./imgs/tsVscodeConfig.png)
 
+### React+TS 项目安装配置
+
+```js
+npm install @types/react @types/react-dom -D
+```
+
+使用@types/前缀表示我们额外要获取 React 和 React-DOM 的声明文件。 通常当你导入像 "react"这样的路径，它会查看 react 包； 然而，并不是所有的包都包含了声明文件，所以 TypeScript 还会查看 @types/react 包
+
+```js
+npm install --save-dev typescript awesome-typescript-loader source-map-loader
+```
+
+安装开发时依赖，这些依赖会让 TypeScript 和 webpack 在一起良好地工作。 awesome-typescript-loader 可以让 Webpack 使用 TypeScript 的标准配置文件 tsconfig.json 编译 TypeScript 代码。 source-map-loader 使用 TypeScript 输出的 sourcemap 文件来告诉 webpack 何时生成 自己的 sourcemaps。 这就允许你在调试最终生成的文件时就好像在调试 TypeScript 源码一样。
+
+> **添加 TypeScript 配置文件**
+
+我们想将 TypeScript 文件整合到一起 - 这包括我们写的源码和必要的声明文件。
+
+我们需要创建一个 tsconfig.json 文件，它包含了输入文件列表以及编译选项。 在工程根目录下新建文件 tsconfig.json 文件，添加以下内容：
+
+```js
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "module": "commonjs",
+        "target": "es5",
+        "jsx": "react"
+    },
+    "include": [
+        "./src/**/*"
+    ]
+}
+```
+
+> **配置 webpack.config.js**
+
+```js
+module.exports = {
+  entry: "./src/index.tsx",
+  output: {
+    filename: "bundle.js",
+    path: __dirname + "/dist",
+  },
+
+  // Enable sourcemaps for debugging webpack's output.
+  devtool: "source-map",
+
+  resolve: {
+    // Add '.ts' and '.tsx' as resolvable extensions.
+    extensions: [".ts", ".tsx", ".js", ".json"],
+  },
+
+  module: {
+    rules: [
+      // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+      { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+
+      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+    ],
+  },
+
+  // When importing a module whose path matches one of the following, just
+  // assume a corresponding global variable exists and use that instead.
+  // This is important because it allows us to avoid bundling all of our
+  // dependencies, which allows browsers to cache those libraries between builds.
+  externals: {
+    react: "React",
+    "react-dom": "ReactDOM",
+  },
+};
+```
+
+- [React & Webpack 配置](https://www.tslang.cn/docs/handbook/react-&-webpack.html)
+
 ## 参考资料
 
 - [[1] 官网](https://www.tslang.cn/docs/handbook/basic-types.html)
