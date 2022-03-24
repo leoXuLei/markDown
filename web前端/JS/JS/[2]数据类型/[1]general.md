@@ -184,9 +184,12 @@ Boolean 类型转换时，只有下面六个值会被转为 false，其余都是
 
   ```js
   // NaN不等于任何值，包括它本身
-  NaN ===
-    NaN// NaN数组的indexOf方法内部使用的是严格相等运算符，所以该方法对NaN不成立。 // false
-    [NaN].indexOf(NaN); // -1
+
+  // false
+  NaN === NaN;
+  // NaN数组的indexOf方法内部使用的是严格相等运算符，所以该方法对NaN不成立。
+
+  const a = [NaN].indexOf(NaN); // a=-1
 
   // NaN与任何数（包括它自己）的运算，得到的都是NaN。
   NaN + 32; // NaN
@@ -676,3 +679,17 @@ Object.prototype.toString.call([]); // "[object Array]"
 - `String(x)`
 - `x + ''`
 
+## 引用数据类型问题
+
+```jsx
+// 下面是处理表单初始值，从接口返回的详情对象中去赋值，基本数据类型没问题，但是引用数据类型就不行，因为一旦修改了initValues某个引用类型的属性，task.属性的值也会随之变化，而且这个initValues还当成了表单的values，修改控件就会实时改变，就更不行了。
+
+initValues[component?.formItemOptions?.name] =
+  task?.[component?.formItemOptions?.name];
+<ModalForm values={initValues} />;
+
+// 换成lodash的深拷贝即可
+initValues[component?.formItemOptions?.name] = cloneDeep(
+  task?.[component?.formItemOptions?.name]
+);
+```

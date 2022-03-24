@@ -639,6 +639,20 @@ const onClickFormula = useCallback((ref: React.RefObject<HTMLDivElement>) => {
 }
 ```
 
+## 组件 className 前缀统一
+
+```jsx
+const __prefix_name = "ui-use-case";
+
+const join = (...args) => {
+  return [__prefix_name, ...args].join("-");
+};
+
+function render() {
+  return <div className={join("customer-pop", "bottom")}></div>;
+}
+```
+
 ## 其它
 
 - scss 文件悬浮到选择器上可以看到匹配当前选择器的 html 结构
@@ -677,6 +691,12 @@ height: calc(100vh - 260px); // 有时候用100%受到父元素影响不如vh方
 ```
 
 - [MDN-sticky 定位](https://developer.mozilla.org/zh-CN/docs/Web/CSS/position)
+- 若有更高优先级的 className 把设置的样式覆盖如何处理
+  解决方法：通过连写选择符号 或者 !important
+  ```css
+  .ant-form-item.oui-value-evaluation-formItem {
+  }
+  ```
 
 # 常见效果
 
