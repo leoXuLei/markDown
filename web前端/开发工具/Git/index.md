@@ -131,8 +131,16 @@ doc/*.txt
 
 - **Git: error Command "husky-run" not found**
 
-解决方法：重新安装一下 husky 依赖
+  解决方法：重新安装一下 husky 依赖
 
+- **OpenSSL SSL_connect: Connection was reset in connection to github.com:443**
+解決方法：[链接](https://blog.csdn.net/qq_37555071/article/details/114260533)
+- **OpenSSL SSL_read: Connection was reset, errno 10054**
+解決方法：执行git命令脚本：修改设置，解除ssl验证。`git config --global http.sslVerify "false"`
+## git clone 报错
+若开VPN且用git 桌面端clone仓库会很快，十几M/s
+- windows 上面git 克隆clone 的时候报错 warning:Clone succeeded,but checkout failed
+解决办法：根据提示的路径将包含了空格的目录重新修改，将空格删除了就可以了。
 # macbook
 
 - [MAC 上 Git 安装与 GitHub 基本使用](https://www.jianshu.com/p/7edb6b838a2e)
