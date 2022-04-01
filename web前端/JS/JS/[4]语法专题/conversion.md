@@ -421,14 +421,14 @@ undefined + 1 // NaN
 
 ## Tips
 ### 强制转换（显式）
-| 数据类型 | `Number()` | `String()` |
-|:-- |:-- |:--|
-|number | 不变 | 加引号 |
-|boolean | true 转成 1，false 转成 0  | 加引号 |
-|string | 如果可以被解析为数值，则转换为相应的数值（空字符串转为0），否则返回`NaN`。 | 加引号 |
-|null | 0 | 加引号 |
-|undefined | NaN | 加引号 |
-|Symbol | 报错：Uncaught TypeError: Cannot convert a Symbol value to a number | 加引号 |
-|function | NaN | 加引号 |
-|array [] | 除非是包含单个数值的数组，否则将返回NaN， | 返回该数组的字符串形式 |
-|object {} | NaN | `"[object Object]"` |
+| 数据类型  | `Number()`                                                                 | `String()`             |
+| :-------- | :------------------------------------------------------------------------- | :--------------------- |
+| number    | 不变                                                                       | 加引号                 |
+| boolean   | true 转成 1，false 转成 0                                                  | 加引号                 |
+| string    | 如果可以被解析为数值，则转换为相应的数值（空字符串转为0），否则返回`NaN`。 | 加引号                 |
+| null      | 0                                                                          | 加引号                 |
+| undefined | NaN                                                                        | 加引号                 |
+| Symbol    | 报错：Uncaught TypeError: Cannot convert a Symbol value to a number        | 加引号                 |
+| function  | NaN                                                                        | 加引号                 |
+| array []  | 除非是包含单个数值的数组，否则将返回NaN，                                  | 返回该数组的字符串形式 |
+| object {} | NaN                                                                        | `"[object Object]"`    |

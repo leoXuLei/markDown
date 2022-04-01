@@ -87,14 +87,6 @@
     "git.suggestSmartCommit": false,
     "diffEditor.ignoreTrimWhitespace": false,
     "leek-fund.fundAmount": {
-      "160634": {
-        "name": "鹏华中证环保产业指数(LOF)",
-        "amount": 6162.07,
-        "price": "1.6520",
-        "unitPrice": 1.8228,
-        "earnings": -171.58,
-        "priceDate": "2022-01-05"
-      },
       "161725": {
         "name": "招商中证白酒指数(LOF)A",
         "amount": 34115.76,
@@ -143,14 +135,6 @@
         "earnings": -272.18,
         "priceDate": "2022-01-05"
       },
-      "002190": {
-        "name": "农银新能源主题",
-        "amount": 0,
-        "price": "4.3489",
-        "unitPrice": 0,
-        "earnings": 0,
-        "priceDate": "2021-12-30"
-      },
       "004851": {
         "name": "广发医疗保健股票A",
         "amount": 17129.34,
@@ -166,7 +150,7 @@
     "markdown-preview-enhanced.previewTheme": "github-light.css",
     "leek-fund.statusBarStock": ["sh512690", "sh515030", "sh512480", "sh515790"],
     "leek-fund.fallColor": "#52c41a",
-    "leek-fund.riseColor": "#ff4d4f",
+    "leek-fund.riseColor": "#ff4400",
     "leek-fund.iconType": "arrow"
   }
   

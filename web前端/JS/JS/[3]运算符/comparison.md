@@ -360,6 +360,9 @@ undefined === null; // fasle
 null == null; // true
 undefined == undefined; // true
 undefined == null; // true
+
+[] == [] // false
+[1,2,3] == '1,2,3' // === String([1,2,3]) == '1,2,3'   true
 ```
 
 ### 大于小于号比较

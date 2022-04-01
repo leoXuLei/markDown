@@ -218,6 +218,7 @@ type ReactText = string | number;
 type ReactChild = ReactElement | ReactText;
 
 interface ReactNodeArray extends Array<ReactNode> {}
+
 type ReactFragment = {} | ReactNodeArray;
 
 type ReactNode =

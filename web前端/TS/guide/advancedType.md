@@ -184,30 +184,6 @@ var s = people.next.next.next.name;
 type Yikes = Array<Yikes>; // error
 ```
 
-### 接口 vs 类型别名
-
-类型别名可以像接口一样；然而，仍有一些细微差别。
-
-- 接口创建了一个新的名字，可以在其它任何地方使用。 类型别名并不创建新名字—比如，错误信息就不会使用别名。
-
-```ts
-//  在编译器中将鼠标悬停在 interfaced上，显示它返回的是 Interface，但悬停在 aliased上时，显示的却是对象字面量类型。
-
-type Alias = { num: number };
-interface Interface {
-  num: number;
-}
-declare function aliased(arg: Alias): Alias;
-declare function interfaced(arg: Interface): Interface;
-```
-
-- 重要区别: 类型别名不能被 extends 和 implements（自己也不能 extends 和 implements 其它类型）。因为 软件中的对象应该对于扩展是开放的，但是对于修改是封闭的，你应该尽量去使用接口代替类型别名。
-
-另一方面，如果你无法通过接口来描述一个类型并且需要使用联合类型或元组类型，这时通常会使用类型别名。
-
-
-**参考链接：**
-- [TypeScript 中 interface 和 type 使用区别介绍](https://juejin.cn/post/6844904114925600776#heading-3)
 ## 字符串字面量类型
 
 字符串字面量类型允许你指定字符串必须的固定值。 在实际应用中，字符串字面量类型可以与联合类型，类型保护和类型别名很好的配合。 通过结合使用这些特性，你可以实现类似枚举类型的字符串。
@@ -321,6 +297,9 @@ let unknown = getProperty(person, "unknown"); // error, 'unknown' is not in 'nam
 ```
 
 ### 索引类型和字符串索引签名
+> **keyof操作符会将一个对象类型(注意这里是类型并不是值)的key组成联合类型返回。**
+
+
 
 `keyof` 和 `T[K]` 与字符串索引签名进行交互。 如果你有一个带有字符串索引签名的类型，那么 `keyof T` 会是 string。 并且 `T[string]` 为索引签名的类型：
 
@@ -454,7 +433,6 @@ interface Person {
 ```
 
 #### Partial：属性可选
-
 ```ts
 /**
  * Make all properties in T optional：将T中的所有属性设为可选
@@ -462,12 +440,44 @@ interface Person {
 type Partial<T> = {
   [P in keyof T]?: T[P];
 };
+```
+可以看出 TS 源码中这样定义 Partial ：它接受传入的一个泛型类型 T ，==使用 in 关键字遍历传入的 T 类型==，重新定义了一个相同的类型，不过新的类型所有的 key 变成了可选类型。
 
+
+```ts
 // 使用如下：
 type PersonPartial = Partial<Person>;
 // PersonPartial === { name?: string; age?: number }
 ```
 
+
+需要==额外注意的是当使用 Partial 时仅仅会将第一层变为可选，当存在多层嵌套时并不会递归转化==。
+
+```ts
+interface Person {
+  name: string;
+  age: number;
+  detail: {
+    school: string;
+    company: string;
+  };
+}
+
+type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
+};
+
+type PartialPerson = DeepPartial<Person>;
+
+const person1: PartialPerson = {
+  name: '19Qingfeng',
+  age: 24,
+  detail: {
+    company: 'Tencent',
+    // 即使我们不输入school也无关紧要
+  },
+};
+```
 #### Required：属性必选
 
 ```ts
@@ -477,10 +487,26 @@ type PersonPartial = Partial<Person>;
 type Required<T> = {
   [P in keyof T]-?: T[P];
 };
+```
 
+```ts
 // 使用如下：
 type RequiredPerson = Required<Person>;
 // RequiredPerson === { name: string; age: number }
+```
+
+
+同样 Required 表示将传入的类型中的属性全部转为必选，它和 Parital 正好相反，同样不支持嵌套。它仅仅会将T的第一层属性转化为必填属性，对于嵌套属性它并不会处理。
+
+我在第一次接触到这个类型源码中的定义时也傻眼了，竟然还有 `-?` 这样的语法...没错，Required 中正是通过在属性名后使用 `-?` 定义属性为必填的。
+
+
+至于它仅会处理一层的问题，也同样可以使用递归的方式来处理：
+
+```ts
+type DeepRequired<T> = {
+  [K in keyof T]-?: T[K] extends object ? DeepRequired<T[K]> : T[K];
+};
 ```
 
 #### Readonly：属性只读
@@ -518,6 +544,10 @@ type PickPerson = Pick<Person, "name">;
 ```
 
 #### Exclude：从T中排除可分配给U的那些类型
+> **用法含义**
+Exclude是进行排除 T 类型中满足 U 的类型从而返回新的类型，==**相对于下面的Omit操作符来说Omit是针对于key&value/接口形式的，而Exclude是针对于联合类型来操作的**==。
+
+
 
 ```ts
 /**
@@ -528,6 +558,12 @@ type PickPerson = Pick<Person, "name">;
 type Exclude<T, U> = T extends U ? never : T;
 ```
 
+```ts
+// 使用如下
+let a: string | number;
+
+type CustomType = Exclude<typeof a, string>; // number类型
+```
 #### Extract：从T中提取可分配给U的那些类型
 
 ```ts
@@ -545,15 +581,19 @@ type Extract<T, U> = T extends U ? T : never;
  * Construct a type with the properties of T except for those in type K.
  ：构造类型为T的类型，但类型K除外。
  */
-
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+```
 
+```ts
 // 使用如下：
 type OmitPerson = Omit<Person, "name">;
 // OmitPerson === { age: number }
 ```
 
-#### Record: 构建一组具有相同类型的属性构成的类型
+#### `Record<Keys,Type>`: 构建一组具有相同类型的属性构成的类型
+> **用法含义**
+> `Record<Keys,Type>`用于构造一个新的对象类型，其属性键为Keys，属性值为Type。此实用程序可用于将一种类型的属性映射到另一种类型。
+
 
 ```ts
 /**
@@ -563,12 +603,94 @@ type OmitPerson = Omit<Person, "name">;
 type Record<K extends string, T> = {
   [P in K]: T;
 };
+// 或者
+type Record<K extends keyof any, T> = {
+  [P in K]: T;
+};
 
 // 使用如下：
 type RecordPerson = Record<"name" | "age", string>;
 // RecordPerson === { name: string; age: string }
 ```
+看看它的源码本质上很简单，就是==遍历传入的泛型 K 中每一个 key 值 P ，将每一个 P 作为 key 传入的 T 作为值类型重新组成一个对象类型==。
+> **实例**
 
+```ts
+type keys = 'name' | 'title' | 'hello';
+
+interface values {
+  name: string;
+  label?: number;
+}
+
+// Record内置类型可以将 传入的keys联合类型遍历作为key 
+// 为每一个key的value赋值为 values从而形成一个全新的对象类型返回
+const b: Record<keys, values> = {
+  name: {
+    name: 'wang',
+    label: 1,
+  },
+  title: {
+    name: 'hellp',
+  },
+  hello: {
+    name: 'nihao',
+  },
+};
+```
+
+同样我们常用 Record 类型在遍历上，比如：
+```ts
+// Record 常用遍历对象返回新的类型时使用
+function mapping<K extends string | number | symbol, V, R>(
+  obj: Record<K, V>,
+  callback: (key: K, value: V) => R
+): Record<K, R> {
+  const result = {} as Record<K, R>;
+  Object.keys(obj).forEach((key) => {
+    const parseKey = key as K;
+    const value = obj[key];
+    result[key] = callback(parseKey, value);
+  });
+  return result;
+}
+
+mapping({ name: '19Qingfeng', company: 'Tencent' }, (key, value) => {
+  return key + value;
+});
+```
+
+
+#### `Parameters<T>`
+> **用法含义**
+> `Parameters<T>`用于获得函数的参数类型组成的元组类型
+
+
+
+```ts
+// 源码
+type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any 
+  ? P : never;
+```
+
+```ts
+// 使用如下
+const fn = (a:string, b:number,...c: number[]) => {}
+
+type c = Parameters<typeof fn>
+```
+
+#### `ResultType`
+> **用法含义**
+> `ResultType<type>`接受传入一个函数类型为泛型，返回值为函数的返回类型。
+
+```ts
+type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+```
+
+ReturnType 源码中的类型定义中使用到了 extends 和 infer 关键字。
+
+==首先使用 extends 约束了传入的泛型类型 T 必须是一个函数，同时使用 infer 关键字推断函数的返回值，当然如果传入的泛型 T 不满足约束则会返回 any==。
 ### 条件类型
 
 ```ts
