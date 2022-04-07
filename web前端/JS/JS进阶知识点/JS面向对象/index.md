@@ -149,6 +149,8 @@ console.log(`child2.color`, child2.color); // ["pink", "yellow"]
 console.log(`child2.getSubValue`, child2.getSubValue()); // false
 ```
 
+> **总结**
+构造函数继承属性，无法调用父类型的原型中定义的方法，只能调用父类型中构造函数的方法
 ### 3.组合继承
 
 ```js

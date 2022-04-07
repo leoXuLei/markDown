@@ -1409,6 +1409,7 @@ Object.prototype.toString.call([]) === "[object Array]" // true
   [(1, 2, 3)].findIndex((v) => v === 4) // -1
   [(1, 2, 3)].includes(2) // true
   [(1, 2, 3)].includes(4); // false
+
 // in不能用来判断
 1 in [1, 2, 3]; // true
 2 in [1, 2, 3]; // true
@@ -1521,7 +1522,7 @@ for (const v of arr) {
 
 - **注意：**
 
-  下面实例都是循环是主体代码，如果循环是在函数中，是可以`return`提前退出的。(函数体内部的`return`语句，表示停止执行并返回值)
+  下面实例都是循环是主体代码，如果循环是在函数中，是可以`return`提前退出的。(==函数体内部的`return`语句，表示停止执行并返回值==)
 
   ```js
   function testFor(show = []) {

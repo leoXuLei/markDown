@@ -275,6 +275,7 @@ var webpackConfig = {
 
 - `webpack-bundle-analyzer`：webpack 打包体积优化
   [参考链接](https://www.jianshu.com/p/eadd2fb68d48)
+  [webpack-libs-optimizations 依赖包优化](https://github.com/GoogleChromeLabs/webpack-libs-optimizations)
   `npm install --save-dev webpack-bundle-analyzer`
   ```js
   const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")

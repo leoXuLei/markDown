@@ -425,7 +425,7 @@ matches.input; // "cat, bat, sat, fat"
 
 ## Tips
 
-### 字符串转数组
+### 字符串转字符数组
 
 - `Object.values()`
 - `split`
