@@ -40,10 +40,10 @@
 
 ### 光标相关
 
-| 作用                       | 快捷键                 |      |
-| :------------------------- | ---------------------- | ---: |
-| 移动光标选择字符           | `shift + 左右←`        |      |
-| 移动光标选择字符(一整段落) | `ctrl + shift + 左右←` |      |
+| 作用                       | 快捷键                 |     |
+| :------------------------- | ---------------------- | --: |
+| 移动光标选择字符           | `shift + 左右←`        |     |
+| 移动光标选择字符(一整段落) | `ctrl + shift + 左右←` |     |
 
 - 移动到行首： `Home`
 - 移动到行尾： `End`
@@ -103,18 +103,24 @@
 ## Code Spell Checker： 拼写检查
 
 ## MPE：Markdown 预览导出插件
+
 - [使用教程](https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/)
 
 ## Markdown All in One：Markdown 编辑插件
+
 - 键盘快捷键
   - `ctrl + B` : 文本加粗
 - 列表编辑
   - `Enter`
   - `Tab、BackSpace`
-- 格式化 : github风格的md
+- 格式化 : github 风格的 md
   - `Alt + Shift + F`
 - 其它
   - `Ctrl + B` : 在所选文本上粘贴链接
+
+# 其它
+## VSCode自动格式化md文档
+[链接](https://www.jianshu.com/p/4d5529848104)
 # 参考链接
 
 - [vscode 常用快捷键](https://www.cnblogs.com/bindong/p/6045957.html)

@@ -27,9 +27,9 @@ React v16.0刚推出的时候，是增加了一个componentDidCatch生命周期�
 
 至于shouldComponentUpdate，如果谁还想着在里面做AJAX操作，那真的是没救了。
 
-按照官方说法，以前需要利用被deprecate的所有生命周期函数才能实现的功能，都可以通过getDerivedStateFromProps的帮助来实现。
+**按照官方说法，以前需要利用被deprecate的所有生命周期函数才能实现的功能，都可以通过getDerivedStateFromProps的帮助来实现**。
 
-这个getDerivedStateFromProps是一个静态函数，所以函数体内不能访问this，简单说，就是应该一个纯函数，纯函数是一个好东西啊，输出完全由输入决定。同样的输入一定会有同样的输出。
+**这个getDerivedStateFromProps是一个静态函数，所以函数体内不能访问this**，简单说，就是应该一个纯函数，纯函数是一个好东西啊，输出完全由输入决定。同样的输入一定会有同样的输出。
 
 ```js
 static getDerivedStateFromProps(nextProps, prevState) {

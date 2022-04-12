@@ -55,7 +55,7 @@ export default GlobalContext;
 </GlobalContext.Consumer>
 ```
 
-注意：GlobalContext.Consumer 内必须是回调函数，改变 context，通过 context 方法改变根组件状态
+注意：**GlobalContext.Consumer 内必须是回调函数，改变 context，通过 context 方法改变根组件状态**
 
 ##　 context 优缺点
 
