@@ -142,7 +142,7 @@ console.log(`child1.getSubValue`, child1.getSubValue()); // false
 
 const child2 = new ChildType(["wyc"]);
 child2.testFun(); // http://tools.jb51.net/
-console.log(`child2.name`, child2.name);
+console.log(`child2.name`, child2.name); // ['wyc']
 // console.log(`child2.getSuperValue`, child2.getSuperValue()); // child2.getSuperValue is not a function
 console.log(`child2.test`, child2.test); // ["h1", "h2", "h3", "h4"]
 console.log(`child2.color`, child2.color); // ["pink", "yellow"]

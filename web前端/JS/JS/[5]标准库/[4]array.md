@@ -1537,6 +1537,7 @@ for (const v of arr) {
       }
       show.push(arr[i]);
     }
+    console.log("嘻嘻"); // 字符串会打印：说明for和for in确实是退出了循环，循环后面的代码继续执行
   }
   let a = [];
   testFor(a);

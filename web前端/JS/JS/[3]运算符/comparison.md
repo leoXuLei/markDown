@@ -356,10 +356,15 @@ null == undefined; // true
 0 == null; // false
 false == null; // false
 NaN == null; // false
-undefined === null; // fasle
 null == null; // true
 undefined == undefined; // true
+undefined === undefined; // true
+null === null; // true
 undefined == null; // true
+undefined === null; // fasle
+NaN == NaN // false
+NaN === NaN // false
+
 
 [] == [] // false
 [1,2,3] == '1,2,3' // === String([1,2,3]) == '1,2,3'   true

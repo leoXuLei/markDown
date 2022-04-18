@@ -57,6 +57,7 @@
 - 删除光标右侧的所有字： `Ctrl+Delete`
 - 扩展/缩小选取范围： `Shift+Alt+Left` 和 `Shift+Alt+Right`
 - 多行编辑(列编辑)：`Alt+Shift+鼠标左键`，`Ctrl+Alt+Down/Up`
+  - **可以从每一行的最开始开始编辑、结尾开始编辑、复制粘贴也是可以的（需要借助`HOME`和`END`移动到每行选中区域的开始/结束）**
 - 同时选中所有匹配： `Ctrl+Shift+L`
 - `Ctrl+D` 下一个匹配的也被选中 (在 sublime 中是删除当前行，后面自定义快键键中，设置与 `Ctrl+Shift+K` 互换了)
 - 回退上一个光标操作： `Ctrl+U`
@@ -116,11 +117,14 @@
 - 格式化 : github 风格的 md
   - `Alt + Shift + F`
 - 其它
-  - `Ctrl + B` : 在所选文本上粘贴链接
+  - `Ctrl + v` : 在所选文本上粘贴链接
 
 # 其它
-## VSCode自动格式化md文档
+
+## VSCode 自动格式化 md 文档
+
 [链接](https://www.jianshu.com/p/4d5529848104)
+
 # 参考链接
 
 - [vscode 常用快捷键](https://www.cnblogs.com/bindong/p/6045957.html)
