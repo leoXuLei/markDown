@@ -1,3 +1,145 @@
+# 文本
+
+## 文本超出显示省略号
+
+文本显示一行，超出显示省略号，悬浮显示全部
+
+```css
+.oneLineTextWrap {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+}
+```
+
+```jsx
+<div
+  title={value}
+  style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+>
+  //
+  若Tooltip的children为全文本，则必须为div，为span的话，Tooltip没法显示在布局的正中间，而是文本的正中间（即使文本被hidden了），
+  //
+  但是这也解决还有一个问题，就是没有超出的时候Tooltip依旧显示在布局的正中间，而不是文本的正中间了
+  <div style={{ width: "100%" }}>{value}</div>
+</div>
+```
+
+```jsx
+// 最终解决方法为：设置最大宽度为100%，ToolTip就能始终显示在文本的正中间，文本超出则显示在布局盒子的正中间
+
+// .approval-item-title {
+//   max-width: 100%; // 不设置宽度直接flex: 1 1 auto即可
+//   display: inline-block;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   white-space: nowrap;
+// }
+
+<Row>
+  <Col span={4}>
+    <Tooltip title={approvalItem?.approvalTitle}>
+      <span
+        className="approval-item-title"
+        onClick={() => {
+          props?.onClickDetail?.(approvalItem);
+        }}
+      >
+        {approvalItem?.approvalTitle}
+      </span>
+    </Tooltip>
+  </Col>
+
+  <Col span={3} offset={1} className="status">
+    {approvalItem?.approvalStatus}
+  </Col>
+</Row>
+```
+
+```jsx
+// 解法方案一：flex布局，子项目长度可能很长超出显示省略号，悬浮显示Tooltip，不需要缩小的子项目就设置flex-shrink
+const ApprovalITemCss = css`
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+
+  .approval-processing {
+    color: #0171c2;
+  }
+  .no-shrink {
+    flex: 0 0 auto;
+  }
+  .text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .gap {
+    margin-right: 16px;
+  }
+  .project-info {
+    margin-left: 6px;
+  }
+  &:hover {
+    background: #f7f7f7;
+  }
+`;
+
+const ApprovalItem = (props) => {
+  const { dashboard: lang } = useAppLocales();
+
+  const { item } = props;
+  return (
+    <div css={ApprovalITemCss}>
+      <Icon type="approval-process" className="gap approval-processing" />
+      <div className="no-shrink gap">{lang?.myApproval}</div>
+      <Tooltip title={item?.title}>
+        <div className="text gap">{item?.title}</div>
+      </Tooltip>
+      <div className="text no-shrink gap">{item?.reviewDescription}</div>
+      <div className="no-shrink">
+        <ProjectSvg />
+      </div>
+      <div className="project-info text">{item?.projectName}</div>
+    </div>
+  );
+};
+
+export default ApprovalItem;
+```
+
+> **显示两行文本，超出第二行显示省略号**
+
+```css
+.twoLineTextWrap{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  text-overflow: -o-ellipsis-lastline;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+```
+
+## 静态字符串文本换行
+
+```jsx
+// 几个\n，就换几行
+const info = '点击“全部成员”，可以根据角色来查看成员列表\n\n鼠标移过某个成员，右侧可以看到下拉图标，点击可以设置成员的角色\n权限说明：'
+
+
+<Tooltip title={<div style={{ whiteSpace: 'pre-line' }}>{i18n.useInfo}</div>}>
+  <InfoCircleOutlined />
+</Tooltip>
+```
+
+# CSS
+
 ## 浮层 modalbox-shadow 效果
 
 下面是 antd 的 popover 的 content 盒子的 box-shadow 样式
@@ -40,7 +182,7 @@
 
 ## 纯 CSS 实现自适应正方形
 
-> **方案一：CSS3 vw 单位：**
+### 方案一：CSS3 vw 单位
 
 ==CSS3 中新增了一组相对于可视区域百分比的长度单位 vw, vh, vmin, vmax==。其中 vw 是相对于视口宽度百分比的单位，1vw = 1% viewport width， vh 是相对于视口高度百分比的单位，1vh = 1% viewport height；==vmin 是相对当前视口宽高中较小的一个的百分比单位，同理 vmax 是相对当前视口宽高中较大的一个的百分比单位==。该单位浏览器兼容性如下（见原链接）。
 
@@ -72,9 +214,9 @@
 </html>
 ```
 
-> **方案二：设置垂直方向的 padding 撑开容器：**
+### 方案二：设置垂直方向的 padding 撑开容器
 
-在 CSS 盒模型中，一个比较容易被忽略的就是 margin, padding 的百分比数值计算。按照规定，==margin, padding 的百分比数值是相对 父元素的宽度 计算的==。由此可以发现只需将元素垂直方向的一个 padding 值设定为与 width 相同的百分比就可以制作出自适应正方形了。
+在 CSS 盒模型中，一个比较容易被忽略的就是 margin, padding 的百分比数值计算。按照规定，**margin, padding 的百分比数值是相对 父元素的宽度计算的**。由此可以发现只需将元素垂直方向的一个 padding 值设定为与 width 相同的百分比就可以制作出自适应正方形了。
 
 ```html
 <html>
@@ -166,7 +308,7 @@
 
 ![](../imgs/效果实现-css实现自适应正方形-4.png)
 
-> **方案三：利用伪元素的 margin(padding)-top 撑开容器：**
+### 方案三：利用伪元素的 margin(padding)-top 撑开容器
 
 在方案二中，我们利用百分比数值的 padding-bottom 属性撑开容器内部空间，但是这样做会导致在元素上设置的 max-height 属性失效。==而失效的原因是 max-height 属性只限制于 height，也就是只会对元素的 content height 起作用==。那么我们是不是能用一个子元素撑开 content 部分的高度，从而使 max-height 属性生效呢？我们来试试：
 

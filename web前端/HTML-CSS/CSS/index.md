@@ -185,6 +185,7 @@ link 和@import 的区别：
 
   #container * {
   }
+
   /* 把包含标题（title）的所有元素变为蓝色 */
   [title] {
     color: blue;
@@ -193,10 +194,12 @@ link 和@import 的区别：
   [title="hello"] {
     color: blue;
   }
+
   /* 选择包含title的a标签 */
   /* 选择包含title且为‘test’的a标签 */
   /* 选择包含href以http开头的a标签 */
   /* 选择包含href以.jpg结尾的a标签 */
+
   /* 选择除了id为 container的div标签 */
   div:not(#container) {
   }
@@ -287,7 +290,7 @@ li:nth-last-child(1) {
 }
 
 /* 选择除了最后一个li标签 */
-li:not(: last-child) {
+li:not(:last-child) {
 }
 ```
 
@@ -394,7 +397,7 @@ CSS 盒模型本质上是一个盒子，封装周围的 HTML 元素，它包括�
 > **概念：**
 
 - 定位：定义元素框相对于其正常位置应该出现的位置，或者相对于父元素、另一个元素甚至浏览器窗口本身的位置。
-- css 定位机制：有三种基本的定位机制：普通流、浮动和绝对定位。
+- css 定位机制：**有三种基本的定位机制：普通流、浮动和绝对定位**。
 - 定位属性
   - `position`: 把元素放置到一个静态的、相对的、绝对的、或固定的位置中。
     - static：元素框正常生成。块级元素生成一个矩形框，作为文档流的一部分，行内元素则会创建一个或多个行框，置于其父元素中。
@@ -698,151 +701,6 @@ height: calc(100vh - 260px); // 有时候用100%受到父元素影响不如vh方
   }
   ```
 
-# 常见效果
-
-## 文本超出显示省略号
-
-文本显示一行，超出显示省略号，悬浮显示全部
-
-```jsx
-<div
-  title={value}
-  style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
->
-  //
-  若Tooltip的children为全文本，则必须为div，为span的话，Tooltip没法显示在布局的正中间，而是文本的正中间（即使文本被hidden了），但是这也解决还有一个问题，就是没有超出的时候Tooltip依旧显示在布局的正中间，而不是文本的正中间了
-  <div style={{ width: "100%" }}>{value}</div>
-</div>
-```
-
-```jsx
-// 最终解决方法为：设置最大宽度为100%，ToolTip就能始终显示在文本的正中间，文本超出则显示在布局盒子的正中间
-
-// .approval-item-title {
-//   max-width: 100%; // 不设置宽度直接flex: 1 1 auto即可
-//   display: inline-block;
-//   overflow: hidden;
-//   text-overflow: ellipsis;
-//   white-space: nowrap;
-// }
-
-<Row>
-  <Col span={4}>
-    <Tooltip title={approvalItem?.approvalTitle}>
-      <span
-        className="approval-item-title"
-        onClick={() => {
-          props?.onClickDetail?.(approvalItem);
-        }}
-      >
-        {approvalItem?.approvalTitle}
-      </span>
-    </Tooltip>
-  </Col>
-
-  <Col span={3} offset={1} className="status">
-    {approvalItem?.approvalStatus}
-  </Col>
-</Row>
-```
-
-```jsx
-// 解法方案一：flex布局，子项目长度可能很长超出显示省略号，悬浮显示Tooltip，不需要缩小的子项目就设置flex-shrink
-const ApprovalITemCss = css`
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-
-  .approval-processing {
-    color: #0171c2;
-  }
-  .no-shrink {
-    flex: 0 0 auto;
-  }
-  .text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .gap {
-    margin-right: 16px;
-  }
-  .project-info {
-    margin-left: 6px;
-  }
-  &:hover {
-    background: #f7f7f7;
-  }
-`;
-
-const ApprovalItem = (props) => {
-  const { dashboard: lang } = useAppLocales();
-
-  const { item } = props;
-  return (
-    <div css={ApprovalITemCss}>
-      <Icon type="approval-process" className="gap approval-processing" />
-      <div className="no-shrink gap">{lang?.myApproval}</div>
-      <Tooltip title={item?.title}>
-        <div className="text gap">{item?.title}</div>
-      </Tooltip>
-      <div className="text no-shrink gap">{item?.reviewDescription}</div>
-      <div className="no-shrink">
-        <ProjectSvg />
-      </div>
-      <div className="project-info text">{item?.projectName}</div>
-    </div>
-  );
-};
-
-export default ApprovalItem;
-```
-
-```jsx
-const StaffsRender = (props: { staffList: IStaff[] }) => {
-  const { staffList } = props;
-
-  const staffsStr = staffList
-    ?.map((staffItem: IStaff) =>
-      staffItem ? `${staffItem?.tyName}(${staffItem?.name})` : ""
-    )
-    ?.filter(Boolean)
-    ?.join("、");
-
-  if (!staffsStr) {
-    return null;
-  }
-  return (
-    <Tooltip title={staffsStr}>
-      <div
-        style={{
-          maxWidth: "100%",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          whiteSpace: "nowrap",
-        }}
-      >
-        {staffsStr}
-      </div>
-    </Tooltip>
-  );
-};
-```
-
-## 静态字符串文本换行
-
-```jsx
-// 几个\n，就换几行
-const info = '点击“全部成员”，可以根据角色来查看成员列表\n\n鼠标移过某个成员，右侧可以看到下拉图标，点击可以设置成员的角色\n权限说明：'
-
-
-<Tooltip title={<div style={{ whiteSpace: 'pre-line' }}>{i18n.useInfo}</div>}>
-  <InfoCircleOutlined />
-</Tooltip>
-```
 
 # CSS 模块化
 

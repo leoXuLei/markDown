@@ -1921,6 +1921,28 @@ const diff = arrOne.filter((v) => !arrTwo.includes(v));
 // diff = [1, 2, 3, 4]
 ```
 
+### 数组乱序
+
+`Fisher–Yates shuffle` 洗牌算法：该方法就是每次在数组中随机产生一个位置，依次将数组中的每一项与该次产生的随机位置上的元素交换位置。
+
+```js
+Array.prototype.shuffle = function () {
+  var array = this;
+  var curEleIndex = array.length, // 当前处理元素下标 从最后依次到开头
+    temp, // 暂存值
+    i; // 随机下标
+  while (curEleIndex) {
+    i = Math.floor(Math.random() * curEleIndex--);
+    temp = array[curEleIndex];
+    array[curEleIndex] = array[i];
+    array[i] = temp;
+  }
+  return array;
+};
+```
+
+- [如何将一个 JavaScript 数组打乱顺序](https://www.zhihu.com/question/68330851/answer/266506621)
+
 ## 其它
 
 - 数组中间元素的下标
