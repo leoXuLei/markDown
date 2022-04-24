@@ -1,10 +1,80 @@
-## 递归
+# 递归
 
-### 树形数据处理
+## 遍历处理树形数据
+
+```js
+const mapTree = (node, cb, fieldName = "children", parentNodes = []) => {
+  const findalParentNodes = parentNodes.concat(node);
+  return cb(
+    {
+      ...node,
+      [fieldName]: node[fieldName]
+        ? node[fieldName].map((item) =>
+            mapTree(item, cb, fieldName, findalParentNodes)
+          )
+        : undefined,
+    },
+    findalParentNodes
+  );
+};
+
+export const handleTreeDataToFlatData = rootNode => {
+  let res = [];
+  mapTree(rootNode, (node, parentNodes) => {
+    const { level } = node;
+    // 返回当前节点的权限列表
+    const handledAuthList = getAuthList(node);
+
+    const getConcatList = () => {
+      const getNodeNames = node => {
+        const { resourceName, resourceType } = node;
+        const resourceTypeZHCN = DATA_PERMISSION_RESOURCE_TYPE_MAP[resourceType];
+        if (resourceTypeZHCN) {
+          if (resourceTypeZHCN === DATA_PERMISSION_RESOURCE_TYPE_MAP.ROOT) {
+            return resourceName;
+          }
+          return `${resourceName} (${resourceTypeZHCN})`;
+        }
+        return resourceName;
+      };
+      const dataPermissionColumnNameObj = ([...Array(level).keys()].reduce((t, v, i) => {
+        const temp = t;
+        temp[`${v}_name`] = getNodeNames(parentNodes[i]);
+        return temp;
+      }, {}) as unknown) as object;
+      // 有权限的节点返回当前节点
+      if (handledAuthList.length) {
+        return handledAuthList.map(item => {
+          return {
+            ...dataPermissionColumnNameObj,
+            [`${level}_name`]: item.name,
+            level,
+          };
+        });
+      }
+      // 没有权限但是有子节点的返回nul
+      if (node.children) {
+        return null;
+      }
+      // 没有权限但是没有子节点的返回当前节点
+      return {
+        ...dataPermissionColumnNameObj,
+        level,
+      };
+    };
+    const toConcatList = getConcatList() || [];
+    res = res.concat(toConcatList);
+  });
+  return res;
+};
+
+```
+
+## 树形数据处理
 
 原理就是递归，最小的子问题解决之后开始依次返回值，最终得到问题的最终结果（类似坐在电影院最后一排，问前面一排他是第几排，他也同样方式问他的前面一排，以此类推，直到问到第一排的人，他回头告诉第二排的人自己是第一排，以此类推，最终就能直到最后一排是第几排）
 
-#### 实例一： 两级菜单树形数据处理
+### 实例一： 两级菜单树形数据处理
 
 ```js
 const pageId = {
@@ -179,7 +249,7 @@ treeData(pageId);
 */
 ```
 
-#### 实例二： 两级菜单树形数据处理+三级(二级的操作权限)
+### 实例二： 两级菜单树形数据处理+三级(二级的操作权限)
 
 ```js
 // allPagePermission 数据结构
@@ -354,7 +424,7 @@ const handledTreeData = this.handleLevelThreeTreeData(treeData(pageId));
 
 ```
 
-#### 实例三： 返回最后一级：即第三级(二级的操作权限)
+### 实例三： 返回最后一级：即第三级(二级的操作权限)
 
 ```js
 // 写法一：reduce
@@ -428,7 +498,7 @@ export const getLevelThreeKeyTreeData = (list) => {
   };
 ```
 
-#### 实例四： 树形数据转为平层
+### 实例四： 树形数据转为平层
 
 ```js
 const treeData = [
@@ -509,11 +579,11 @@ const res = [
 ];
 ```
 
-#### 实例五： 见`典型需求/excel导出数据处理`
+### 实例五： 见`典型需求/excel导出数据处理`
 
-## 其它
+# 其它
 
-### 比较两个对象的属性变化
+## 比较两个对象的属性变化
 
 ```js
 // 写一个比较两个对象相同属性、不同属性

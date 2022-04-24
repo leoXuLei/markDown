@@ -1945,7 +1945,7 @@ Array.prototype.shuffle = function () {
 
 ## 其它
 
-- 数组中间元素的下标
+### 数组中间元素的下标
 
 ```js
 const arrOne = ["一", "二", "三", "四", "五"];
@@ -1967,4 +1967,42 @@ const getArrMidEleIndex = (list) => {
   // 奇数长度
   return midEleIndex;
 };
+```
+
+### 双层 for 循环体里，分别跳出外层循环和内层循环
+
+跳出内层循环
+
+```js
+for (let i = 0; i < 5; i++) {
+  console.log("外-->" + i);
+  for (let j = 0; j < 5; j++) {
+    break; //跳出内层循环
+    console.log("内-->" + j);
+  }
+}
+
+// 外-->0
+// 外-->1
+// 外-->2
+// 外-->3
+// 外-->4
+```
+
+跳出外层循环
+
+```js
+outer: for (let i = 0; i < 5; i++) {
+  console.log("外-->" + i);
+  for (let j = 0; j < 5; j++) {
+    if (j == 2) {
+      break outer; //跳出内层循环
+    }
+    console.log("内-->" + j);
+  }
+}
+
+// 外-->0
+// 内-->0
+// 内-->1
 ```

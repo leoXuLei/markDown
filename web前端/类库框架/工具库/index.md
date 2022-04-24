@@ -367,3 +367,15 @@ const moveCard = useCallback(
 
 [使用 immutability-helper 更好的更新复杂数据](https://www.jianshu.com/p/5f749e90a6a2)
 [使用 immutability-helper 的经验教训](https://www.jianshu.com/p/5d44a831fad1)
+
+## 比对对象是否修改过
+
+一般用来控制保存按钮是否可点击，修改过了才可点击
+
+```jsx
+import deepEqual from "fast-deep-equal";
+
+useEffect(() => {
+  setHasModified(!deepEqual(milestones, currentMilestones));
+}, [milestones, currentMilestones]);
+```

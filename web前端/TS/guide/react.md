@@ -753,3 +753,36 @@ loadData={(selectedOptions) => {
 ```jsx
 import { CascaderOptionType } from "antd/lib/cascader/index";
 ```
+
+- 接口这样写注释，悬浮到类型的属性上时会提示中文
+
+```tsx
+interface IResource {
+  id: string;
+  /** 文件/文件夹的路径 */
+  currentPath: IResourcePath[];
+  /** 文件类型 */
+  contentType: string;
+  /** 是否是文件夹 */
+  directory?: boolean;
+  /** 文件资源 */
+  fileId: string;
+  /** 文件更新时间 */
+  gmtModified: number | null;
+  /** 文件名称 */
+  name: string;
+  /** 顺序 */
+  order?: number;
+  /** 文件大小 */
+  size: string;
+  /** 默认版本 */
+  version: string;
+  /** 其他版本 */
+  otherVersions: IResource[] | null;
+  /** 子文件/文件夹 */
+  subResources: IResource[] | null;
+  /** 是否含有子文件（某些场景没有返回 subResources 时，可以尝试使用这个判断） */
+  hasSubResources?: boolean;
+  tags: ITagItem[];
+}
+```
