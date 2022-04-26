@@ -24,3 +24,7 @@ P10(研究员)
 答案特别简单，就是加大自己的代码量。
 
 [程序员 30 岁前，该如何规划自己的职业发展? - 小爝的回答](https://www.zhihu.com/question/67491003/answer/254913649)
+
+# 团队早会
+
+[为何要做团队早会](https://baijiahao.baidu.com/s?id=1674901640505133985&wfr=spider&for=pc)

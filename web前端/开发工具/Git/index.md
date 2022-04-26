@@ -160,5 +160,5 @@ git commit -m '' --no-verify
 - [vscode 代码管理菜单含义](https://segmentfault.com/q/1010000020782287)
 
 # 参考链接
-
+- [git官网中文](https://git-scm.com/book/zh/v2)
 - [git 工作流程](https://www.ruanyifeng.com/blog/2015/12/git-workflow.html)
