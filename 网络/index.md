@@ -12,7 +12,7 @@ HTTP 协议老的标准是 HTTP/1.0，==为了提高系统的效率，HTTP 1.0 �
 > **1.1 的改进**
 
 - 支持长连接（默认 connection: keep-alive），在一个TCP连接上可以传送多个HTTP请求和响应，减少了建立和关闭连接的消耗和延迟。
-- 增加Host请求头字段后，在HTTP1.0中认为每台服务器都绑定一个唯一的IP地址，因此，请求消息中的URL并没有传递主机名（hostname）。但随着虚拟主机技术的发展，在一台物理服务器上可以存在多个虚拟主机（Multi-homed Web Servers），并且它们共享一个IP地址。HTTP1.1的请求消息和响应消息都应支持Host头域，且请求消息中如果没有Host头域会报告一个错误（400 Bad Request）。
+- 增加Host请求头字段，在HTTP1.0中认为每台服务器都绑定一个唯一的IP地址，因此，请求消息中的URL并没有传递主机名（hostname）。但随着虚拟主机技术的发展，在一台物理服务器上可以存在多个虚拟主机（Multi-homed Web Servers），并且它们共享一个IP地址。HTTP1.1的请求消息和响应消息都应支持Host头域，且请求消息中如果没有Host头域会报告一个错误（400 Bad Request）。
 - 还提供了与身份认证、状态管理和Cache缓存等机制相关的请求头和响应头。
     - cache 缓存
         - Cache-Control
