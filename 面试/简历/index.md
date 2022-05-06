@@ -173,18 +173,3 @@
 ![](./../../web前端/1-典型需求/imgs/typical-needs-file-copy-move-to-folder1.png)
 ![](./../../web前端/1-典型需求/imgs/typical-needs-css-project-milestones-stage-3.png) -->
 
-<!--
-## 行情薪资
-
-- 姚长剑
-  - 后端
-  - 16 年毕业：6 年经验
-  - 恒生电子：28K 公积金全额，社保基数 4K 多
-  - 在涂鸦：23K，
-- 梁成
-  - 后端
-  - 绿城服务：22K\*15，
-- 北冥
-  - 前端，硕士
-  - 18 年毕业：
-  - 涂鸦：25K -->

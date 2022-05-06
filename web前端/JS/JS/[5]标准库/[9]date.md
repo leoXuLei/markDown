@@ -551,23 +551,42 @@ d; // Sun Jan 06 2013 06:00:00 GMT+0800 (CST)
 
 上面代码中，本地时区（东八时区）的 1 月 6 日 0 点 0 分，是 UTC 时区的前一天下午 16 点。设为 UTC 时区的 22 点以后，就变为本地时区的上午 6 点。
 
-## Tips
+# Tips
 
-- 根据时间戳转换年月日方法
+## 根据时间戳转换年月日方法
 
 ```jsx
-const timestampToTime = (timestamp) => {
-  const date = new Date(timestamp);
-  const Y = `${date.getFullYear()}-`;
-  const M = `${
-    date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
-  }-`;
-  const D = `${date.getDate()}`;
-  return Y + M + D;
-};
+// 时间戳生成时间
+const date = new Date(timestamp);
+
+// 格式化小于10的数字
+function formatNumsLessTen(num) {
+  return `${num < 10 ? `0${num}` : num}`;
+}
+// 格式化显示年月日-时分
+function handledDate(date) {
+  // 年
+  const Y = date.getFullYear();
+  // 月
+  const M = date.getMonth() + 1;
+  // 日
+  const D = date.getDate();
+  // 格式化显示年月日
+  const formatedDate = `${Y}/${formatNumsLessTen(M)}/${formatNumsLessTen(D)}`;
+  const Hours = date.getHours();
+  const Minutes = date.getMinutes();
+  // 格式化显示年月日 时分
+  const formatedTime = `${formatedDate}${"  "}${formatNumsLessTen(
+    Hours
+  )}:${formatNumsLessTen(Minutes)}`;
+  // return formatedDate;
+  return formatedTime;
+}
+
+handledDate(date);
 ```
 
-- 根据毫秒数值转换成天
+## 根据毫秒数值转换成天
 
 ```jsx
 var days = parseInt(ms / 1000 / 60 / 60 / 24); //转换为天
@@ -580,4 +599,84 @@ var use_days = parseInt((end_timeMS - start_timeMS) / 1000 / 60 / 60 / 24); //�
 var use_hours = parseInt(((end_timeMS - start_timeMS) / 1000 / 60 / 60) % 24); //转换为小时
 var user_min = parseInt(((end_timeMS - start_timeMS) / 1000 / 60) % 60); //转换为分钟
 var user_second = parseInt(((end_timeMS - start_timeMS) / 1000) % 60); //转换为秒
+```
+
+## 生成艾兵豪斯记忆曲线复习时间
+
+```js
+// 格式化小于10的数字
+function formatNumsLessTen(num) {
+  return `${num < 10 ? `0${num}` : num}`;
+}
+// 格式化显示年月日-时分
+function handledDate(date) {
+  // 年
+  const Y = date.getFullYear();
+  // 月
+  const M = date.getMonth() + 1;
+  // 日
+  const D = date.getDate();
+  // 格式化显示年月日
+  const formatedDate = `${Y}/${formatNumsLessTen(M)}/${formatNumsLessTen(D)}`;
+  const Hours = date.getHours();
+  const Minutes = date.getMinutes();
+  // 格式化显示年月日 时分
+  const formatedTime = `${formatedDate}${"  "}${formatNumsLessTen(
+    Hours
+  )}:${formatNumsLessTen(Minutes)}`;
+  // return formatedDate;
+  return formatedTime;
+}
+// 艾宾浩斯记忆曲线时间生成
+function getABHSDates(today = new Date()) {
+  // 一天的毫秒数
+  const msPerDay = 24 * 60 * 60 * 1000;
+  // 一月的毫秒数
+  const msPerMonth = 30 * 24 * 60 * 60 * 1000;
+
+  // 30分钟后
+  const thirtyMinutesLater = new Date(today.getTime() + 30 * 60 * 1000);
+  // 12小时后
+  const twelveHoursLater = new Date(
+    thirtyMinutesLater.getTime() + msPerDay / 2
+  );
+  // 1天后
+  const oneDayLater = new Date(twelveHoursLater.getTime() + msPerDay);
+  // 2天后
+  const twoDaysLater = new Date(oneDayLater.getTime() + msPerDay * 2);
+  // 4天后
+  const fourDaysLater = new Date(twoDaysLater.getTime() + msPerDay * 4);
+  // 7天后
+  const sevenDaysLater = new Date(fourDaysLater.getTime() + msPerDay * 7);
+  // 15天后
+  const fifteenDaysLater = new Date(sevenDaysLater.getTime() + msPerDay * 15);
+  // 1个月后
+  const oneMonthLater = new Date(fifteenDaysLater.getTime() + msPerMonth);
+  // 3个月后
+  const threeMonthsLater = new Date(oneMonthLater.getTime() + msPerMonth * 3);
+  // 6个月后
+  const sixMonthsLater = new Date(threeMonthsLater.getTime() + msPerMonth * 6);
+  // 1年后
+  const oneYearLater = new Date(sixMonthsLater.getTime() + msPerMonth * 12);
+  console.log(`${handledDate(today)}  现在`);
+  console.log(`${handledDate(thirtyMinutesLater)}  30分钟后`);
+  console.log(`${handledDate(twelveHoursLater)}  12小时后`);
+  console.log(`${handledDate(oneDayLater)}  1天后`);
+  console.log(`${handledDate(twoDaysLater)}  2天后`);
+  console.log(`${handledDate(fourDaysLater)}  4天后`);
+  console.log(`${handledDate(sevenDaysLater)}  7天后`);
+  console.log(`${handledDate(fifteenDaysLater)}  15天后`);
+  console.log(`${handledDate(oneMonthLater)}  1个月后`);
+  console.log(`${handledDate(threeMonthsLater)}  3个月后`);
+  console.log(`${handledDate(sixMonthsLater)}  6个月后`);
+  console.log(`${handledDate(oneYearLater)}  1年后`);
+
+  var start_timeMS = today.getTime();
+  var end_timeMS = oneYearLater.getTime();
+  var use_months = parseInt((end_timeMS - start_timeMS) / msPerMonth); //转换为月
+  var use_days = parseInt((end_timeMS - start_timeMS) / msPerDay); //转换为天
+  // console.log("持续时间的月数为", use_months); // 为22个月，不到两年，即1年零10个月
+}
+getABHSDates();
+getABHSDates(new Date(2022, 4, 3, 15, 30)); // 指定年月日时分，注意日期为实际-1
 ```

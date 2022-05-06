@@ -536,172 +536,6 @@ CSS 盒模型本质上是一个盒子，封装周围的 HTML 元素，它包括�
   }
   ```
 
-# Tips
-
-## 设置颜色时的 `currentColor` 关键字
-
-currentColor 关键字代表原始的 color 属性的计算值。它允许让继承自属性或子元素的属性颜色属性以默认值不再继承。
-
-它也能用于那些继承了元素的 color 属性计算值的属性，相当于在这些元素上使用 inherit 关键字，如果这些元素有该关键字的话。
-[MDN currentColor](https://developer.mozilla.org/zh-CN/docs/Web/CSS/color_value)
-
-```css
-.indicator {
-  margin-left: 2px;
-  width: 12px;
-  height: 12px;
-  border: 2px solid currentColor;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: all 0.2s;
-
-  &:hover,
-  &.is-active {
-    background-color: currentColor;
-  }
-
-  &:hover {
-    transform: scale(1.2);
-  }
-}
-```
-
-## position 定位`top：100%` `bottom: 0`问题
-
-> css 设置绝对定位后 ==top、bottom，设置百分比定位是按父元素的高度来计算的，同样 left、right，设置百分比定位是按父元素的宽度度来计算的==。
-
-> top: 100%的定位是以父元素 border 下界为基线，向下延伸。（定位元素的顶部贴着父元素的底部 border，在边框外边）
-> bottom: 0px 的定位是以父元素 border 上界为基线，向上延伸。（定位元素的底部贴着父元素的底部 border，在边框里面）
-
-- 参考链接
-  - [css position 定位 top 百分比的问题](https://www.imooc.com/article/12794)
-  - [CSS 绝对定位 top: 100%和 bottom:0 的区别](https://www.jianshu.com/p/e37e586249f3)
-
-## 同一个选择器使用多次伪类
-
-```css
-.folder-item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 4px 16px;
-  cursor: pointer;
-  &-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  // hover时候且不是.disabled和.selected
-  &:hover:not(.disabled):not(.selected) {
-    background: #f7f7f7;
-  }
-
-  &:hover:not(.disabled):not(.selected) .folder-item-name {
-    color: #1b9aee;
-  }
-}
-```
-
-## 滚动条样式
-
-```css
-::-webkit-scrollbar {
-  display: none;
-}
-```
-
-[用 CSS 修改滚动条样式](https://www.cnblogs.com/liulangbxc/p/15200433.html)
-
-## 点击 a 元素 b 元素添加样式
-
-```jsx
-
-.high-light {
-  background-color: #fff;
-  transition: background-color 0.5s ease-in 0.5s;
-  animation: changebackgroundcolor 0.5s ease-in-out 0s 1 alternate running forwards;
-}
-
-const onClickFormula = useCallback((ref: React.RefObject<HTMLDivElement>) => {
-  ref?.current?.classList?.add("high-light");
-  setTimeout(() => {
-    ref?.current?.classList?.remove("high-light");
-  }, 500);
-}, []);
-```
-
-## 用纯 CSS 禁止鼠标点击事件
-
-[链接](https://www.cnblogs.com/karajanking/p/5889300.html)
-
-```css
-.disabled {
-  pointer-events: none;
-  cursor: default;
-  opacity: 0.6;
-}
-```
-
-## 组件 className 前缀统一
-
-```jsx
-const __prefix_name = "ui-use-case";
-
-const join = (...args) => {
-  return [__prefix_name, ...args].join("-");
-};
-
-function render() {
-  return <div className={join("customer-pop", "bottom")}></div>;
-}
-```
-
-## 其它
-
-- scss 文件悬浮到选择器上可以看到匹配当前选择器的 html 结构
-
-- 若写了结构也有内容但是就是不出来高度占比，给个`font-size`就好了
-
-- css 如何实现点击 a 元素，b 元素改变样式
-
-  ```css
-  a:hover .b {
-    background: red;
-  }
-  ```
-
-- styled 组件元素复用的时候如果需要特定修改，通过 style 来修改
-
-- 如何修改 antd 的默认样式
-
-```css
-.button-container {
-  display: flex;
-  align-items: center;
-  .ant-switch {
-    background-color: #117a65;
-  }
-  .ant-switch-checked {
-    background-color: #1890ff;
-  }
-}
-```
-
-- calc
-
-```css
-height: calc(100vh - 260px); // 有时候用100%受到父元素影响不如vh方便
-```
-
-- [MDN-sticky 定位](https://developer.mozilla.org/zh-CN/docs/Web/CSS/position)
-- 若有更高优先级的 className 把设置的样式覆盖如何处理
-  解决方法：通过连写选择符号 或者 !important
-  ```css
-  .ant-form-item.oui-value-evaluation-formItem {
-  }
-  ```
-
-
 # CSS 模块化
 
 ## 实例一
@@ -985,3 +819,210 @@ export const modalWrapperCss = css`
 ## 参考
 
 - [CSS 知识点及技巧整理](https://juejin.cn/post/6844903567707357197#heading-22)
+
+# 问题
+
+## `visibility: hidden`和`display: none`的区别
+
+几种元素消失的属性：
+
+- `display: none`; 元素消失，不占位；
+- `visibility: hidden`; 元素消失，占位；
+- `opacity: 0`; 透明度设为 0，元素看不见，占位；
+- `width: 0`; 宽度设为 0，元素看不见，不占位。
+
+在使用 CSS 隐藏一些元素时，我们经常用到 `display:none` 和 `visibility:hidden`。两者差别如下：
+
+- 1. **是否占据空间**
+
+  - `display:none`，该元素不占据任何空间，在文档渲染时，该元素如同不存在（但依然存在 DOM 文档对象模型树中）。
+  - `visibility:hidden`，该元素空间依旧存在。
+  - 即一个（display:none）不会在渲染树中出现，一个（visibility :hidden）会。
+
+- 2. **是否渲染**
+  - `display:none`，会触发 reflow（回流），进行渲染。
+  - `visibility:hidden`，只会触发 repaint（重绘），因为没有发现位置变化，不进行渲染。
+- 3. **是否是继承属性**
+
+  - `display:none`，display 不是继承属性，元素及其子元素都会消失。
+  - `visibility:hidden`，visibility 是继承属性，若子元素使用了`visibility:visible`，则不继承，这个子孙元素又会显现出来。
+
+- 4. **读屏器是否读取**
+     读屏器不会读取 display：none 的元素内容，而会读取 visibility：hidden 的元素内容。
+
+- 布局应用
+  基于 visibility 的可识别性，一些布局上的操作也是优于 display 的。
+  - 页面加载。
+    通常我们会设置一个加载图片来告诉用户页面正在加载，然后通过回调函数，隐藏加载图片，显示实际页面，如果此时用 display，在图片较少的情况下，问题不大。但正如上面所述，display 会触发重排，所以页面会发生抖动，等于一些元素重新被撑开，图片重新加载显示，尤其图片多的时候，问题更显著；而此时使用 visibility，是不会有这个问题，页面都已加载好，只是显示出来而已，不会触发重排，也不会触发页面抖动。
+  - echarts 的 canvas 画布显示是基于其容器大小的，如果 display 控制显隐，元素相当于从 0 扩展到正常大小，虽然时间可以忽略，但对于 echarts 是致命的，它会挤成一团，必须重新调用 resize 方法才能恢复，页面不仅晃动，而且会有卡顿，这种问题通常出现在切换显示 echartsde 的时候，而使用 visibility，将相应的图层利用绝对定位叠在一起，这样切换，完全不会有任何问题，而且 visibility 在 hidden 状态时，是不会遮盖其他元素的，对于 echarts 或者有类似需求的布局，完全可以使用 visibility 来代替 display，并且兼容性无忧。
+  - 针对与鼠标移入显示菜单的功能布局，display 可以胜任，但是它总会立刻出现，不能控制延时。原因就是 transition 属性不支持 display，究其原因，就是 display: none 不能识别，它不存在于渲染树中，无法获取对它的相应控制；而 visibility 属性是被支持的，因此利用 transition、visibility，可以实现元素的延时显示和立即消失。
+
+> **链接**
+
+- [display:none 和 visibility:hidden 的区别](https://zhuanlan.zhihu.com/p/37221519)
+- [display:none 与 visibility:hidden 的区别](https://zhuanlan.zhihu.com/p/368014069)
+
+# Tips
+
+## 设置颜色时的 `currentColor` 关键字
+
+currentColor 关键字代表原始的 color 属性的计算值。它允许让继承自属性或子元素的属性颜色属性以默认值不再继承。
+
+它也能用于那些继承了元素的 color 属性计算值的属性，相当于在这些元素上使用 inherit 关键字，如果这些元素有该关键字的话。
+[MDN currentColor](https://developer.mozilla.org/zh-CN/docs/Web/CSS/color_value)
+
+```css
+.indicator {
+  margin-left: 2px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover,
+  &.is-active {
+    background-color: currentColor;
+  }
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+```
+
+## position 定位`top：100%` `bottom: 0`问题
+
+> css 设置绝对定位后 ==top、bottom，设置百分比定位是按父元素的高度来计算的，同样 left、right，设置百分比定位是按父元素的宽度度来计算的==。
+
+> top: 100%的定位是以父元素 border 下界为基线，向下延伸。（定位元素的顶部贴着父元素的底部 border，在边框外边）
+> bottom: 0px 的定位是以父元素 border 上界为基线，向上延伸。（定位元素的底部贴着父元素的底部 border，在边框里面）
+
+- 参考链接
+  - [css position 定位 top 百分比的问题](https://www.imooc.com/article/12794)
+  - [CSS 绝对定位 top: 100%和 bottom:0 的区别](https://www.jianshu.com/p/e37e586249f3)
+
+## 同一个选择器使用多次伪类
+
+```css
+.folder-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 16px;
+  cursor: pointer;
+  &-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  // hover时候且不是.disabled和.selected
+  &:hover:not(.disabled):not(.selected) {
+    background: #f7f7f7;
+  }
+
+  &:hover:not(.disabled):not(.selected) .folder-item-name {
+    color: #1b9aee;
+  }
+}
+```
+
+## 滚动条样式
+
+```css
+::-webkit-scrollbar {
+  display: none;
+}
+```
+
+[用 CSS 修改滚动条样式](https://www.cnblogs.com/liulangbxc/p/15200433.html)
+
+## 点击 a 元素 b 元素添加样式
+
+```jsx
+
+.high-light {
+  background-color: #fff;
+  transition: background-color 0.5s ease-in 0.5s;
+  animation: changebackgroundcolor 0.5s ease-in-out 0s 1 alternate running forwards;
+}
+
+const onClickFormula = useCallback((ref: React.RefObject<HTMLDivElement>) => {
+  ref?.current?.classList?.add("high-light");
+  setTimeout(() => {
+    ref?.current?.classList?.remove("high-light");
+  }, 500);
+}, []);
+```
+
+## 用纯 CSS 禁止鼠标点击事件
+
+[链接](https://www.cnblogs.com/karajanking/p/5889300.html)
+
+```css
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
+```
+
+## 组件 className 前缀统一
+
+```jsx
+const __prefix_name = "ui-use-case";
+
+const join = (...args) => {
+  return [__prefix_name, ...args].join("-");
+};
+
+function render() {
+  return <div className={join("customer-pop", "bottom")}></div>;
+}
+```
+
+## 其它
+
+- scss 文件悬浮到选择器上可以看到匹配当前选择器的 html 结构
+
+- 若写了结构也有内容但是就是不出来高度占比，给个`font-size`就好了
+
+- css 如何实现点击 a 元素，b 元素改变样式
+
+  ```css
+  a:hover .b {
+    background: red;
+  }
+  ```
+
+- styled 组件元素复用的时候如果需要特定修改，通过 style 来修改
+
+- 如何修改 antd 的默认样式
+
+```css
+.button-container {
+  display: flex;
+  align-items: center;
+  .ant-switch {
+    background-color: #117a65;
+  }
+  .ant-switch-checked {
+    background-color: #1890ff;
+  }
+}
+```
+
+- calc
+
+```css
+height: calc(100vh - 260px); // 有时候用100%受到父元素影响不如vh方便
+```
+
+- [MDN-sticky 定位](https://developer.mozilla.org/zh-CN/docs/Web/CSS/position)
+- 若有更高优先级的 className 把设置的样式覆盖如何处理
+  解决方法：通过连写选择符号 或者 !important
+  ```css
+  .ant-form-item.oui-value-evaluation-formItem {
+  }
+  ```

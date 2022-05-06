@@ -434,6 +434,8 @@ Array.prototype.method = function () {
   console.log(this.length);
 };
 let arr = [1, 2, 4, 5, 7];
+arr.name = "数组";
+
 for (let index in arr) {
   console.log(arr[index]);
   console.log(typeof index);
@@ -449,6 +451,8 @@ for (let index in arr) {
 // 5
 // string
 // 7
+// string
+// 数组
 // string
 // ƒ (){
 // 　console.log(this.length);
@@ -518,6 +522,9 @@ for-of 可以简单、正确地遍历数组（不遍历原型 method 和 name）
 遍历数组：
 
 ```js
+Array.prototype.method = function () {
+  console.log(this.length);
+};
 let myArray = [1, 2, 4, 5, 6, 7];
 myArray.name = "数组";
 myArray.getName = function () {
@@ -557,7 +564,7 @@ for (let value of myArray) {
 - for...in 循环不仅遍历数字键名，还会遍历手动添加的其它键，甚至包括原型链上的键
 - for...in 遍历的索引为字符串类型
 - for..of 适用遍历数/数组对象/字符串/map/set 等拥有迭代器对象的集合，但是不能遍历对象
-- for...of 与 forEach()不同的是，它可以正确响应 break、continue 和 return 语句具有迭代器对象才可以使用 for...of
+- for...of 与 forEach()不同的是，它可以正确响应 break、continue 和 return 语句，具有迭代器对象才可以使用 for...of
 
 > 参考链接
 

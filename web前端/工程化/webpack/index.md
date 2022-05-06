@@ -2,6 +2,8 @@
 
 ## 为什么学习 webpack
 
+> 还需要对应用进行打包、压缩和编译成浏览器能够理解的代码
+
 随着前端项目越来越复杂，单独建几个文件 HTML，JS，CSS 来写业务代码，==这样的方式已经无法保证项目的可维护性了==。
 
 ==所以就需要将不同的业务场景拆成模块==，然后去分开引入这些模块，每个模块自己做自己的事情，这样就可以保证项目的可维护性和可扩展性了，
@@ -278,8 +280,8 @@ var webpackConfig = {
   [webpack-libs-optimizations 依赖包优化](https://github.com/GoogleChromeLabs/webpack-libs-optimizations)
   `npm install --save-dev webpack-bundle-analyzer`
   ```js
-  const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
-    .BundleAnalyzerPlugin;
+  const BundleAnalyzerPlugin =
+    require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
   module.exports = {
     plugins: [new BundleAnalyzerPlugin()],
   };
@@ -338,63 +340,58 @@ module.exports = {
 ### 【八】实现 HMR：模块热更新
 
 Hot Module Replacement 模块热更新
+
 > **什么是模块热更新：**
-模块热替换是指在应用程序运行过程中，替换、添加、删除模块，而无需重新刷新整个页面。
+> 模块热替换是指在应用程序运行过程中，替换、添加、删除模块，而无需重新刷新整个页面。
 
-
-> **HMR通过如下几种方式，来提高开发的速度**
+> **HMR 通过如下几种方式，来提高开发的速度**
 
 - 不重新加载整个页面，这样可以保留某些应用程序的状态不丢失；
 - 只需更新需要变化的内容，节省开发时间
-- 修改了css、js源代码，会立即在浏览器更新，相当于直接在浏览器的devtools中直接修改样式。
+- 修改了 css、js 源代码，会立即在浏览器更新，相当于直接在浏览器的 devtools 中直接修改样式。
 
-> **如何使用HMR？**
-三步骤
-- 1. 默认情况下，webpack-dev-server已经支持HMR，只需要开启即可。需要加个 `hot: true`
-- 2. 然后引入一个`new webpack.HotModuleReplacementPlugin()` webpack自带插件
-- 3. 最后还得在需要设置热更新的JS模块处手动定义使用HMR的模块。如果是CSS的HMR则不需要手动定义配置，因为css的loader已经做了，自搭建项目JS的HMR就得如下定义，但是React脚手架项目则不需要开发者手动做，脚手架等底层会把HMR的代码做好。
+> **如何使用 HMR？**
+> 三步骤
+
+- 1. 默认情况下，webpack-dev-server 已经支持 HMR，只需要开启即可。需要加个 `hot: true`
+- 2. 然后引入一个`new webpack.HotModuleReplacementPlugin()` webpack 自带插件
+- 3. 最后还得在需要设置热更新的 JS 模块处手动定义使用 HMR 的模块。如果是 CSS 的 HMR 则不需要手动定义配置，因为 css 的 loader 已经做了，自搭建项目 JS 的 HMR 就得如下定义，但是 React 脚手架项目则不需要开发者手动做，脚手架等底层会把 HMR 的代码做好。
 
 ```js
-  if (module.hot) {
+if (module.hot) {
   module.hot.accept("./number", () => {
     document.body.removeChild(document.getElementById("number"));
-    number(); // 
+    number(); //
   });
 }
 ```
 
-
 - 另外一种配置方法(见参考链接)：
-  > 值得一提的是，在上面的配置中并没有配置 HotModuleReplacementPlugin，原因在于当我们设置 devServer.hot 为 true 后，并且在package.json 文件中添加如下的 script 脚本：
-  "start": "webpack-dev-server --hot --open"
-  添加 —hot 配置项后，devServer 会告诉 webpack 自动引入 HotModuleReplacementPlugin 插件，而不用我们再手动引入了。
+  > 值得一提的是，在上面的配置中并没有配置 HotModuleReplacementPlugin，原因在于当我们设置 devServer.hot 为 true 后，并且在 package.json 文件中添加如下的 script 脚本：
+  > "start": "webpack-dev-server --hot --open"
+  > 添加 —hot 配置项后，devServer 会告诉 webpack 自动引入 HotModuleReplacementPlugin 插件，而不用我们再手动引入了。
 
->**HMR效果：**
+> **HMR 效果：**
 
-CSS的HMR实现效果如下
+CSS 的 HMR 实现效果如下
 ![](./imgs/webpack-dev-server-css-HMR.png)
-
-
-
-
 
 > **其它：**
 
-HMR开头的信息提示由webpack/hot/dev-server模块产生
+HMR 开头的信息提示由 webpack/hot/dev-server 模块产生
 
 总结：js 里实现代码 HMR，稍微复杂一点，需要监听对应的模块是否发生变化，再去重新执行这个模块，
 
 问题：为啥 cssHMR 的时候不需要去监听，手写一些代码呢，因为 css-loader 里面已经帮你做了这个事情，所以自己就不用再写一遍了。
 
-
 **参考链接：**
-- [Webpack DevServer和HMR原理 - 前端LeBron的文章 - 知乎
-](https://zhuanlan.zhihu.com/p/375264720)
 
+- [Webpack DevServer 和 HMR 原理 - 前端 LeBron 的文章 - 知乎
+  ](https://zhuanlan.zhihu.com/p/375264720)
 
-- [Webpack HMR 原理解析 - 冉四夕的文章 - 知乎](https://zhuanlan.zhihu.com/p/30669007
-)
-- [启用Webpack服务使用热更新](http://ljylk.cn/?p=713)
+- [Webpack HMR 原理解析 - 冉四夕的文章 - 知乎](https://zhuanlan.zhihu.com/p/30669007)
+- [启用 Webpack 服务使用热更新](http://ljylk.cn/?p=713)
+
 ### 【九】Tree Shaking
 
 tree shaking 是一个术语，通常用于描述移除 JavaScript 上下文中的未引用代码(dead-code)
@@ -530,8 +527,7 @@ devServer: {
 
 现在，我们可以在命令行中运行 npm start，就会看到浏览器自动加载页面。如果现在修改和保存任意源文件，web 服务器就会自动重新加载编译后的代码(即 ==实时重新加载(live reloading)==。试一下！
 
-
-- 默认的，webpack-dev-server的hot值为false，这时，webpack-dev-server会在文件修改后刷新页面，这是冷更新。
+- 默认的，webpack-dev-server 的 hot 值为 false，这时，webpack-dev-server 会在文件修改后刷新页面，这是冷更新。
 
 ```js
 // 配置好修改源码页面自动整体刷新后console如下
@@ -1636,10 +1632,13 @@ modules by path ./node_modules/ 1.21 MiB (javascript) 42.4 KiB (css/mini-extract
 ```
 
 ## 【十一】配置 Eslint
+
 详见[./工程化/依赖/eslint.md]()
 
 ## 【十一】配置 TS
+
 详见[./TS/intro/安装配置]()
+
 # **Tips**
 
 ## 设置绝对路径
@@ -1720,7 +1719,7 @@ module.exports = {
       patterns: [
         {
           from: "src/static/*.js",
-          to: `${path.resolve(__dirname, "dist", "js")}/[name][ext]`,  // 输出到 dist/js/[name][ext]
+          to: `${path.resolve(__dirname, "dist", "js")}/[name][ext]`, // 输出到 dist/js/[name][ext]
           // to: path.resolve(__dirname, "dist", "js"), // 输出到 dist/js/src/static/[name][ext]: 即会把输入的路径带上
         },
         // 还可以继续配置其它要拷贝的文件
@@ -1770,3 +1769,8 @@ module.exports = {
 - [webpack 配置 react+antd+ts](https://blog.csdn.net/besttoby01/article/details/106615678)
 - [使用 webpack5 从 0 到 1 搭建一个 react 项目的实现步骤](https://www.jb51.net/article/202257.htm)
 - [带你深度解锁 Webpack 系列(进阶篇)](https://juejin.cn/post/6844904084927938567)
+
+# Todo
+- HMR 没有设置target: 'web'属性
+- jsx 文件
+- TS 配置
