@@ -308,7 +308,7 @@ Google 的 Angular 源码直接使用 TS 编写，微软的 RxJS 也是使用 TS
 
 WebStorm 和 VS Code 等主流 IDE 对 TS 都支持的十分完善，VS Code 甚至本身就是 TS 写的。
 
-## 安装配置
+# 安装配置
 
 **安装**：`npm install typescript -g `
 
@@ -325,84 +325,62 @@ WebStorm 和 VS Code 等主流 IDE 对 TS 都支持的十分完善，VS Code 甚
 
 ![tsVscodeConfig](./imgs/tsVscodeConfig.png)
 
-### React+TS 项目安装配置
+## React+TS 项目安装配置
 
-```js
-npm install @types/react @types/react-dom -D
+由于我们采用 ts 来开发，所以只要安装 typescript 和 ts-loader 来处理我们的脚本就行了，不再需要 babel-loader 了（如果任然会写一些 JS 或者 JSX 则可任然保留）;
+
+```bash
+npm i  typescript ts-loader -D
 ```
 
-使用@types/前缀表示我们额外要获取 React 和 React-DOM 的声明文件。 通常当你导入像 "react"这样的路径，它会查看 react 包； 然而，并不是所有的包都包含了声明文件，所以 TypeScript 还会查看 @types/react 包
+然后再根目录下执行 `tsc --init` 来生成 tsconfig.json 配置文件
 
-```js
-npm install --save-dev typescript awesome-typescript-loader source-map-loader
-```
-
-安装开发时依赖，这些依赖会让 TypeScript 和 webpack 在一起良好地工作。 awesome-typescript-loader 可以让 Webpack 使用 TypeScript 的标准配置文件 tsconfig.json 编译 TypeScript 代码。 source-map-loader 使用 TypeScript 输出的 sourcemap 文件来告诉 webpack 何时生成 自己的 sourcemaps。 这就允许你在调试最终生成的文件时就好像在调试 TypeScript 源码一样。
-
-> **添加 TypeScript 配置文件**
-
-我们想将 TypeScript 文件整合到一起 - 这包括我们写的源码和必要的声明文件。
-
-我们需要创建一个 tsconfig.json 文件，它包含了输入文件列表以及编译选项。 在工程根目录下新建文件 tsconfig.json 文件，添加以下内容：
-
-```js
+```json
 {
-    "compilerOptions": {
-        "outDir": "./dist/",
-        "sourceMap": true,
-        "noImplicitAny": true,
-        "module": "commonjs",
-        "target": "es5",
-        "jsx": "react"
-    },
-    "include": [
-        "./src/**/*"
-    ]
+  "compilerOptions": {
+    "target": "es5",
+    "jsx": "react", //后面添加react的时候、需要配置这个属性
+    "module": "commonjs",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "sourceMap": true
+  },
+  "include": ["./src/*"],
+  "exclude": ["node_modules"]
 }
+```
+
+我们知道 typescript 是通过类型声明来检查代码的！如果没有类型声明文件、将会检查失败！
+对于非 typescript 编写的，或者没有导出类型声明文件的第三方模块。我们都需要自己编写一个类型声明文件。
+当然，对于 react 来说，我们有现成的，直接使用就好！
+使用@types/前缀表示我们额外要获取 React 和 React-DOM 的声明文件。
+
+```bash
+npm  i @types/react @types/react-dom -D
 ```
 
 > **配置 webpack.config.js**
 
 ```js
 module.exports = {
-  entry: "./src/index.tsx",
-  output: {
-    filename: "bundle.js",
-    path: __dirname + "/dist",
-  },
-
-  // Enable sourcemaps for debugging webpack's output.
-  devtool: "source-map",
-
-  resolve: {
-    // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: [".ts", ".tsx", ".js", ".json"],
-  },
-
+  // ...
   module: {
     rules: [
-      // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-      { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
-
-      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+      {
+        test: /\.(ts|tsx)$/, // 匹配.ts|x结尾的文件
+        exclude: /node_modules/,
+        loader: "ts-loader",
+      },
     ],
-  },
-
-  // When importing a module whose path matches one of the following, just
-  // assume a corresponding global variable exists and use that instead.
-  // This is important because it allows us to avoid bundling all of our
-  // dependencies, which allows browsers to cache those libraries between builds.
-  externals: {
-    react: "React",
-    "react-dom": "ReactDOM",
   },
 };
 ```
 
 - [React & Webpack 配置](https://www.tslang.cn/docs/handbook/react-&-webpack.html)
+- [[通过 ts-loader]添加 Reac 和支持 TypeScript](https://juejin.cn/post/7067093307264319519#heading-6)
+- [[通过awesome-typescript-loader source-map-loader支持TypeScript]](https://juejin.cn/post/7094900059493367845#heading-5) 类似于官网的方式
 
-## 参考资料
+# 参考资料
 
 - [[1] 官网](https://www.tslang.cn/docs/handbook/basic-types.html)
 - [[2] 蚂蚁数据体验技术团队之 TypeScript 体系调研报告](https://github.com/ProtoTeam/blog/blob/master/002.TypeScript%20%E4%BD%93%E7%B3%BB%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A.md)
@@ -410,3 +388,4 @@ module.exports = {
 - [[4] TypeScript 概括](https://www.jianshu.com/p/a012c5017ce4)
 - [[5] 大地 TS 入门视频教程](https://ts.xcatliu.com/basics/type-of-object-interfaces)
 - [[6] TS 入门教程-声明文件](https://ts.xcatliu.com/basics/declaration-files.html#%E7%AC%AC%E4%B8%89%E6%96%B9%E5%A3%B0%E6%98%8E%E6%96%87%E4%BB%B6)
+- [[7]打开 TypeSearch，在这里对应的去搜索你想用的库有没有类型插件](https://www.typescriptlang.org/dt/search?search=react)

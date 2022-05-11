@@ -862,6 +862,9 @@ export const modalWrapperCss = css`
 - [display:none 和 visibility:hidden 的区别](https://zhuanlan.zhihu.com/p/37221519)
 - [display:none 与 visibility:hidden 的区别](https://zhuanlan.zhihu.com/p/368014069)
 
+# 常用颜色
+
+<div style="background: #1890ff;color: #fff">真的</div>
 # Tips
 
 ## 设置颜色时的 `currentColor` 关键字

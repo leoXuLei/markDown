@@ -350,6 +350,21 @@ Hot Module Replacement 模块热更新
 - 只需更新需要变化的内容，节省开发时间
 - 修改了 css、js 源代码，会立即在浏览器更新，相当于直接在浏览器的 devtools 中直接修改样式。
 
+> **如何配置**
+
+```js
+target: "web", // webpack5 必须加个target属性 否则无法修改代码后自动刷新整个页面
+// 当时为了解决整个问题，搞了3H也没解决，最终解决是重新整理了问题描述，就搜到了：webpack5.0 使用webpack-dev-server时，无法自动刷新页面。
+```
+
+配置后修改代码可以看到界面自动刷新
+
+```js
+[WDS] Live Reloading enabled.
+
+// webpack://react-demo/node_modules/webpack-dev-server/client/index.js
+```
+
 > **如何使用 HMR？**
 > 三步骤
 
@@ -369,7 +384,7 @@ if (module.hot) {
 - 另外一种配置方法(见参考链接)：
   > 值得一提的是，在上面的配置中并没有配置 HotModuleReplacementPlugin，原因在于当我们设置 devServer.hot 为 true 后，并且在 package.json 文件中添加如下的 script 脚本：
   > "start": "webpack-dev-server --hot --open"
-  > 添加 —hot 配置项后，devServer 会告诉 webpack 自动引入 HotModuleReplacementPlugin 插件，而不用我们再手动引入了。
+  > **添加 —hot 配置项后，devServer 会告诉 webpack 自动引入 HotModuleReplacementPlugin 插件**，而不用我们再手动引入了。
 
 > **HMR 效果：**
 
@@ -424,9 +439,10 @@ optimization: {
 
 代码分离是 webpack 中最引人注目的特性之一。此特性能够把代码分离到不同的 bundle 中，然后可以按需加载或并行加载这些文件。代码分离可以用于获取更小的 bundle，以及控制资源加载优先级，如果使用合理，会极大影响加载时间。
 有三种常用的代码分离方法：
- 入口起点：使用  entry  配置手动地分离代码。
- 防止重复：使用  CommonsChunkPlugin  去重和分离 chunk。
- 动态导入：通过模块的内联函数调用来分离代码。
+
+- 入口起点：使用  entry  配置手动地分离代码。
+- 防止重复：使用  CommonsChunkPlugin  去重和分离 chunk。
+- 动态导入：通过模块的内联函数调用来分离代码。
 
 没有 code splitting，代码没有问题；但是有了合理的代码分割之后，通过对代码进行拆分，就能减少请求的大小、次数，提升了性能，用户体验更好一些，
 
@@ -507,8 +523,6 @@ webpack 中有几个不同的选项，可以帮助你在代码发生变化后自
 ```
 
 ```js
-target: "web", // webpack5 必须加个target属性 否则无法修改代码后自动刷新整个页面
-// 当时为了解决整个问题，搞了3H也没解决，最终解决是重新整理了问题描述，就搜到了：webpack5.0 使用webpack-dev-server时，无法自动刷新页面。
 
 
 
@@ -546,6 +560,24 @@ Proxy:配置是干嘛的
 
 > **作用**
 > 将单个文件或整个目录复制到构建目录
+
+```js
+const CopyWebpackPlugin = require("copy-webpack-plugin"); // 静态资源拷贝：将单个文件或整个目录复制到构建目录
+
+module.exports = {
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "src/static/*.js",
+          to: `${path.resolve(__dirname, "dist", "js")}/[name][ext]`, // 输出到 dist/js/[name][ext]
+        },
+        // 还可以继续配置其它要拷贝的文件
+      ],
+    }),
+  ],
+};
+```
 
 # **实战流程**
 
@@ -1167,9 +1199,19 @@ npm install node-sass sass-loader -D
 重新打包发现样式生效。
 
 ### 为 CSS 加上浏览器前缀
+> **以下是最新设置（2022/05/11）**
+```json
+{
+  "postcss": "^8.4.13",
+  "postcss-loader": "^6.2.1",
+  "postcss-preset-env": "^7.5.0"
+}
+```
 
-想给样式加一些前缀，如`-webkit-transform`，如何实现呢？
-自己手动写会很麻烦，但是有 loader 可以实现这种自动添加厂商前缀的功能。即： `postcss-loader` 和 `autoprefixer`
+> **以下是`"postcss-loader": "^5.3.0"`旧版本的设置**
+
+> 想给样式加一些前缀，如`-webkit-transform`，如何实现呢？
+> 自己手动写会很麻烦，但是有 loader 可以实现这种自动添加厂商前缀的功能。即： `postcss-loader` 和 `autoprefixer`
 
 ```powerShell
 npm install postcss-loader autoprefixer -D
@@ -1360,9 +1402,40 @@ module: {
 Babel 官网里面左侧的`预设（Presets）`下有个 react，点开。
 
 ```js
-npm i @babel/preset-react -D
 npm i react react-dom -S
+npm i @babel/preset-react -D
 ```
+
+配置如下：
+
+```js
+module: {
+  rules: [
+    {
+      test: /(\.js)|(\.jsx)$/, // 匹配.js|x结尾的文件
+      exclude: /node_modules/, // 排除依赖包文件夹
+      loader: "babel-loader", // 使用babel-loader，配置在.babelrc
+    },
+  ];
+}
+```
+
+```js
+{
+    "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "usage", // 只把转换后用到的特性打包进去
+        "corejs": 3
+      }
+    ],
+    "@babel/preset-react"
+  ],
+}
+```
+
+测试代码如下：
 
 ```js
 // index.js
@@ -1374,7 +1447,7 @@ ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
 ```js
-// app.js
+// app.jsx
 import React from "react";
 import waterbyside from "@/assets/images/waterbyside.jpg";
 import styles from "@/css/index.scss";
@@ -1761,16 +1834,12 @@ module.exports = {
 # 参考链接
 
 - [webpack 官网](https://www.webpackjs.com/concepts/)
+- [webpack 中文](https://webpack.docschina.org/configuration/dev-server/#root)
 - [npm 官网查看安装的依赖](https://www.npmjs.com/package/copy-webpack-plugin)
 
-- [24 个实例入门并掌握「Webpack4」(一)](https://juejin.cn/post/6844903817322954759#heading-5)
+- [！！！24 个实例入门并掌握「Webpack4」(一)](https://juejin.cn/post/6844903817322954759#heading-5)
 - [24 个实例入门并掌握「Webpack4」博客](https://itxiaohao.github.io/passages/webpack4-learn-introduction/)
 - [Webpack+Babel 手把手带你搭建开发环境(内附配置文件)](https://cloud.tencent.com/developer/article/1665658)
 - [webpack 配置 react+antd+ts](https://blog.csdn.net/besttoby01/article/details/106615678)
 - [使用 webpack5 从 0 到 1 搭建一个 react 项目的实现步骤](https://www.jb51.net/article/202257.htm)
 - [带你深度解锁 Webpack 系列(进阶篇)](https://juejin.cn/post/6844904084927938567)
-
-# Todo
-- HMR 没有设置target: 'web'属性
-- jsx 文件
-- TS 配置
