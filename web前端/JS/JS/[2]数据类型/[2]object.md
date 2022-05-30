@@ -421,9 +421,11 @@ for (let v of obj) {
 
 ## `for-in`和`for-of`的区别
 
+**【可枚举属性】**
+
 > 可枚举属性： 通俗的讲就是可以通过 for...in 遍历出来的属性就是可枚举属性。通常由 JS 代码创建出来的属性都是可枚举的。
 
-> `for-in`
+**【`for-in`】**
 
 for...in 语句用于遍历数组或者对象的属性。
 
@@ -515,7 +517,7 @@ for (let key in obj) {
 
 所以 for-in 更适合遍历对象，通常是建议不要使用 for-in 遍历数组。
 
-> for-of
+**【`for-of`】**
 
 for-of 可以简单、正确地遍历数组（不遍历原型 method 和 name）。
 
@@ -557,7 +559,7 @@ for (let value of myArray) {
 
 因此建议是使用 for-of 遍历数组，因为 for-of 遍历的只是数组内的元素，而不包括数组的原型属性 method 和索引 name。
 
-> 总结
+**【总结】**
 
 - for...in 可以遍历对象和数组，for...of 不能遍历对象
 - for in 遍历的是数组的索引（即键名），而 for of 遍历的是数组元素值。

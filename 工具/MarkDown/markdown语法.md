@@ -64,25 +64,31 @@
 > **不推荐全局安装 webpack：**
 > 这会将你项目中的 webpack 锁定到指定版本，并且在使用不同的 webpack 版本的项目中，可能会导致构建失败。
 
-> **多重样式优先级顺序：**
+**【多重样式优先级顺序】：**
 
 > **CSS 优先级法则：**
 
 - A 选择器都有一个权值，权值越大越优先；
 
-**解释：**
+**【解释】：**
 
 - content（内容）就是盒子里装的东西
 - border（边框）就是盒子本身了
 
-**分类：**
+**【分类】：**
 分为 W3c 标准盒子（默认）和 IE 盒子模型。通过`box-sizing: `属性设置。
 
-**规则：**
+**【规则】：**
 
-- > 【1】**如果你的更新函数返回值与当前 state 完全相同(浅比较)，则随后的重渲染会被完全跳过**。
+- > [1]**如果你的更新函数返回值与当前 state 完全相同(浅比较)，则随后的重渲染会被完全跳过**。
 
 - > 【2】与 class 组件中的 `this.setState` 方法不同，**`useState`不会将旧值自动“合并”并更新对象，它会使用新值覆盖 state**。
+
+**【安装】**：`npm install typescript -g `
+
+> 目前的主流浏览器还不完全支持 ES6 的语法，所以目前想要在浏览器运行 TS 代码需要 Compiler 编译器来将 TS 代码转换为浏览器支持的 JS 代码
+
+**【编译】**（将 TS 文件 ES6 转为 JS 文件 ES5 代码）：
 
 # 语法
 
@@ -482,6 +488,7 @@ $$O(n^2)$$
   `$ npm install clean-mark --global`
 
 - 使用
+
   - `$ clean-mark "http://some-website.com/fancy-article"`
     文章将使用 URL 路径名自动命名。 在上面的情况下，名称将是`fancy-article.md`。
   - `$ clean-mark "http://some-website.com/fancy-article" -t html`

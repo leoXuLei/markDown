@@ -37,6 +37,8 @@ Webpack4 相对于之前的版本，有了较多的变化，
 - `npm install / yarn`: 安装依赖
   删除 node_modules 文件夹后，重新安装依赖包
 
+- `npm run eject`：[解释](https://blog.csdn.net/qq_30841657/article/details/91872302)
+
 ## 常用简写
 
 - `npm install = npm i`
@@ -1199,7 +1201,9 @@ npm install node-sass sass-loader -D
 重新打包发现样式生效。
 
 ### 为 CSS 加上浏览器前缀
+
 > **以下是最新设置（2022/05/11）**
+
 ```json
 {
   "postcss": "^8.4.13",
@@ -1843,3 +1847,6 @@ module.exports = {
 - [webpack 配置 react+antd+ts](https://blog.csdn.net/besttoby01/article/details/106615678)
 - [使用 webpack5 从 0 到 1 搭建一个 react 项目的实现步骤](https://www.jb51.net/article/202257.htm)
 - [带你深度解锁 Webpack 系列(进阶篇)](https://juejin.cn/post/6844904084927938567)
+- [(2022-05-07)webpack(v5.7)+React(v18.0)+react-router(v6.3)+Mobx(v6.5)+TS(v4.6)从零开始构建](https://juejin.cn/post/7094900059493367845#heading-15)
+- [(2022-02-21)webpack配置react+ts项目+webpack优化](https://juejin.cn/post/7067093307264319519#heading-6)
+- [(2022-04-04)前端开发环境安装与配置(React+Webpack5+TS+ESLint+Prettier)](https://juejin.cn/post/7082577266978324488#heading-11)
