@@ -820,6 +820,86 @@ export const modalWrapperCss = css`
 
 - [CSS 知识点及技巧整理](https://juejin.cn/post/6844903567707357197#heading-22)
 
+# 实战
+
+## 如何修改 antd 组件的样式
+
+- 通过 `global` 关键字来全局修改样式（不添加选择器限定条件时即为全局生效）。
+  - 特点： 虽然你是在当前目录下的 less 或 css 文件修改了，但是全局生效的，建议如果有全局修改的需求，放到 `global.less` 的文件中修改，并做好注释。
+- 小技巧:因为这里是全局修改样式，会影响其他组件，通过给你需要修改的父级元素加一个包裹，用 `global` 的时候加一个父级选择器（如下面例子的`.m_tabs`）。
+
+**【实例】：**
+
+- 实例一
+
+```css
+/* index.less */
+.m_tabs {
+  :global(.ant-tabs-nav) {
+    padding: 0 !important;
+  }
+  :global(.ant-tabs-tab) {
+    line-height: 2rem !important;
+    font-size: 1.333rem !important;
+    padding: 0.5rem 1rem !important;
+  }
+}
+```
+
+```jsx
+import style from "./index.less";
+
+<Tabs
+  onChange={this.handleTabsChange}
+  activeKey="cx"
+  className={`${style.m_tabs} m-tabs-screen`}
+>
+  // ...
+</Tabs>;
+```
+
+- 实例二
+
+只有左右箭头的分页按钮，数字是 `.ant-pagination-simple` 下的 `.ant-pagination-simple-pager`元素。
+
+```css
+/* index.less */
+.simplePagination {
+  /* &表示并列，其实不用加这行直接加里面的也是对的 */
+  &:global(.ant-pagination-simple) {
+    :global(.ant-pagination-simple-pager) {
+      display: none;
+    }
+  }
+}
+```
+
+```jsx
+import styles from "./index.less";
+
+<Pagination className={`${styles.simplePagination}`} />;
+```
+
+- 实例三：用`emotion`好像可以不用global直接写就行？
+
+```css
+.button-container {
+  display: flex;
+  align-items: center;
+  .ant-switch {
+    background-color: #117a65;
+  }
+  .ant-switch-checked {
+    background-color: #1890ff;
+  }
+}
+```
+
+**【参考链接】：**
+
+- [修改 antd 中选择器修改不了的样式](https://blog.csdn.net/qq_43382853/article/details/104476658)
+- [修改 antd 组件样式的几种方式](https://blog.csdn.net/qq_43382853/article/details/108324623)
+
 # 问题
 
 ## `visibility: hidden`和`display: none`的区别
@@ -1001,20 +1081,6 @@ function render() {
 
 - styled 组件元素复用的时候如果需要特定修改，通过 style 来修改
 
-- 如何修改 antd 的默认样式
-
-```css
-.button-container {
-  display: flex;
-  align-items: center;
-  .ant-switch {
-    background-color: #117a65;
-  }
-  .ant-switch-checked {
-    background-color: #1890ff;
-  }
-}
-```
 
 - calc
 

@@ -429,6 +429,45 @@ export const TRANSFORM_TYPE_ZHCH_MAP = {
 
 ```
 
+```tsx
+export enum DocType {
+  PICTURE = "PICTURE",
+  TEXT = "TEXT",
+  LINK = "LINK",
+  GROUPING = "GROUPING",
+  FILE = "FILE",
+}
+
+export enum DocShareType {
+  INVALID = 0,
+  SHARING = 1,
+  CLOSED = 2,
+}
+
+export const DocTypeMap = new Map([
+  [DocType.GROUPING, "文件夹"],
+  [DocType.TEXT, "文档"],
+  [DocType.LINK, "链接"],
+  [DocType.PICTURE, "图片"],
+]);
+
+export const DocShareTypeMap = new Map([
+  [DocShareType.INVALID, "分享失效"],
+  [DocShareType.SHARING, "分享中"],
+  [DocShareType.CLOSED, "分享关闭"],
+]);
+
+const title = useMemo(() => {
+  if (props.type === DocType.FILE && !props.directory) {
+    return "上传文件";
+  }
+  if (props.type === DocType.FILE && props.directory) {
+    return "上传文件夹";
+  }
+  return `创建${DocTypeMap.get(props.type! || DocType.TEXT)}`;
+}, [props.type, props.directory, DocType.TEXT]);
+```
+
 ### 问题
 
 - [TypeScript 中如何使用自己在 d.ts 中定义的 enum？](https://www.zhihu.com/question/464165657)
