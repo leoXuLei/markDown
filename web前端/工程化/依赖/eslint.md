@@ -229,3 +229,490 @@ eslint --init  // 创建ESlint配置文件.eslintrc.js：
 - [白话 Linters (EsLint)](https://www.jianshu.com/p/4d4900ce4230)
 - [ESLint & typescript 配置文件 .eslintrc.js](https://www.jianshu.com/p/58882d3c2135)
 - [规范化标准学习总结（ESLint 、StyleLint 、Prettier 、Git Hooks）](https://blog.csdn.net/u012961419/article/details/107991794)
+
+# umi 项目配置 Eslint
+
+```bash
+> npm install eslint -D
+```
+
+**【初始化`ESLint`配置文件】：**
+
+```bash
+> npx eslint --init
+
+
+You can also run this command directly using 'npm init @eslint/config'.
+npx: 40 安装成功，用时 6.581 秒
+√ How would you like to use ESLint? · style
+√ What type of modules does your project use? · esm
+√ Which framework does your project use? · react
+√ Does your project use TypeScript? · No / Yes
+√ Where does your code run? · browser
+√ How would you like to define a style for your project? · guide
+√ Which style guide do you want to follow? · airbnb
+√ What format do you want your config file to be in? · JavaScript
+Checking peerDependencies of eslint-config-airbnb@latest
+The config that you've selected requires the following dependencies:
+
+eslint-plugin-react@^7.28.0 @typescript-eslint/eslint-plugin@latest eslint-config-airbnb@latest eslint@^7.32.0 || ^8.2.0 eslint-plugin-import@^2.25.3 eslint-plugin-jsx-a11y@^6.5.1 eslint-plugin-react-hooks@^4.3.0 @typescript-eslint/parser@latest
+? Would you like to install them now? » No / Yes
+```
+
+**【生成的默认配置文件】：**
+
+```js
+module.exports = {
+  env: {
+    browser: true,
+    es2021: true,
+  },
+  extends: ["plugin:react/recommended", "airbnb"],
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: "latest",
+    sourceType: "module",
+  },
+  plugins: ["react", "@typescript-eslint"],
+  rules: {},
+};
+```
+
+**【配置文件】：**
+
+```js
+// .eslintrc.js
+module.exports = {
+  env: {
+    browser: true,
+    es2021: true,
+  },
+  extends: [
+    "airbnb",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "eslint-config-umi",
+  ],
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: "latest",
+    sourceType: "module",
+  },
+  plugins: ["@typescript-eslint", "react-hooks"],
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
+  rules: {
+    // 自定义你的规则
+    // 'no-extra-semi': 'error',
+    semi: 0,
+    "no-undef": "off",
+    "no-return-assign": ["error", "except-parens"],
+    "prefer-promise-reject-errors": 1,
+    "no-unused-vars": "warn",
+    "no-unused-expressions": "off",
+    "max-params": ["error", 4], // 修改最大参数为4
+    "no-console": [
+      "error",
+      {
+        allow: ["warn", "error"],
+      },
+    ],
+
+    "@typescript-eslint/no-unused-expressions": 2,
+    "@typescript-eslint/no-require-imports": 0,
+    "@typescript-eslint/no-empty-interface": 0,
+    "@typescript-eslint/no-invalid-this": "off",
+    "@typescript-eslint/member-ordering": 0, // 声明定义需要在一起
+    "@typescript-eslint/consistent-type-assertions": "off",
+    "max-nested-callbacks": ["error", 4], // 最大回调数
+    "@typescript-eslint/explicit-member-accessibility": "off", // disable the rule for all files
+    "@typescript-eslint/prefer-optional-chain": 1,
+
+    // react
+    "react/jsx-no-bind": 2, // JSX中不允许使用箭头函数和bind
+    "react/jsx-no-script-url": 1, // a标签url
+    "react/no-this-in-sfc": "off",
+
+    // react-hooks
+    "react-hooks/rules-of-hooks": "error", // 检查 Hook 的规则
+    "react-hooks/exhaustive-deps": "warn", // 检查 effect 的依赖
+  },
+  overrides: [
+    {
+      // enable the rule specifically for TypeScript files
+      files: ["*.ts", "*.tsx"],
+      rules: {
+        "@typescript-eslint/explicit-member-accessibility": ["error"],
+      },
+    },
+  ],
+};
+```
+
+```json
+// package.json 新增依赖如下
+{
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "eslint": "^8.16.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.5.0"
+  }
+}
+```
+
+**【新增 lint 检查命令：`yarn lint`】：**
+
+```json
+{
+  "scripts": {
+    "lint": "eslint --fix \"**/*.{js,jsx,tsx,ts}\""
+  }
+}
+```
+
+- 没加`extends: [""eslint-config-umi"]`之前可以正常执行这个命令，会格式化所有 tsx、ts、jsx、js 文件，且格式化后的文件可能跟加了`extends：xxx`之后手动格式化的文件有些格式差别。所以慎用`yarn lint`。
+
+```jsx
+// 没加`extends：xxx`之前执行`yarn lint`之后的格式
+import React, { FC } from "react";
+import { Spin } from "antd";
+import { Layout, ConfigProvider } from "antd";
+const { Header } = Layout;
+
+const containerStyle = { width: "100vh", height: "100vh" };
+function Loading() {
+  return (
+    <Spin delay={200} spinning size="large">
+      <div style={containerStyle} />
+    </Spin>
+  );
+}
+
+export default Loading;
+```
+
+```jsx
+// 加了`extends：xxx`之后恢复代码到执行`yarn lint`之前的版本再手动格式化的文件格式
+
+import React, { FC } from "react";
+import { Spin } from "antd";
+import { Layout, ConfigProvider } from "antd";
+const Header = Layout.Header;
+
+const containerStyle = { width: "100vh", height: "100vh" };
+const Loading = () => {
+  return (
+    <Spin delay={200} spinning={true} size="large">
+      <div style={containerStyle} />
+    </Spin>
+  );
+};
+
+export default Loading;
+```
+
+- 但是加了`extends: ["eslint-config-umi"]`会报错如下。
+
+```js
+> yarn lint
+
+yarn run v1.22.18
+$ eslint --fix "**/*.{js,jsx,tsx,ts}"
+
+Oops! Something went wrong! :(
+
+ESLint: 8.16.0
+
+ESLint couldn't find the config "eslint-config-umi" to extend from. Please check that the name of the config is correct.
+
+The config "eslint-config-umi" was referenced from the config file in "项目根目录\.eslintrc.js".
+
+If you still have problems, please stop by https://eslint.org/chat/help to chat with the team.
+```
+
+### 提交代码走`lint-staged`报错
+
+配置完成提交代码报错如下。
+**【报错信息】：**
+
+```js
+× eslint --config .eslintrc.js:
+
+Oops! Something went wrong! :(
+
+ESLint: 8.16.0
+
+ESLint couldn't find the config "eslint-config-umi" to extend from. Please check that the name of the config is correct.
+
+The config "eslint-config-umi" was referenced from the config file in "D:\Users\gitlabProjects\vxbatch_recipeeditor\.eslintrc.js".
+
+If you still have problems, please stop by https://eslint.org/chat/help to chat with the team.
+
+
+pre-commit hook failed (add --no-verify to bypass)
+```
+
+## 问题
+
+可以发现以下问题通过`extend` umi 的 ESLint 配置都可以解决。
+
+### 报错`Unable to resolve path to module 'x'`
+
+**【报错信息】：**
+
+```js
+Unable to resolve path to module '@/xx/xx'.eslint(import/no-unresolved)
+```
+
+**【解决方法】：**
+
+- 方法一：`extend` `umi` 的 ESLint 配置
+
+```js
+// .eslintrc.js
+{
+    extends: [
+    'airbnb',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'eslint-config-umi', // 新增 extend umi的eslint配置
+  ],
+}
+```
+
+- 方法二：配置`setting-import/resolver`
+
+```js
+// .eslintrc.js
+{
+setting: {
+  'import/ignore': ['node_modules'],
+  'import/resolver': {
+    node: {
+      extensions: ['.tsx', '.ts', '.jsx', '.js', ],
+    },
+  },
+}
+}
+```
+
+- 方法三：配置 rules （不确定是不是这个报错的解决方法）
+
+```js
+// .eslintrc.js
+{
+rules: {
+    'import/no-unresolved': [
+      2,
+      {
+        ignore: ['^@/'],
+      },
+    ],
+}
+```
+
+### 报错`Function component is not a function declaration`
+
+**【报错信息】：**
+
+```js
+Function component is not a function declaration .eslint(react/function-component-definition)
+```
+
+**【解决方法】：**
+
+- 方法一：`extend` `umi` 的 ESLint 配置，如报错`Unable to resolve path to module 'x'`
+
+- 方法二：配置 rules
+
+```js
+// .eslintrc.js
+{
+  rules: {
+    'react/function-component-definition': [
+        2,
+        {
+          namedComponents: 'arrow-function',
+          unnamedComponents: 'arrow-function',
+        },
+      ]
+  }
+}
+```
+
+### 页面大量报错`Expected linebreaks to be 'LF' but found 'CRLF'.eslint(linebreak-style)`
+
+**【报错信息】：** `Expected linebreaks to be 'LF' but found 'CRLF'.eslint(linebreak-style)`
+
+**【解决方法】：**
+
+- 方法一：`extend` `umi` 的 ESLint 配置，如报错`Unable to resolve path to module 'x'`
+- 方法二：配置`rules-linebreak-style`
+
+```js
+{
+  rules: {
+    'linebreak-style': ['error', 'windows'], // 换行符使用lf
+    'object-curly-newline': ['error', 'always'],
+  }
+}
+```
+
+## CB 版配置
+
+我搞了一天也没搞好，各种问题，然后 CB 直接复制其它项目的配置，说是没必要花费太多时间自己搞配置，有现成配置好的。
+
+```json
+// package.json
+{
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,less,md,json}": ["prettier --write"],
+    "*.ts?(x)": ["node ./log.js", "prettier --parser=typescript --write"]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
+    "eslint": "^7.32.0",
+    "eslint-config-alloy": "^4.2.0",
+    "eslint-plugin-react": "^7.25.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "lint-staged": "^10.0.7",
+    "prettier": "^2.2.0",
+    "typescript": "^4.1.2",
+    "yorkie": "^2.0.0"
+  }
+}
+```
+
+```js
+// .eslintrc
+{
+  "extends": "eslint-config-umi"
+}
+```
+
+```js
+// .eslintrc.js
+module.exports = {
+  parser: "@typescript-eslint/parser",
+  extends: ["alloy", "alloy/react", "alloy/typescript"],
+  plugins: ["@typescript-eslint", "react-hooks"],
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
+  env: {
+    // 你的环境变量（包含多个预定义的全局变量）
+    //
+    browser: true,
+    // node: true,
+    // mocha: true,
+    // jest: true,
+    // jquery: true
+  },
+  globals: {
+    // 你的全局变量（设置为 false 表示它不允许被重新赋值）
+    //
+    // myGlobal: false
+  },
+  rules: {
+    // 自定义你的规则
+    "no-undef": "off",
+    "no-return-assign": ["error", "except-parens"],
+    "prefer-promise-reject-errors": 1,
+    "no-unused-expressions": "off",
+    "max-params": ["error", 4], // 修改最大参数为4
+    "no-console": ["error", { allow: ["warn", "error"] }],
+    "@typescript-eslint/no-unused-expressions": 2,
+    "@typescript-eslint/no-require-imports": 0,
+    "@typescript-eslint/no-empty-interface": 0,
+    "@typescript-eslint/no-invalid-this": "off",
+    "@typescript-eslint/member-ordering": 0, // 声明定义需要在一起
+    "@typescript-eslint/consistent-type-assertions": "off",
+    "max-nested-callbacks": ["error", 4], // 最大回调数
+    "@typescript-eslint/explicit-member-accessibility": "off", // disable the rule for all files
+    "@typescript-eslint/prefer-optional-chain": 1,
+
+    // react
+    "react/jsx-no-bind": 2, // JSX中不允许使用箭头函数和bind
+    "react/jsx-no-script-url": 1, // a标签url
+    "react/no-this-in-sfc": "off",
+
+    // react-hooks
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+  },
+  overrides: [
+    {
+      // enable the rule specifically for TypeScript files
+      files: ["*.ts", "*.tsx"],
+      rules: {
+        "@typescript-eslint/explicit-member-accessibility": ["error"],
+      },
+    },
+  ],
+};
+```
+
+## `.eslintignore配置文件`
+
+```js
+// .eslintignore
+.prettierrc.js
+**/*.md
+**/*.svg
+**/*.ejs
+**/*.html
+**/*.json
+
+# production
+/dist
+
+# ignore static js file
+/public/js/*
+# misc
+.DS_Store
+
+# umi
+/src/.umi
+/src/.umi-production
+/src/.umi-test
+/.env.local
+.prettierrc.js
+**/*.md
+**/*.svg
+**/*.ejs
+**/*.html
+**/*.json
+
+# production
+/dist
+/generated
+
+# misc
+.DS_Store
+
+# umi
+/src/.umi
+/src/.umi-production
+/src/.umi-test
+/.env.local
+```
