@@ -826,7 +826,55 @@ export const modalWrapperCss = css`
 
 - 通过 `global` 关键字来全局修改样式（不添加选择器限定条件时即为全局生效）。
   - 特点： 虽然你是在当前目录下的 less 或 css 文件修改了，但是全局生效的，建议如果有全局修改的需求，放到 `global.less` 的文件中修改，并做好注释。
-- 小技巧:因为这里是全局修改样式，会影响其他组件，通过给你需要修改的父级元素加一个包裹，用 `global` 的时候加一个父级选择器（如下面例子的`.m_tabs`）。
+- 不影响其它组件小技巧：
+  - 因为这里是全局修改样式，会影响其他组件，通过给你需要修改的父级元素加一个包裹，用 `global` 的时候加一个父级选择器（如下面例子的`.m_tabs`）。
+
+**【是否跳过中间层级的选择器】：**
+
+非要选择多层级的类选择时每层都得加上`:global()`。
+
+```css
+.MaterialModal {
+  :global(.ant-modal-content) {
+    color: red;
+    :global(.ant-modal-body) {
+      font-size: 16px;
+      :global(.ant-table-wrapper.EditTable) {
+        max-height: 460px;
+        overflow-y: scroll;
+      }
+    }
+  }
+}
+```
+
+跳过中间层选择也是可以生效的。
+
+```css
+.MaterialModal {
+  :global(.ant-table-wrapper.EditTable) {
+    max-height: 460px;
+    overflow-y: scroll;
+  }
+}
+```
+
+多层级的类选择写在一个选择器中也是可以生效的。
+
+```css
+.MaterialModal {
+  :global(.ant-modal-content > .ant-modal-body .ant-table-wrapper.EditTable) {
+    max-height: 460px;
+    overflow-y: scroll;
+  }
+}
+```
+
+```jsx
+import styles from "./index.less";
+
+<Modal className={styles.MaterialModal} visible={materialModalVisible} />;
+```
 
 **【实例】：**
 
@@ -880,7 +928,7 @@ import styles from "./index.less";
 <Pagination className={`${styles.simplePagination}`} />;
 ```
 
-- 实例三：用`emotion`好像可以不用global直接写就行？
+- 实例三：用`emotion`好像可以不用 global 直接写就行？
 
 ```css
 .button-container {
@@ -899,6 +947,82 @@ import styles from "./index.less";
 
 - [修改 antd 中选择器修改不了的样式](https://blog.csdn.net/qq_43382853/article/details/104476658)
 - [修改 antd 组件样式的几种方式](https://blog.csdn.net/qq_43382853/article/details/108324623)
+
+## 某个组件的 disabled 样式如何从外部添加
+
+如下若想给`<ContextMenuItem />`组件添加 disabled 样式，只能引入`styles.类目`来实现。（PS：emotion 好像可以支持外部添加类名？）
+
+```tsx
+import contextMenuStyles from "@components/contextMenu/ContextMenu.less";
+
+<ContextMenuItem
+  // className={curProductItem ? 'disabled' : ''} //这种没法生效
+  className={!curProductItem ? `${contextMenuStyles.disabled}` : ""}
+  onClick={onOpenAddModal}
+>
+  新增
+</ContextMenuItem>;
+```
+
+```tsx
+// src\components\contextMenu\ContextMenu.tsx
+import styles from "./ContextMenu.less";
+
+export const ContextMenuItem: FC<IContextMenuItem> = (props) => {
+  const { children, className, ...restProps } = props;
+  return (
+    <div className={`${styles.ContextMenuItem} ${className}`} {...restProps}>
+      {children}
+    </div>
+  );
+};
+```
+
+```less
+// src\components\contextMenu\ContextMenu.less
+.ContextMenu {
+  .ContextMenuItem {
+    padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    min-width: 100px;
+    &:hover {
+      background-color: #99ccff;
+    }
+    &.disabled {
+      color: red;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+  }
+}
+```
+
+后面分析得出：以上情况的出现，说明组件设计有问题，应该将`disabled`设置为`ContextMenuItem`的属性，通过外部传入与否来控制里面的`disabled`样式，如下：
+
+```tsx
+export const ContextMenuItem: FC<IContextMenuItem> = (props) => {
+  const { children, className, disabled, ...restProps } = props;
+  return (
+    <div
+      className={classNames(
+        styles.ContextMenuItem,
+        disabled && styles.disabled,
+        className
+      )}
+      {...restProps}
+    >
+      {children}
+    </div>
+  );
+};
+```
+
+```tsx
+<ContextMenuItem disabled={!curProductItem} onClick={onOpenAddModal}>
+  新增
+</ContextMenuItem>
+```
 
 # 问题
 
@@ -1080,7 +1204,6 @@ function render() {
   ```
 
 - styled 组件元素复用的时候如果需要特定修改，通过 style 来修改
-
 
 - calc
 
