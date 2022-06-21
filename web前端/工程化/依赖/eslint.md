@@ -512,6 +512,8 @@ setting: {
 
 - 方法三：配置 rules （不确定是不是这个报错的解决方法）
 
+[Unable to resolve path to module '' import/no-unresolved](https://www.cnblogs.com/ly0612/p/12600156.html)
+
 ```js
 // .eslintrc.js
 {
@@ -522,6 +524,7 @@ rules: {
         ignore: ['^@/'],
       },
     ],
+}
 }
 ```
 

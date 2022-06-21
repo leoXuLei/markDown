@@ -3,7 +3,15 @@
 - 在【开发者工具-element】中调试样式是很方便的
 
 - 如下，鼠标点击【styles 里面的一个选择器】所选择的元素就能在界面上显示出来。
-  ![](../imgs/chrome-kzt-element-style-debug.png)
+  ![](./imgs/chrome-kzt-element-style-debug.png)
+
+## Elements Dom 树
+
+某些事件触发显示的 DOM 元素不好让其暂停显示查看 DOM 结构及样式，如 antd 的`message.info` 显示提示。
+
+解决方案：找到其 DOM 节点，触发的瞬间快速的右键/copy/copy element。再编辑节点复制一下即可。效果如下。
+
+![](./imgs/chrome-element-查看元素DOM.png)
 
 # 手动添加 cookie
 
@@ -26,3 +34,86 @@ document.cookie="keyName=cookeiValue"；
 4. 重启chrome
 5. 将cookie的path改成/
 ```
+
+# 全局搜索
+
+位置：`开发者工具-菜单-search`。
+
+如下为项目内的源代码，在控制台全局搜索找到如下图。
+
+```jsx
+export const confirm = async (options: IOptions) => {
+  // taskTypeId = 'tasktype3'
+  // taskTypeStateId = 'state3'
+  const { taskTypeStateId, task, project, refreshFlag } = options;
+  return new Promise((resolve) => {
+    const taskTypeId = task?.taskTypeId || task?.taskType?.id;
+    const currentTaskTypeState = getCurrentTaskTypeState(
+      taskTypeId,
+      taskTypeStateId,
+      project?.taskTypes
+    );
+    // 如 currentTaskTypeState 变量是自己定义的，所以编译之后会变成诸如a/b/m这种的变量，但是 下面的 currentTaskTypeState?.preRequiredColumnIds 中的 preRequiredColumnIds不会被编译，直接在Search中搜索就能发现浏览器中编译之后的代码，然后可以
+    if (currentTaskTypeState?.preRequiredColumnIds?.length) {
+      const nodeWrapper = document.createElement("div");
+      const nodeInner = document.createElement("div");
+      nodeWrapper.appendChild(nodeInner);
+      document.body.appendChild(nodeWrapper);
+      ReactDOM.render(
+        <div>
+          {ReactDOM.createPortal(
+            <TasksTypeStateConfirm
+              {...options}
+              onOk={(values) => {
+                refreshFlag && (refreshFlag.current = true);
+                resolve(values);
+              }}
+              onCancel={() => {
+                resolve(false);
+                ReactDOM.unmountComponentAtNode(nodeWrapper);
+                nodeWrapper.remove();
+              }}
+            />,
+            nodeInner
+          )}
+        </div>,
+        nodeWrapper
+      );
+    } else {
+      resolve(true);
+    }
+  });
+};
+
+export default confirm;
+```
+
+这里就可以打断点了，就能知道走了哪些逻辑。判断出 bug 原因。
+![](./imgs/chrome-search-code.png)
+
+# 联调
+
+## 请求接口响应内容字段在 `Preview` 和 `Response`中不一致
+
+**【问题描述】：**
+产品列表 ID 字段是 Number 类型，Response 中为`{..., "ID": 1329854122600030002, ...}`，而在 Preview 中却显示为`{..., "ID": 1329854122600030000, ...}`，即尾位显示有问题。代码中 console 打印数据显示为`ID: "1329854122600030002",..`，可以发现 console 打印的字段跟 Response 中的保持一致，但是类型却从`number`变成了`String`。
+
+**【原因分析】：**
+
+**【参考链接】：**
+
+- [（2021-10-14）解决 JS 处理 api 返回 number 字段精度丢失问题](https://blog.csdn.net/zhangjunfun/article/details/120761177)
+- [（2022-05-14）chrome 中 response 与 preview 数据不一致的问题](https://blog.csdn.net/HAN_789/article/details/124268068)
+- [chrome 浏览器 preview 和 response 数据不一致](https://www.csdn.net/tags/MtTaMg5sMDY4MzU0LWJsb2cO0O0O.html)
+
+## `NetWork`发送的请求在 postMan 测试
+
+**【步骤】：**
+
+- 右键接口-`Copy`-`Copy as cURL(Bash)`
+- potman-`import`-`Raw text`-复制
+- 可以修改 url、headers 字段，body 字段进行接口测试。
+
+# Tips
+
+# 问题
