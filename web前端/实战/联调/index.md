@@ -252,6 +252,47 @@ export async function getRiskList(params) {
 
 ![](../imgs/rap-use-3.png)
 
+## 问题
+
+### 特殊域名需配置代理 proxy
+
+- 之前接口都是`/Api/`开头的，现在要掉一个直接`/Auth`的接口，调通了返回 200，但是`response`中没有正常格式的数据，而是一个`html文档`。
+
+```js
+/**
+ * 在生产环境 代理是无法生效的，所以这里没有生产环境的配置
+ * The agent cannot take effect in the production environment
+ * so there is no configuration of the production environment
+ * For details, please see
+ * https://pro.ant.design/docs/deploy
+ */
+const proxyUrl = "http://192.168.1.262:8006";
+export default {
+  "/Api/": {
+    target: proxyUrl,
+    changeOrigin: false,
+    pathRewrite: { "^": "" },
+  },
+  // '/Authenticate': {
+  //   target: proxyUrl,
+  //   changeOrigin: false,
+  //   pathRewrite: { '^': '' },
+  // },
+  "/DogServ": {
+    target: proxyUrl,
+    changeOrigin: false,
+    pathRewrite: { "^": "" },
+  },
+  "/Auth": {
+    target: proxyUrl,
+    changeOrigin: false,
+    pathRewrite: { "^": "" },
+  },
+};
+```
+
+
+
 ## 业务常识
 
 **数字型**
