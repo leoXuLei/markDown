@@ -2,13 +2,20 @@
 
 - 新增 reducer 后接口请求了也 set 了但是没有监听到数据更新 （清一下缓存即可）
 
-# Tips
+# 问题
+
+- 更新依赖版本后不生效
+  试试看重新编译项目
 
 ## 某些依赖配置后不生效
 
 **【`hooks依赖检查：react-hooks/exhaustive-deps`配置了却没有生效】：**
 
 - 解决方法： 关闭所有 vscode 窗口，重启即可。
+
+# Tips
+
+- 项目用 yarn 安装依赖就一直用 yarn，不要 yarn 和 npm 混用
 
 ## 类库的 Api 用途/参数不清楚含义
 
@@ -121,3 +128,7 @@ export interface DragObjectWithType {
 }
 
 ```
+
+# 参考链接
+
+- [NPM 官网-查询依赖说明、用法、官网链接](https://www.npmjs.com/package/typescript)

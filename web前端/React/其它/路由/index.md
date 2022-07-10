@@ -280,3 +280,41 @@ doLogin = (e) => {
 - [React-router4 的简单理解](https://www.cnblogs.com/webqiand/p/13862928.html)
 
 - [https://github.com/remix-run/react-router/blob/main/docs/getting-started/tutorial.md](https://github.com/remix-run/react-router/blob/main/docs/getting-started/tutorial.md)
+
+# 问题
+
+## 动态路由之间相互跳转，页面不刷新
+
+动态路由之间相互跳转，还是同一个详情组件实例，state 状态共享，切换后组件只会重新 render，而不是卸载然后重新挂载。
+
+**【问题背景】**
+工作项目中两个页面模块基本业务流程和交互都差不多（其实就类似于详情页用一个动态路由），因此决定用共用同一套组件，通过设置不同的路由，跳转到同一个模块，在模块内部通过路由的参数作区分，现在面临两个问题：
+1）不同路由跳转后，组件只会重新渲染（render），而不会整个组件重新构建，即不会重走 constructor 等生命周期函数。
+2）共用 reducer，需要解决数据相互解耦合，独立问题
+
+**【路由问题原因和解决方案】**
+**react 组件是根据 diff 算法来决定是否更新组件，不同路由跳转，如果组件 props 没有变化，则认为是同一个组件内部的状态更新，不会重建组件，需要每次跳转需要赋予组件不同的 props，在路由组件最上层加上 key**：
+
+```js
+const mapStateToProps = (state, props) => ({
+  otherData: fun(state),
+  key: props.location.state.from, // 将路由参数中的 from 赋予 key,或者 props.location.state.pathname
+});
+export default connect(mapStateToProps)(MyComponent);
+```
+
+不同 mapStateToProps 绑定函数时的组件注入 key 的写法：
+
+```js
+export default (props) => <User {...props} key={props.location.state.from} />;
+```
+
+将路由参数 from 赋予给组件 props 的 key，当不同路由跳转时，组件有了不同的 key，因此实现了组件的构建更新
+
+**【diff 算法】**
+diff 算法是 react 的核心思想。当你添加了一个 key 之后，因为 react 在重新渲染时，会比较组件是否发生了变更，diff 算法包括组件 diff,element diff，还有 dom 树 diff。有了 key 作为标识，**react 能很快的计算出是否需要重新渲染，如果没有添加 key，默认就重新渲染**。
+
+**【参考链接】**
+
+- [关于动态路由切换组件没有重新挂载的问题](https://blog.csdn.net/weixin_43824519/article/details/119932327)
+- [react 多个路由共用同一个组件模块，切换路由跳转页面不刷新问题](https://www.jianshu.com/p/0ec8fc865a15)

@@ -691,7 +691,9 @@ function TextInputWithFocusButton() {
 
 ### 变更 ref 不会引发渲染问题？？
 
-> **实例一：？？某些情况依赖数组需要监听 ref**
+若`ref.current`对象发生变化，监听`ref.current`对象的 `useMemo` 也是会更新的，然后 `useMemo` 的值在 render 中被使用所以会触发界面渲染。
+
+> **实例一：某些情况依赖数组需要监听 ref.current 或下面属性**
 
 Ref 改变更新.current 属性不会引发组件重新渲染，但是某些用到 ref 的 useCallback 或者 useMemo 中若使用到了 ref.current 对象中的某些属性（假设为属性 A），也需要在依赖数组中加入属性 A，不然的话 A 变了没发触发 useCallback 和 useMemo 的更新。
 ==出现这种情况，很可能是因为状态管理、代码组织的有问题，需要优化==
@@ -760,7 +762,7 @@ const treeData = useMemo(() => {
 />
 ```
 
-> **实例三：实例一再次测试结果**
+> **实例三：实例一再次测试结果** ？？待再次测试
 
 ==最新测试结果：监听 currt 或者 current 下的属性（基本/引用）都是没法更新渲染页面的，也没法触发 useMemo 的更新==
 
@@ -863,6 +865,12 @@ function CountMyRenders() {
 ```
 
 单击几次按钮来触发重新渲染。每次渲染组件时，countRenderRef 可变引用的值都会使`countRenderRef.current ++`递增。 重要的是，更改不会触发组件重新渲染。
+
+### 保存状态用 state 还是 ref？
+
+- **只是在函数事件中用到的数据**就用 ref。
+- **只要`render`中用到的数据**就用 state (即更新后页面会发生变化)。
+- **若更新 `ref.current`的事件中同时有`setState`更新其它 `state` 的操作**，这种情况也是可以用 `ref` 保存状态数据：事件触发才会显示的一些状态。比如打开新增、复制不同弹窗，配置的弹窗数据（title，表单控件） 可以用 ref 保存，因为在更新 ref 的同时也控制了弹窗的显隐 `visible` 状态的变化，`state`更新能引起页面的重新渲染，自然就能使用到最新的 `ref.current` 了。
 
 ### input 绑定设置 ref 后获取、设置值
 
