@@ -1,14 +1,14 @@
 # Array 对象
 
-## 概述
+# 概述
 
 数组对于程序语言的重要性自不必多说，而在使用 JS 的时候难免也会需要用到数组操作,主要**用于封装多个任意类型的数据，并对它们进行管理**，在 JS 中，数组可以使用 Array 构造函数来创建，或使用[]快速创建，这也是首选的方法。
 
 数组是值的有序集合，由于弱类型的原因，JS 中数组十分灵活、强大，不像是 Java 等强类型高级语言数组只能存放同一类型或其子类型元素，JS**在同一个数组中可以存放多种类型的元素，而且是长度也是可以动态调整的，可以随着数据增加或减少自动对数组长度做更改**。
 
-## 创建数组方式
+# 创建数组方式
 
-### 构造函数
+## 构造函数
 
 - **作用：** `Array`是 JavaScript 的原生对象，同时也是一个构造函数，可以用它生成新的数组。
 
@@ -83,7 +83,7 @@ b[0]; // undefined
 
 上面代码中，`a`是`Array()`生成的一个长度为 3 的空数组，`b`是一个三个成员都是`undefined`的数组，这两个数组是不一样的。读取键值的时候，`a`和`b`都返回`undefined`，但是`a`的键名（成员的序号）都是空的，`b`的键名是有值的。
 
-### 字面量
+## 字面量
 
 - **对比：**
   - 单个数字参数时两者不同：**构造函数会创建一个长度为参数的空数组，而字面量是无论几个参数，都作为数组成员**
@@ -111,9 +111,9 @@ a; // [1, 2, 3]
 
 这段代码在现代浏览器上运行结果和我们设想一样，长度是 3，但是在低版本 IE 下确实长度为 4 的数组，最后一条数据是 undefined。
 
-## 静态方法
+# 静态方法
 
-### Array.isArray()
+## Array.isArray()
 
 - **作用：** `Array.isArray`方法返回一个布尔值，表示参数是否为数组。它可以弥补`typeof`运算符的不足。
 
@@ -126,9 +126,9 @@ Array.isArray(arr); // true
 
 上面代码中，`typeof`运算符只能显示数组的类型是`Object`，而`Array.isArray`方法可以识别数组。
 
-## 实例方法
+# 实例方法
 
-### valueOf()，toString()
+## valueOf()，toString()
 
 `valueOf`方法是一个所有对象都拥有的方法，表示对该对象求值。不同对象的`valueOf`方法不尽一致，**数组的`valueOf`方法返回数组本身**。
 
@@ -147,9 +147,9 @@ var arr = [1, 2, 3, [4, 5, 6]];
 arr.toString(); // "1,2,3,4,5,6"
 ```
 
-### 增删改元素
+## 增删改元素
 
-#### push()，pop()：队
+### push()，pop()：队
 
 - **`push`作用：** `push`方法用于在数组的末端添加一个或多个元素，并返回添加新元素后的数组长度。注意，该方法会改变原数组。
 
@@ -191,7 +191,7 @@ arr; // [1, 2]
 
 上面代码中，`3`是最后进入数组的，但是最早离开数组。
 
-#### shift()，unshift()：栈
+### shift()，unshift()：栈
 
 - **`shift`作用：** `shift()`方法用于删除数组的第一个元素，并返回该元素。注意，该方法会改变原数组。
 
@@ -238,7 +238,7 @@ arr.unshift("a", "b"); // 4
 arr; // [ 'a', 'b', 'c', 'd' ]
 ```
 
-#### slice()：提取
+### slice()：提取
 
 - **作用：** `slice()`方法用于提取目标数组的一部分，返回一个新数组，原数组不变。（浅拷贝）
 
@@ -288,7 +288,7 @@ Array.prototype.slice.call(arguments);
 
 上面代码的参数都不是数组，但是通过`call`方法，在它们上面调用`slice()`方法，就可以把它们转为真正的数组。
 
-#### splice()：插入、删除、替换
+### splice()：插入、删除、替换
 
 - **作用：** `splice()`方法用于**删除原数组的一部分成员，并可以在删除的位置添加新的数组成员，返回值是被删除的元素**。注意，该方法会改变原数组。
 
@@ -366,7 +366,7 @@ list.splice(cIndex - 2, 1);
 console.log("list", list); // []
 ```
 
-#### concat()：合并
+### concat()：合并
 
 - **作用：** `concat`方法用于多个数组的合并。它将新数组的成员，添加到原数组成员的后部，然后返回一个新数组，原数组不变。`a.concat(b)返回一个a和b共同组成的新数组，不会修改任何一个原始数组`
 
@@ -433,7 +433,7 @@ console.log(b);
 
 上面代码中，原数组包含一个对象，`concat`方法生成的新数组包含这个对象的引用。所以，改变原对象以后，新数组跟着改变。
 
-#### delete 元素
+### delete 元素
 
 ```js
 var arr = [1, 2, 3, 4];
@@ -446,9 +446,9 @@ arr; //  [1, 2, empty, 4]
 // }
 ```
 
-### 查询
+## 查询
 
-#### indexOf()，lastIndexOf()
+### indexOf()，lastIndexOf()
 
 - **作用：** `indexOf`方法返回给定元素在数组中第一次出现的位置，如果没有出现则返回`-1`。`indexOf`方法还可以接受第二个参数，表示搜索的开始位置。
 
@@ -473,9 +473,9 @@ a.lastIndexOf(7); // -1
   [NaN].lastIndexOf(NaN); // -1
 ```
 
-### 其它
+## 其它
 
-#### join()：连接成员为字符串
+### join()：连接成员为字符串
 
 - **作用：** `join()`方法以指定参数作为分隔符，将所有数组成员连接为一个字符串返回。如果不提供参数，**默认用逗号分隔**。
 
@@ -509,7 +509,7 @@ Array.prototype.join.call(obj, '-')
 // 'a-b'
 ```
 
-#### reverse()：逆序
+### reverse()：逆序
 
 - **作用：** `reverse`方法用于颠倒排列数组元素，返回改变后的数组。注意，该方法将改变原数组。
 
@@ -546,7 +546,7 @@ b.reverse(); // [5, 4, empty × 3, 3, 2, empty × 2]
 ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"].reverse(); // ["0", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
 ```
 
-#### sort()：排序
+### sort()：排序
 
 - **作用：** `sort`方法对数组成员进行排序，默认是按照字典顺序排序。排序后，原数组将被改变。
 
@@ -640,13 +640,15 @@ arr.sort(); // [5, "b", undefined]
 
 上面代码中，前一种排序算法返回的是布尔值，这是不推荐使用的。后一种是数值，才是更好的写法。
 
-##### Tips
+### 排序 Tips
 
-- 数组根据某个中文字段排序
-  ```js
-  list?.sort((a: any, b: any) => a?name?.localeCompare(b?.name, "zh"));
-  ```
-- 数组根据某个时间日期字段来排序
+**【数组根据某个中文字段排序】**
+
+```js
+list?.sort((a: any, b: any) => a?name?.localeCompare(b?.name, "zh"));
+```
+
+**【数组根据某个时间日期字段来排序】**
 
 ```JS
 // 日期字段为 '2020-09-04' 格式
@@ -663,7 +665,9 @@ const dataSource = arr.sort(
 );
 ```
 
-- 数组按照指定的顺序排序：实例一（简单版）
+**【数组按照指定的顺序排序】**
+
+- 实例一（简单版）
 
 ```js
 // 如下，将arr数组的元素根据pageId按照pageIds的顺序来排序
@@ -686,7 +690,7 @@ const res = pageIds.reduce((t, v) => {
 }, []);
 ```
 
-- 数组按照指定的顺序排序：实例二（复杂版）
+- 实例二（复杂版）
   指定的顺序是从接口：一个二维数组（阶段和子阶段属性）里面获取的，如下。而里程碑节点的 list 是以节点为维度一维的，需要按照这个二维数组的顺序来给 list 排序。
 
   ```jsx
@@ -804,7 +808,21 @@ const res = pageIds.reduce((t, v) => {
   )
   ```
 
-### 迭代方法
+**【数组多个字段按优先级同时排序】**
+
+```tsx
+// list先按Name字段排序，再按Version排序，且不区分大小写字母
+const sortByNameAndVersion = (a: IRecipeItem, b: IRecipeItem) => {
+  if (a.Name !== b.Name) {
+    return a.Name?.toLowerCase?.() > b.Name?.toLowerCase?.() ? 1 : -1;
+  }
+  return a.Version?.toLowerCase?.() > b.Version?.toLowerCase?.() ? 1 : -1;
+};
+
+Array.isArray(res) && setOriginalListData(res.sort(sortByNameAndVersion));
+```
+
+## 迭代方法
 
 - **语法：**
 
@@ -866,7 +884,7 @@ arr2; // [1, 2, 3]
 - **参考资料：**
   - [forEach、map、filter、find、sort、some 等易错点整理](https://juejin.im/post/5ca96c76f265da24d5070563)
 
-#### map()
+### map()
 
 - **作用：** `map`方法将数组的所有成员依次传入参数函数，然后把每一次的执行结果组成一个新数组返回。
 
@@ -923,7 +941,7 @@ arr.map((v, i) => {
 });
 ```
 
-#### forEach()
+### forEach()
 
 - **作用：** `forEach`方法与`map`方法很相似，也是对数组的所有成员依次执行参数函数。但是，`forEach`方法不返回值，只用来操作数据。这就是说，如果数组遍历的目的是为了得到返回值，那么使用`map`方法，否则使用`forEach`方法。
 
@@ -992,7 +1010,7 @@ var log = function (n) {
 // Uncaught TypeError: Cannot read property 'filter' of undefined
 ```
 
-#### filter()
+### filter()
 
 - **作用：** `filter`方法用于过滤数组成员，满足条件的成员组成一个新数组返回。
 
@@ -1024,7 +1042,7 @@ var arr = [2, 8, 3, 4, 1, 3, 2, 9];
 arr.filter(myFilter, obj); // [8, 4, 9]
 ```
 
-#### some()，every()
+### some()，every()
 
 - **作用：**
   - `some`方法是只要一个成员的返回值是`true`，则整个`some`方法的返回值就是`true`，否则返回`false`。只要有一个满足即返回 true，之后的不再执行(对性能比较好！)
@@ -1053,7 +1071,7 @@ function isEven(x) { return x % 2 === 0 }
 [].every(isEven) // true
 ```
 
-#### reduce()，reduceRight()
+### reduce()，reduceRight()
 
 - **定义：** 对数组中的每个元素执行一个自定义的累计器，将其结果汇总为单个返回值
 
@@ -1117,7 +1135,7 @@ findLongest(["aaa", "bb", "c"]); // "aaa"
 
 上面代码中，`reduce`的参数函数会将字符长度较长的那个数组成员，作为累积值。这导致遍历所有成员之后，累积值就是字符长度最长的那个成员。
 
-##### 高级应用
+#### 高级应用
 
 - [1] 累加累乘
   ```js
@@ -1377,9 +1395,9 @@ users
 
 上面代码中，先产生一个所有 Email 地址组成的数组，然后再过滤出以`t`开头的 Email 地址，最后将它打印出来。
 
-## Tips
+# Tips
 
-### 判断是否为数组
+## 判断是否为数组
 
 ```js
 Array.isArray([]) // true
@@ -1393,7 +1411,7 @@ Array.isArray([]) // true
 Object.prototype.toString.call([]) === "[object Array]" // true
 ```
 
-### 判断是否为数组元素
+## 判断是否为数组元素
 
 ```js
 // ES5用indexof、some; ES6用find、findIndex、includes
@@ -1416,7 +1434,7 @@ Object.prototype.toString.call([]) === "[object Array]" // true
 3 in [1, 2, 3]; // false  最后一个元素就返回false
 ```
 
-### 初始化数组
+## 初始化数组
 
 ```js
 // let a =[...Array(n)] : n项元素都为undefined的数组
@@ -1426,7 +1444,7 @@ let c = [...Array(5)].map((v, i) => i); // [0, 1, 2, 3, 4]
 let d = new Array(5).fill("1"); // ["1", "1", "1", "1", "1"]
 ```
 
-### 清空数组
+## 清空数组
 
 - splice
 - length 赋值为 0
@@ -1448,7 +1466,7 @@ var a = [1, 2, 3, 4];
 a; // []
 ```
 
-### 数组遍历方法
+## 数组遍历方法
 
 - **用法：**
 
@@ -1502,7 +1520,7 @@ for (const v of arr) {
 // 'c'
 ```
 
-### 数组遍历如何提前退出循环
+## 数组遍历如何提前退出循环
 
 - **作用：** 可以提高性能：校验数组时某个 record 不满足直接退出，减少不必要的后续遍历。
 
@@ -1631,7 +1649,7 @@ for (const v of arr) {
 
 - **参考资料：** [JS 中如何跳出循环/结束遍历](https://segmentfault.com/a/1190000020176190)
 
-### 数组复制
+## 数组复制
 
 - **规则：** （浅拷贝）
   - 数组是引用数据类型，直接赋值的话，只是复制了指针，而不是克隆一个全新的数组。
@@ -1655,7 +1673,7 @@ const a2 = [...a1];
 // const [...a2] = a1;
 ```
 
-### 数组合并
+## 数组合并
 
 - **规则：** （浅拷贝）
   - ES5 通过 concat 实现， ES6 通过`...`展开符实现
@@ -1684,7 +1702,7 @@ a3[0] === a1[0] // true
 a4[0] === a1[0] // true
 ```
 
-### 数组元素分组
+## 数组元素分组
 
 ```jsx
 const sprintTypeMap: Record<string, ISprintItem> = {
@@ -1719,7 +1737,7 @@ sprintsData?.forEach((item) => {
 setSprintList(Object.values(sprintTypeMap) || []);
 ```
 
-### 数组去重
+## 数组去重
 
 - **规则：** 只能去重基础数据类型元素数组
 - **方法：**
@@ -1786,7 +1804,7 @@ console.log(setQC(arr)); // ['a', 'b', 'd']
 console.log(arrayFromQC(arr)); // ['a', 'b', 'd']
 ```
 
-### 数组最大值
+## 数组最大值
 
 - `Math.max.apply()`
 - `Math.max(...array)`
@@ -1802,7 +1820,7 @@ Math.max(...arr) // 9
 arr.reduce((t, v) => v > t ? v : t) // 9
 ```
 
-### 数组中随机获取成员
+## 数组中随机获取成员
 
 ```js
 const arr = [12, 548, "a", 2, 5478, "foo", 8852, 119];
@@ -1812,7 +1830,7 @@ function getRandowItem(arr) {
 }
 ```
 
-### 扁平化 n 维数组
+## 扁平化 n 维数组
 
 - **方法：**
   - 利用递归和数组合并方法 concat 实现扁平
@@ -1843,7 +1861,7 @@ console.log(flatten([1, [2, 3, [4, 5]]])) // [1,2,3,4,5]
 [1, [2, 3, [4, 5]]].toString().split(',')  // ["1", "2", "3", "4", "5"]
 ```
 
-### 类数组转化
+## 类数组转化
 
 ```js
 Array.prototype.slice.call(arguments) // arguments是类数组(伪数组)
@@ -1854,7 +1872,7 @@ Array.from(arguments)
 [...arguments]
 ```
 
-### 数组转换
+## 数组转换
 
 - **数组与字符串的转换：**
 
@@ -1888,7 +1906,7 @@ let newArr = [...obj]; // Uncaught TypeError: object is not iterable...
 let newArr = Array.from(obj); // [0, 1, 2]
 ```
 
-### 数组交、并、补、差集
+## 数组交、并、补、差集
 
 ```js
 const arrOne = [1, 2, 3, 4, 5];
@@ -1921,7 +1939,7 @@ const diff = arrOne.filter((v) => !arrTwo.includes(v));
 // diff = [1, 2, 3, 4]
 ```
 
-### 数组乱序
+## 数组乱序
 
 `Fisher–Yates shuffle` 洗牌算法：该方法就是每次在数组中随机产生一个位置，依次将数组中的每一项与该次产生的随机位置上的元素交换位置。
 
@@ -1943,9 +1961,9 @@ Array.prototype.shuffle = function () {
 
 - [如何将一个 JavaScript 数组打乱顺序](https://www.zhihu.com/question/68330851/answer/266506621)
 
-## 其它
+# 其它
 
-### 数组中间元素的下标
+## 数组中间元素的下标
 
 ```js
 const arrOne = ["一", "二", "三", "四", "五"];
@@ -1969,7 +1987,7 @@ const getArrMidEleIndex = (list) => {
 };
 ```
 
-### 双层 for 循环体里，分别跳出外层循环和内层循环
+## 双层 for 循环体里，分别跳出外层循环和内层循环
 
 跳出内层循环
 

@@ -128,7 +128,7 @@ link 和@import 的区别：
   	color:white; 
   }
   ```
-- 连写选择符号
+- 连写选择符号（且）
 
   ```css
   /* 表示 类包含layout和fold时，sider生效 */
@@ -139,109 +139,180 @@ link 和@import 的区别：
   ```
 
 - 组合选择符：四种
+
   ```
   后代选取器(以空格分隔)  div p { }
   子元素选择器(以大于号分隔）div > p{}
   相邻兄弟选择器（以加号分隔） div + p{}
   普通兄弟选择器（以波浪号分隔）div ~ p{}
   ```
-- 伪类选择器：CSS 伪类是用来添加一些选择器的特殊效果。
 
-  ```css
-  /* 注意hover必须放在link和visited后面才是有效的，
-  active必须放在hover之后才是有效的，
-  即 LoVe HAte */
-  /* 未访问的链接 */
-  a:link {
-  }
-  /* 已访问的链接 */
-  a:visited {
-  }
-  /* 鼠标划过链接 */
-  a:hover {
-  }
-  /* 已选中的链接 */
-  a:active {
-  }
+### 伪类选择器
 
-  p:before {
-  }
-  p:after {
-  }
+> 伪类选择器：CSS 伪类是用来添加一些选择器的特殊效果。
 
-  /* 匹配class为red的a标签 */
-  a.red {
-  }
-  /* 匹配第一个 <p> 元素 */
-  p:first-child {
-  }
-  /* 匹配所有<p> 元素中的第一个 <i> 元素 */
-  p > i:first-child {
-  }
-  /* 匹配所有作为第一个子元素的<p> 元素中的所有 <i> 元素 */
-  p:first-child i {
-  }
-  /* 选择id为container的元素下面的所有子元素 */
+```css
+/* 注意hover必须放在link和visited后面才是有效的，
+active必须放在hover之后才是有效的，
+即 LoVe HAte */
+/* 未访问的链接 */
+a:link {
+}
+/* 已访问的链接 */
+a:visited {
+}
+/* 鼠标划过链接 */
+a:hover {
+}
+/* 已选中的链接 */
+a:active {
+}
 
-  #container * {
+p:before {
+}
+p:after {
+}
+
+/* 匹配class为red的a标签 */
+a.red {
+}
+
+/* 匹配第一个 <p> 元素 */
+p:first-child {
+}
+
+/* 匹配所有<p> 元素中的第一个 <i> 元素 */
+p > i:first-child {
+}
+
+/* 匹配所有作为第一个子元素的<p> 元素中的所有 <i> 元素 */
+p:first-child i {
+}
+/* 选择id为container的元素下面的所有子元素 */
+
+#container * {
+}
+
+/* 把包含标题（title）的所有元素变为蓝色 */
+[title] {
+  color: blue;
+}
+
+/* 属性和值选择器  写出包含标题（title且title为hello）的所有元素变为蓝色 */
+[title="hello"] {
+  color: blue;
+}
+
+/* 选择包含title的a标签 */
+/* 选择包含title且为‘test’的a标签 */
+/* 选择包含href以http开头的a标签 */
+/* 选择包含href以.jpg结尾的a标签 */
+
+/* 选择除了id为 container的div标签 */
+div:not(#container) {
+}
+
+/* 选择除了p标签之外的标签 */
+/* 选择第n个li标签 */
+/* 每隔三个元素获取一个标签 */
+/* 选择奇数个和偶数个li标签的两种写法 */
+/* 选择最后一个li标签两种写法 */
+/* 选择第一个li标签两种写法 */
+/* 选择其父元素的唯一子元素的每个li 元素 */
+/* 选择出ul下除了最后一个的li */
+/* 选择出ul下除了第一个和最后一个的li */
+```
+
+**【`nth-child()`伪类选择器】：**
+
+- 简单数字序号写法（直接匹配第 n 个元素，1 开始）
+- 倍数写法
+- 倍数分组写法
+- 奇偶匹配
+  奇数(odd)与(2n+1)结果一样；偶数(even)与(2n)结果一样。
+
+```css
+/* 匹配序号为奇数的元素 */
+:nth-child(odd) {
+}
+:nth-child(2n + 1) {
+}
+/* 匹配序号为偶数的元素 */
+:nth-child(even) {
+}
+:nth-child(2n) {
+}
+```
+
+**【`:empty`伪类选择器】：**
+
+> 选择没有任何内容的元素，没有内容指的是一点内容都没有，哪怕是一个空格。
+
+如下，antd 的 table 的自有类名`text`，因为`disabled`的列设置了灰白的背景色，且`.text`设置了一个`padding：8px`，导致这一个白色格子中间出现了一条宽度 100%，高度 16px 的灰色条纹，界面大面积出现很不好看。
+
+修复前代码如下：
+
+```css
+tr:not(.row-selected) {
+  .text {
+    background: #f5f5f5;
   }
+}
+```
 
-  /* 把包含标题（title）的所有元素变为蓝色 */
-  [title] {
-    color: blue;
+```jsx
+<td class="ant-table-cell">
+  <div class="text"></div>
+</td>
+```
+
+修复后代码如下：
+`.text`元素若没有任何内容，则不设置，有任何内容则加背景色。
+
+```css
+tr:not(.row-selected) {
+  .text:not(:empty) {
+    background: #f5f5f5;
   }
-  /* 属性和值选择器  写出包含标题（title且title为hello）的所有元素变为蓝色 */
-  [title="hello"] {
-    color: blue;
+}
+```
+
+其它：这么改可以但不完美，完美做法是设置`td`的背景色，因为`td`没有`padding`。
+
+**【`:focus-within`伪类选择器】：**
+
+> :focus-within 是一个 CSS 伪类 ，表示一个元素获得焦点或该元素的后代元素获得焦点。换句话说，元素自身或者它的某个后代匹配 `:focus` 伪类。
+
+```css
+.input-search {
+  flex: 1 1 auto;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  transition: border-color 0.3s ease;
+  background-color: #fff;
+  &:hover {
+    border-color: #1b9aee;
   }
-
-  /* 选择包含title的a标签 */
-  /* 选择包含title且为‘test’的a标签 */
-  /* 选择包含href以http开头的a标签 */
-  /* 选择包含href以.jpg结尾的a标签 */
-
-  /* 选择除了id为 container的div标签 */
-  div:not(#container) {
+  &:focus-within {
+    .input-search-result {
+      display: block;
+    }
   }
-  /* 选择除了p标签之外的标签 */
-  /* 选择第n个li标签 */
-  /* 每隔三个元素获取一个标签 */
-  /* 选择奇数个和偶数个li标签的两种写法 */
-  /* 选择最后一个li标签两种写法 */
-  /* 选择第一个li标签两种写法 */
-  /* 选择其父元素的唯一子元素的每个li 元素 */
-  /* 选择出ul下除了最后一个的li */
-  /* 选择出ul下除了第一个和最后一个的li */
-  ```
+}
+```
 
-  - nth-child()伪类选择器
-    - 简单数字序号写法（直接匹配第 n 个元素，1 开始）
-    - 倍数写法
-    - 倍数分组写法
-    - 奇偶匹配
-      奇数(odd)与(2n+1)结果一样；偶数(even)与(2n)结果一样。
-      ```css
-      /* 匹配序号为奇数的元素 */
-      :nth-child(odd) {
-      }
-      :nth-child(2n + 1) {
-      }
-      /* 匹配序号为偶数的元素 */
-      :nth-child(even) {
-      }
-      :nth-child(2n) {
-      }
-      ```
-
-- 属性选择器
+### 属性选择器
 
 ```css
 /* 选择所有带有 target 属性元素 */
 [target] {
 }
+
 /* 选择所有使用 target="-blank" 的元素 */
 [target="-blank"] {
 }
+
 /* 选择标题属性包含单词 "flower" 的所有元素 */
 [title~="flower"] {
 }
@@ -249,9 +320,11 @@ link 和@import 的区别：
 /* 选择每一个 src 属性的值以 "https" 开头的元素 */
 a[src^="https"] {
 }
+
 /* 选择每一个 src 属性的值以 ".pdf" 结尾的元素 */
 a[src$=".pdf"] {
 }
+
 /* 选择每一个 src 属性的值包含子字符串"W3Cschool" 的元素 */
 a[src*="W3Cschool"] {
 }
@@ -261,14 +334,16 @@ a[src*="W3Cschool"] {
 }
 ```
 
-- `.X:not(selector)` 取反选择器
+### `.X:not(selector)`取反选择器
 
 ```css
+/* 把除id为container之外的所有div标签都选中 */
 div:not(#container) {
-} // 把除id为container之外的所有div标签都选中
+}
 
+/* 把除了p标签之外的所有标签都选中 */
 :not(p) {
-} // 把除了p标签之外的所有标签都选中
+}
 ```
 
 ### 其它
@@ -318,27 +393,6 @@ li:not(:last-child) {
       color: rgba(255, 191, 24, 1);
   }
 </style>
-```
-
-> :focus-within 是一个 CSS 伪类 ，表示一个元素获得焦点，或，该元素的后代元素获得焦点。换句话说，元素自身或者它的某个后代匹配 :focus 伪类。
-
-```css
-.input-search {
-  flex: 1 1 auto;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  transition: border-color 0.3s ease;
-  background-color: #fff;
-  &:hover {
-    border-color: #1b9aee;
-  }
-  &:focus-within {
-    .input-search-result {
-      display: block;
-    }
-  }
-}
 ```
 
 ### `nth-chid`和`nth-of-type`的区别
@@ -536,9 +590,70 @@ CSS 盒模型本质上是一个盒子，封装周围的 HTML 元素，它包括�
   }
   ```
 
+# less 典型选择器写法
+
+**【且选择器结合伪类】**
+
+```less
+.FilterLabel {
+  flex-shrink: 0;
+  margin-right: 10px;
+  // 一：某个选择器className有.FilterLabel类和.Colon类的同时，.FilterLabel类的伪类:after才被选择上
+  &.Colon:after {
+    content: ":";
+  }
+  // 某个选择器className有.FilterLabel类且没有.Colon类的同时，.FilterLabel类的伪类:after才被选择上
+  &:not(.Colon):after {
+    content: ":";
+  }
+}
+```
+
+```jsx
+const Label = (
+  <label
+    className={classNames(styles.FilterLabel, !isCheckbox && styles.Colon)}
+  >
+    {it.label}
+  </label>
+);
+```
+
+**【一个选择器内使用多次伪类】**
+
+```css
+.folder-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 16px;
+  cursor: pointer;
+  &-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  // hover时候且不是.disabled和.selected
+  &:hover:not(.disabled):not(.selected) {
+    background: #f7f7f7;
+  }
+
+  /* 这个放在上面的内部也是可以的 */
+  &:hover:not(.disabled):not(.selected) .folder-item-name {
+    color: #1b9aee;
+  }
+}
+```
+
 # CSS 模块化
 
-## 实例一
+**【参考链接】**
+
+- [CSS 知识点及技巧整理](https://juejin.cn/post/6844903567707357197#heading-22)
+
+**【实例】：**
+
+- 实例一
 
 ```css
 /* ./index.scss */
@@ -596,7 +711,7 @@ import myStyles from "./index.scss"; // css模块化
 />;
 ```
 
-## 实例二
+- 实例二
 
 ```jsx
 /** @jsx jsx */ // 必须加这个不然样式没有效果
@@ -815,10 +930,6 @@ export const modalWrapperCss = css`
   }
 `;
 ```
-
-## 参考
-
-- [CSS 知识点及技巧整理](https://juejin.cn/post/6844903567707357197#heading-22)
 
 # 实战
 
@@ -1068,7 +1179,12 @@ export const ContextMenuItem: FC<IContextMenuItem> = (props) => {
 
 # 常用颜色
 
-<div style="background: #1890ff;color: #fff">真的</div>
+<div style="background: #1890ff;color: #fff">background: #1890ff;color: #fff</div>
+
+<div style="background: lightblue;color: #fff">background: lightblue;color: #fff （天蓝色）</div>
+
+<div style="background: lightgreen;color: #fff">background: lightgreen;color: #fff （淡绿色）</div>
+
 # Tips
 
 ## 设置颜色时的 `currentColor` 关键字
@@ -1106,34 +1222,10 @@ currentColor 关键字代表原始的 color 属性的计算值。它允许让继
 > top: 100%的定位是以父元素 border 下界为基线，向下延伸。（定位元素的顶部贴着父元素的底部 border，在边框外边）
 > bottom: 0px 的定位是以父元素 border 上界为基线，向上延伸。（定位元素的底部贴着父元素的底部 border，在边框里面）
 
-- 参考链接
-  - [css position 定位 top 百分比的问题](https://www.imooc.com/article/12794)
-  - [CSS 绝对定位 top: 100%和 bottom:0 的区别](https://www.jianshu.com/p/e37e586249f3)
+**【参考链接】**
 
-## 同一个选择器使用多次伪类
-
-```css
-.folder-item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 4px 16px;
-  cursor: pointer;
-  &-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  // hover时候且不是.disabled和.selected
-  &:hover:not(.disabled):not(.selected) {
-    background: #f7f7f7;
-  }
-
-  &:hover:not(.disabled):not(.selected) .folder-item-name {
-    color: #1b9aee;
-  }
-}
-```
+- [css position 定位 top 百分比的问题](https://www.imooc.com/article/12794)
+- [CSS 绝对定位 top: 100%和 bottom:0 的区别](https://www.jianshu.com/p/e37e586249f3)
 
 ## 滚动条样式
 
@@ -1143,17 +1235,22 @@ currentColor 关键字代表原始的 color 属性的计算值。它允许让继
 }
 ```
 
-[用 CSS 修改滚动条样式](https://www.cnblogs.com/liulangbxc/p/15200433.html)
+**【参考链接】**
 
-## 点击 a 元素 b 元素添加样式
+- [用 CSS 修改滚动条样式](https://www.cnblogs.com/liulangbxc/p/15200433.html)
 
-```jsx
+## 实现点击 a 元素 b 元素添加样式
 
-.high-light {
-  background-color: #fff;
-  transition: background-color 0.5s ease-in 0.5s;
-  animation: changebackgroundcolor 0.5s ease-in-out 0s 1 alternate running forwards;
-}
+**【最终做法】：** JS 实现
+
+```tsx
+// .high-light {
+//   background-color: #fff;
+//   transition: background-color 0.5s ease-in 0.5s;
+//   animation: changebackgroundcolor 0.5s ease-in-out 0s 1 alternate running forwards;
+// }
+
+const intervalWorkloadRef = useRef < HTMLDivElement > null;
 
 const onClickFormula = useCallback((ref: React.RefObject<HTMLDivElement>) => {
   ref?.current?.classList?.add("high-light");
@@ -1161,11 +1258,25 @@ const onClickFormula = useCallback((ref: React.RefObject<HTMLDivElement>) => {
     ref?.current?.classList?.remove("high-light");
   }, 500);
 }, []);
+
+const Page = () => {
+  return (
+    <CanClickText onClick={() => onClickFormula(intervalWorkloadRef)}>
+      {totalWorkDays ?? "-"}
+    </CanClickText>
+  );
+};
+```
+
+**【简陋做法】：** CSS 实现，但是只是一瞬间，太短了
+
+```css
+a:hover .b {
+  background: red;
+}
 ```
 
 ## 用纯 CSS 禁止鼠标点击事件
-
-[链接](https://www.cnblogs.com/karajanking/p/5889300.html)
 
 ```css
 .disabled {
@@ -1174,6 +1285,10 @@ const onClickFormula = useCallback((ref: React.RefObject<HTMLDivElement>) => {
   opacity: 0.6;
 }
 ```
+
+**【参考链接】**
+
+- [用纯 CSS 禁止鼠标点击事件](https://www.cnblogs.com/karajanking/p/5889300.html)
 
 ## 组件 className 前缀统一
 
@@ -1189,32 +1304,23 @@ function render() {
 }
 ```
 
-## 其它
+# 其它
 
 - scss 文件悬浮到选择器上可以看到匹配当前选择器的 html 结构
 
 - 若写了结构也有内容但是就是不出来高度占比，给个`font-size`就好了
 
-- css 如何实现点击 a 元素，b 元素改变样式
-
-  ```css
-  a:hover .b {
-    background: red;
-  }
-  ```
-
-- styled 组件元素复用的时候如果需要特定修改，通过 style 来修改
-
-- calc
-
-```css
-height: calc(100vh - 260px); // 有时候用100%受到父元素影响不如vh方便
-```
-
 - [MDN-sticky 定位](https://developer.mozilla.org/zh-CN/docs/Web/CSS/position)
+
 - 若有更高优先级的 className 把设置的样式覆盖如何处理
-  解决方法：通过连写选择符号 或者 !important
+
+  解决方法：通过连写选择符号 或者 多些几个层级 实在不行再`!important`
+
   ```css
   .ant-form-item.oui-value-evaluation-formItem {
   }
   ```
+
+```
+
+```

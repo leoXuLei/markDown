@@ -436,6 +436,10 @@ const HeaderWrapper = styled.div`
 `;
 ```
 
+# 实战
+
+- styled 组件元素复用的时候如果需要特定修改，通过 `style(LeftWrapper) {}` 来修改
+
 # 参考链接
 
 - [styled-components 中文文档翻译及不完全指北 - 王亮的文章 - 知乎](https://zhuanlan.zhihu.com/p/50304300)
