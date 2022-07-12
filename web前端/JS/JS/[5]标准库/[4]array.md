@@ -640,188 +640,6 @@ arr.sort(); // [5, "b", undefined]
 
 上面代码中，前一种排序算法返回的是布尔值，这是不推荐使用的。后一种是数值，才是更好的写法。
 
-### 排序 Tips
-
-**【数组根据某个中文字段排序】**
-
-```js
-list?.sort((a: any, b: any) => a?name?.localeCompare(b?.name, "zh"));
-```
-
-**【数组根据某个时间日期字段来排序】**
-
-```JS
-// 日期字段为 '2020-09-04' 格式
-
-const dataSource = arr.sort(
-  (a, b) => moment(a.date).valueOf() - moment(b.date).valueOf()
-);
-
-// 日期字段为 '2020-09-04T11:02:09.596' 格式
-const dataSource = arr.sort(
-  (a, b) =>
-    moment(moment(b.createdAt).format('YYYY-MM-DD')).valueOf() -
-    moment(moment(a.createdAt).format('YYYY-MM-DD')).valueOf(),
-);
-```
-
-**【数组按照指定的顺序排序】**
-
-- 实例一（简单版）
-
-```js
-// 如下，将arr数组的元素根据pageId按照pageIds的顺序来排序
-var pageIds = [125, 123, 124];
-var arr = [{ pageId: 123 }, { pageId: 124 }, { pageId: 125 }];
-```
-
-```js
-// 只需要遍历两次，但是需要耗费一个对象和数组存储数据
-const arrObj = arr.reduce((t, v) => {
-  t[v.pageId] = v;
-  return t;
-}, {});
-const res = pageIds.reduce((t, v) => {
-  const item = arrObj[v];
-  if (item) {
-    t.push(item);
-  }
-  return t;
-}, []);
-```
-
-- 实例二（复杂版）
-  指定的顺序是从接口：一个二维数组（阶段和子阶段属性）里面获取的，如下。而里程碑节点的 list 是以节点为维度一维的，需要按照这个二维数组的顺序来给 list 排序。
-
-  ```jsx
-  // milestonePhaseMappingList 数据接口如下
-  [
-    {
-      children: [
-        {
-          key: "requirement",
-          name: "需求",
-          order: 0,
-        },
-        {
-          key: "design",
-          name: "设计",
-          order: 1,
-        },
-        {
-          key: "plan",
-          name: "计划",
-          order: 2,
-        },
-      ],
-      key: "establish",
-      name: "立项",
-      order: 0,
-    },
-    {
-      children: [
-        {
-          key: "develop",
-          name: "开发",
-          order: 3,
-        },
-        {
-          key: "test",
-          name: "测试",
-          order: 4,
-        },
-      ],
-      key: "implementation",
-      name: "实施",
-      order: 1,
-    },
-    {
-      children: [
-        {
-          key: "publish",
-          name: "发布",
-          order: 5,
-        },
-        {
-          key: "finish",
-          name: "结束",
-          order: 6,
-        },
-      ],
-      key: "finish",
-      name: "结项",
-      order: 2,
-    },
-  ];
-  ```
-
-  ```jsx
-  import produce from 'immer'
-
-  // 获取里程碑节点的阶段、子阶段字典数据
-  const fetchMilestonePhaseMappingInfo = useCallback(async () => {
-    const { success, result } = await getMilestonePhaseMappingInfo()
-    if (success) {
-      setMilestonePhaseMappingList(result || [])
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchMilestonePhaseMappingInfo()
-  }, [fetchMilestonePhaseMappingInfo])
-
-  // 节点list按照阶段-子阶段字典的顺序排序
-  const orderListByStage = useCallback(
-    (list: IMilestone[]) => {
-      const latestmMappingList = milestonePhaseMappingList as Array<
-        IMilestonePhaseMappingItem & {
-          milestones: IMilestone[]
-        }
-      >
-      const handledMappingList = produce(latestmMappingList || [], (draft) => {
-        draft?.forEach((stageItem) => {
-          stageItem.milestones = []
-          if (stageItem?.children?.length) {
-            stageItem?.children?.forEach((subStageItem) => {
-              const filteredItems = list?.filter(
-                (milestoneItem) =>
-                  milestoneItem?.stage === stageItem?.key &&
-                  milestoneItem?.subStage === subStageItem?.key,
-              )
-              if (filteredItems?.length) {
-                stageItem.milestones = stageItem.milestones.concat(filteredItems)
-              }
-            })
-          }
-        })
-      })
-      console.log(`handledMappingList`, handledMappingList)
-      console.log(`milestonePhaseMappingList`, milestonePhaseMappingList)
-      const orderedList = handledMappingList.reduce(
-        (total: IMilestone[], item) => total.concat(item?.milestones || []),
-        [],
-      )
-      console.log(`orderedList`, orderedList)
-      return orderedList
-    },
-    [milestonePhaseMappingList],
-  )
-  ```
-
-**【数组多个字段按优先级同时排序】**
-
-```tsx
-// list先按Name字段排序，再按Version排序，且不区分大小写字母
-const sortByNameAndVersion = (a: IRecipeItem, b: IRecipeItem) => {
-  if (a.Name !== b.Name) {
-    return a.Name?.toLowerCase?.() > b.Name?.toLowerCase?.() ? 1 : -1;
-  }
-  return a.Version?.toLowerCase?.() > b.Version?.toLowerCase?.() ? 1 : -1;
-};
-
-Array.isArray(res) && setOriginalListData(res.sort(sortByNameAndVersion));
-```
-
 ## 迭代方法
 
 - **语法：**
@@ -1960,6 +1778,199 @@ Array.prototype.shuffle = function () {
 ```
 
 - [如何将一个 JavaScript 数组打乱顺序](https://www.zhihu.com/question/68330851/answer/266506621)
+
+# Tips 数组排序
+
+## **根据中文字段排序**
+
+```js
+list?.sort((a: any, b: any) => a?name?.localeCompare(b?.name, "zh"));
+```
+
+## **根据时间日期字段排序**
+
+```js
+// 日期字段为 '2020-09-04' 格式
+
+const dataSource = arr.sort(
+  (a, b) => moment(a.date).valueOf() - moment(b.date).valueOf()
+);
+
+// 日期字段为 '2020-09-04T11:02:09.596' 格式
+const dataSource = arr.sort(
+  (a, b) =>
+    moment(moment(b.createdAt).format("YYYY-MM-DD")).valueOf() -
+    moment(moment(a.createdAt).format("YYYY-MM-DD")).valueOf()
+);
+```
+
+## **根据指定的顺序排序**
+
+**【实例】**
+
+- 实例一（简单版）
+
+```js
+// 如下，将arr数组的元素根据pageId按照pageIds的顺序来排序
+var pageIds = [125, 123, 124];
+var arr = [{ pageId: 123 }, { pageId: 124 }, { pageId: 125 }];
+```
+
+```js
+// 只需要遍历两次，但是需要耗费一个对象和数组存储数据
+const arrObj = arr.reduce((t, v) => {
+  t[v.pageId] = v;
+  return t;
+}, {});
+const res = pageIds.reduce((t, v) => {
+  const item = arrObj[v];
+  if (item) {
+    t.push(item);
+  }
+  return t;
+}, []);
+```
+
+- 实例二（复杂版）
+  指定的顺序是从接口：一个二维数组（阶段和子阶段属性）里面获取的，如下。而里程碑节点的 list 是以节点为维度一维的，需要按照这个二维数组的顺序来给 list 排序。
+
+```jsx
+// milestonePhaseMappingList 数据接口如下
+[
+  {
+    children: [
+      {
+        key: "requirement",
+        name: "需求",
+        order: 0,
+      },
+      {
+        key: "design",
+        name: "设计",
+        order: 1,
+      },
+      {
+        key: "plan",
+        name: "计划",
+        order: 2,
+      },
+    ],
+    key: "establish",
+    name: "立项",
+    order: 0,
+  },
+  {
+    children: [
+      {
+        key: "develop",
+        name: "开发",
+        order: 3,
+      },
+      {
+        key: "test",
+        name: "测试",
+        order: 4,
+      },
+    ],
+    key: "implementation",
+    name: "实施",
+    order: 1,
+  },
+  {
+    children: [
+      {
+        key: "publish",
+        name: "发布",
+        order: 5,
+      },
+      {
+        key: "finish",
+        name: "结束",
+        order: 6,
+      },
+    ],
+    key: "finish",
+    name: "结项",
+    order: 2,
+  },
+];
+```
+
+```jsx
+import produce from 'immer'
+
+// 获取里程碑节点的阶段、子阶段字典数据
+const fetchMilestonePhaseMappingInfo = useCallback(async () => {
+  const { success, result } = await getMilestonePhaseMappingInfo()
+  if (success) {
+    setMilestonePhaseMappingList(result || [])
+  }
+}, [])
+
+useEffect(() => {
+  fetchMilestonePhaseMappingInfo()
+}, [fetchMilestonePhaseMappingInfo])
+
+// 节点list按照阶段-子阶段字典的顺序排序
+const orderListByStage = useCallback(
+  (list: IMilestone[]) => {
+    const latestmMappingList = milestonePhaseMappingList as Array<
+      IMilestonePhaseMappingItem & {
+        milestones: IMilestone[]
+      }
+    >
+    const handledMappingList = produce(latestmMappingList || [], (draft) => {
+      draft?.forEach((stageItem) => {
+        stageItem.milestones = []
+        if (stageItem?.children?.length) {
+          stageItem?.children?.forEach((subStageItem) => {
+            const filteredItems = list?.filter(
+              (milestoneItem) =>
+                milestoneItem?.stage === stageItem?.key &&
+                milestoneItem?.subStage === subStageItem?.key,
+            )
+            if (filteredItems?.length) {
+              stageItem.milestones = stageItem.milestones.concat(filteredItems)
+            }
+          })
+        }
+      })
+    })
+    console.log(`handledMappingList`, handledMappingList)
+    console.log(`milestonePhaseMappingList`, milestonePhaseMappingList)
+    const orderedList = handledMappingList.reduce(
+      (total: IMilestone[], item) => total.concat(item?.milestones || []),
+      [],
+    )
+    console.log(`orderedList`, orderedList)
+    return orderedList
+  },
+  [milestonePhaseMappingList],
+)
+```
+
+**【参考链接】**
+
+- [数组按指定顺序排序](https://cloud.tencent.com/developer/article/2020944)
+
+## **多个字段按优先级先后排序**
+
+```tsx
+// list先按Name字段排序，再按Version排序，且不区分大小写字母
+const sortByNameAndVersion = (a: IRecipeItem, b: IRecipeItem) => {
+  if (a.Name !== b.Name) {
+    return a.Name?.toLowerCase?.() > b.Name?.toLowerCase?.() ? 1 : -1;
+  }
+  return a.Version?.toLowerCase?.() > b.Version?.toLowerCase?.() ? 1 : -1;
+};
+
+Array.isArray(res) && setOriginalListData(res.sort(sortByNameAndVersion));
+```
+
+**【参考链接】**
+
+- [js 对象数组多字段排序](https://www.cnblogs.com/kerin/p/15433435.html)
+- [数组对象多字段排序](https://blog.csdn.net/hu1628299958/article/details/109757487)
 
 # 其它
 
