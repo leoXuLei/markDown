@@ -1,8 +1,68 @@
-## 抽离常量
+# 配置化
+
+配置化写法是代码量最少，最清楚的。
+
+```tsx
+const handledMaterialFilter = useMemo(() => {
+  const recipeClassOptions = [];
+  const recipeGroupOptions = [];
+
+  return recipeFilterConfigs.map((v) => {
+    const label = formatMessage({
+      id: v.label,
+    });
+    return {
+      ...v,
+      label,
+      ...(v.key === "RecipeClass"
+        ? {
+            list: recipeClassOptions,
+          }
+        : {}),
+      ...(v.key === "RecipeGroup"
+        ? {
+            list: recipeGroupOptions,
+          }
+        : {}),
+      ...(v.key === "Status"
+        ? {
+            list: recipeStatusOptions,
+          }
+        : {}),
+    };
+  });
+}, [originalListData, formatMessage]);
+```
+
+```tsx
+const handledMaterialFilter = useMemo(() => {
+  const recipeClassOptions = [];
+  const recipeGroupOptions = [];
+
+  const formFieldOptionConfig: IPlainObject = {
+    RecipeClass: { list: recipeClassOptions },
+    RecipeGroup: { list: recipeGroupOptions },
+    Status: { list: recipeStatusOptions },
+  };
+
+  return recipeFilterConfigs.map((v) => {
+    const label = formatMessage({
+      id: v.label,
+    });
+    return {
+      ...v,
+      label,
+      ...(formFieldOptionConfig[v.key] || {}),
+    };
+  });
+}, [originalListData, formatMessage]);
+```
+
+# 抽离常量
 
 如表格的列
 
-### 注意
+## 注意：引用数据问题
 
 @抽离数组，使用的时候要注意引用数据问题
 
@@ -16,10 +76,11 @@ const defaultColumns = [...DefColumns];
 checkedList.map((item) => defaultColumns.push(columns[item]));
 ```
 
-### 实例
+## 实例
 
-#### 字典数据抽离
-##### 实例1
+### 字典数据抽离
+
+#### 实例 1
 
 ```js
 // 写法一：建议使用这个
@@ -75,7 +136,9 @@ export const TRIPARTITE_KEY_MAP = Object.keys(TRIPARTITE_MAP).reduce((t, v) => {
   };
 }, {});
 ```
-##### 实例2
+
+#### 实例 2
+
 ```js
 export enum EProjectStatus {
   NORMAL = 1,
@@ -90,15 +153,17 @@ export const ProjectStatusMap = {
 }
 ```
 
-##### 实例3
+#### 实例 3
+
 ```js
 export const ApprovalResultMap = {
-  PASS: '审批通过',
-  NO_PASS: '审批不通过',
-  REFERRAL: '已转审',
-}
+  PASS: "审批通过",
+  NO_PASS: "审批不通过",
+  REFERRAL: "已转审",
+};
 ```
-#### 实例一：表格列
+
+### 实例一：表格列
 
 抽离出来的是对象或者数组，若用到其它变量和方法，可以通过箭头函数传入，如下：
 
@@ -117,18 +182,17 @@ const getColumns = (handleRemove) => [
 ];
 ```
 
-#### 实例三：表单控件根据不同期权结构配置
+### 实例三：表单控件根据不同期权结构配置
 
 - 公共控件（大多数期权结构公共）复用
 - 少数几个期权结构没有的，从`公共控件中filter`
 - 少数几个期权结构有的，单独加到最后面
 
-
 实践：根据期权结构返回对应期权结构的控件（期权结构只用写一次，联动显示控件写多次）
 ![](../imgs/配置化-example-1.png)
 ![](../imgs/配置化-example-2.png)
 
-## 项目目录
+# 项目目录
 
 - services
 
@@ -147,7 +211,7 @@ export async function getInstrumentInfo(params) {
 }
 ```
 
-## 巧妙方法
+# 巧妙方法
 
 TY Form2 中控件是按对象存放的，一个控件的值改变，根据类型控制另一个控件是否必填。
 

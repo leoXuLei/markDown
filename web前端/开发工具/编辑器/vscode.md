@@ -147,7 +147,7 @@
 
 # 插件
 
-## snippets 代码片段
+## `snippets` 代码片段
 
 - 插件
   - `ES7+ React/Redux/React-Native snippets`：v4.4.3，5.5M
@@ -244,7 +244,7 @@ div.nav
   - `Path Intellisense`： v2.8.1，7.3M
     - 文件路径补全，在你用任何方式引入文件系统中的路径时提供智能提示和自动完成；
 
-## Git graph = git lens 图表版
+## @`Git graph` = git lens 图表版
 
 查看存储库的 Git 图表，并从图表执行 Git 操作。
 
@@ -256,13 +256,13 @@ div.nav
 - Stashes: 暂存列表管理
 - Search And Compare：搜索 commit、比较不同分支/commit 节点之间的改动/提交变化
 
-## Code Spell Checker： 拼写检查
+## `Code Spell Checker`： 拼写检查
 
-## MPE：MD 预览导出插件
+## `MPE`：MD 预览导出插件
 
 - [使用教程](https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/)
 
-## Markdown All in One：MD 编辑插件
+## `Markdown All in One`：MD 编辑插件
 
 - 键盘快捷键
   - `ctrl + B` : 文本加粗
@@ -273,6 +273,38 @@ div.nav
   - `Alt + Shift + F`
 - 其它
   - `Ctrl + v` : 在所选文本上粘贴链接
+
+## `Doxygen Documentation Generator`：注释
+
+- from: `Christoph Schlosser` `8.2M`
+
+**【实例-函数注释】：**
+
+```jsx
+/**
+ * 去重List的某一个字段值
+ * @param list { Array } 原数组
+ * @param key { String } 字段key
+ * @returns Array
+ */
+export const uniqueListFieldValue = (list: IPlainObject[], key: string) => {
+  const targetFieldList = (list || [])?.map((v) => v[key])?.filter(Boolean);
+  const uniquedFieldList = Array.from(new Set(targetFieldList || []));
+  return uniquedFieldList;
+};
+
+// 使用函数的地方，悬浮显示函数的入参及其类型、描述信息和返回值类型
+
+// 去重List的某一个字段值
+// @param list — 原数组
+// @param key — 字段key
+// @returns — Array
+```
+
+**【参考链接】：**
+
+- [VSCODE 使用插件 Doxygen Documentation Generator](https://blog.csdn.net/my_id_kt/article/details/122852676)
+- [vscode 注释汇总](https://blog.csdn.net/weixin_38318244/article/details/115631697)
 
 # MarkDown
 

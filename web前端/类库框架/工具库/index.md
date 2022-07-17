@@ -379,3 +379,13 @@ useEffect(() => {
   setHasModified(!deepEqual(milestones, currentMilestones));
 }, [milestones, currentMilestones]);
 ```
+
+# React Hooks
+
+## `ahooks`
+
+- 开始用`ahooks`的`useMemoizedFn`来替换 useCallback，不需要再纠结各种依赖的问题了。提高不少效率。
+
+**【参考链接】：**
+
+- [aHook 官网-useMemoizedFn](https://ahooks.js.org/zh-CN/hooks/use-memoized-fn)

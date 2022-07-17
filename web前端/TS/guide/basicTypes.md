@@ -468,10 +468,6 @@ const title = useMemo(() => {
 }, [props.type, props.directory, DocType.TEXT]);
 ```
 
-### 问题
-
-- [TypeScript 中如何使用自己在 d.ts 中定义的 enum？](https://www.zhihu.com/question/464165657)
-
 ## any (不清楚类型)
 
 有时候，我们会想要为那些在编程阶段还不清楚类型的变量指定一个类型。 我们**不希望类型检查器对这些值进行检查而是直接让它们通过编译阶段的检查**。 那么我们可以使用 any 类型来标记这些变量：
