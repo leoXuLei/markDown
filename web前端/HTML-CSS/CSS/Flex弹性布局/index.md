@@ -38,7 +38,7 @@ CSS3 弹性盒（ `Flexible Box` 或 `flexbox`），**是一种当页面需要�
 **【注意】：**
 
 - 思维导图中的`item-flex-简写`中`<number> === <number> 1 auto`应该是`<number> === <number> 1 0%`
-  ![](./../imgs/css-flexbox.jpeg)
+  ![](./../imgs/css-flexbox.png)
 
 # 子项目 `flex` 属性值公式
 
