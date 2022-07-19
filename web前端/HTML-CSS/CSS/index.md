@@ -650,7 +650,7 @@ const Label = (
 **【参考链接】**
 
 - [CSS 知识点及技巧整理](https://juejin.cn/post/6844903567707357197#heading-22)
-
+- 
 **【实例】：**
 
 - 实例一
@@ -1227,7 +1227,7 @@ currentColor 关键字代表原始的 color 属性的计算值。它允许让继
 - [css position 定位 top 百分比的问题](https://www.imooc.com/article/12794)
 - [CSS 绝对定位 top: 100%和 bottom:0 的区别](https://www.jianshu.com/p/e37e586249f3)
 
-## 滚动条样式
+## 设置自定义滚动条样式
 
 ```css
 ::-webkit-scrollbar {
@@ -1236,7 +1236,7 @@ currentColor 关键字代表原始的 color 属性的计算值。它允许让继
 ```
 
 **【参考链接】**
-
+- [React设置自定义滚动条样式](https://blog.csdn.net/sg_knight/article/details/122689629)
 - [用 CSS 修改滚动条样式](https://www.cnblogs.com/liulangbxc/p/15200433.html)
 
 ## 实现点击 a 元素 b 元素添加样式

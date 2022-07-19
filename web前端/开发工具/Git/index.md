@@ -135,13 +135,30 @@ doc/*.txt
 
 - **OpenSSL SSL_connect: Connection was reset in connection to github.com:443**
   - 解決方法：[链接](https://blog.csdn.net/qq_37555071/article/details/114260533)
-  - 若不行，关闭vpn，再push。
+  - 若不行，关闭 vpn，再 push。
 - **OpenSSL SSL_read: Connection was reset, errno 10054**
-  - 解決方法：执行git命令脚本：修改设置，解除ssl验证。`git config --global http.sslVerify "false"`
+  - 解決方法：执行 git 命令脚本：修改设置，解除 ssl 验证。`git config --global http.sslVerify "false"`
+
 ## git clone 报错
-若开VPN且用git 桌面端clone仓库会很快，十几M/s
-- windows 上面git 克隆clone 的时候报错 warning:Clone succeeded,but checkout failed
-解决办法：根据提示的路径将包含了空格的目录重新修改，将空格删除了就可以了。
+
+若开 VPN 且用 git 桌面端 clone 仓库会很快，十几 M/s
+
+- windows 上面 git 克隆 clone 的时候报错 warning:Clone succeeded,but checkout failed
+  解决办法：根据提示的路径将包含了空格的目录重新修改，将空格删除了就可以了。
+
+## git push 报错 429
+
+**【报错如下】：**
+在 vscode 终端中多次 `git push` 都不行，任然报错如下。
+
+```bash
+fatal: unable to access 'https://github.com/leoXuLei/markDown.git/':
+The requested URL returned error: 429
+```
+
+**【解决方法】：**
+`WPH`管理员打开，继续`git push`，多试几次就行。
+
 # macbook
 
 - [MAC 上 Git 安装与 GitHub 基本使用](https://www.jianshu.com/p/7edb6b838a2e)
@@ -160,5 +177,6 @@ git commit -m '' --no-verify
 - [vscode 代码管理菜单含义](https://segmentfault.com/q/1010000020782287)
 
 # 参考链接
-- [git官网中文](https://git-scm.com/book/zh/v2)
+
+- [git 官网中文](https://git-scm.com/book/zh/v2)
 - [git 工作流程](https://www.ruanyifeng.com/blog/2015/12/git-workflow.html)
