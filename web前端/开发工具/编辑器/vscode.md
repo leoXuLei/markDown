@@ -293,7 +293,7 @@ export const uniqueListFieldValue = (list: IPlainObject[], key: string) => {
   return uniquedFieldList;
 };
 
-// 使用函数的地方，悬浮显示函数的入参及其类型、描述信息和返回值类型
+// 使用函数的地方，悬浮显示函数的入参及其类型、描述信息和返回值类型，如下
 
 // 去重List的某一个字段值
 // @param list — 原数组
@@ -308,9 +308,12 @@ export const uniqueListFieldValue = (list: IPlainObject[], key: string) => {
 
 # MarkDown
 
+- [Markdown 的五大 VSCode 扩展插件](https://www.jdon.com/56553)
 - [VSCode 自动格式化 md 文档](https://www.jianshu.com/p/4d5529848104)
 
-# 其它
+# Tip
+
+- 全局搜索和页面内搜索的搜索输入框，支持上下箭头选择历史搜索内容。
 
 # 参考链接
 

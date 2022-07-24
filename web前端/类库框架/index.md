@@ -129,6 +129,10 @@ export interface DragObjectWithType {
 
 ```
 
+## 依赖放在`dependencies`还是`devDependencies`
+
+- 安装 lodash 放在`dependencies`下，安装 lodash 的`@types/lodash`放在`devDependencies`，只要是依赖的对应类型`@types/xx`都放在开发依赖中，因为只有开发途中会用到 TS 相关功能。
+
 # 参考链接
 
 - [NPM 官网-查询依赖说明、用法、官网链接](https://www.npmjs.com/package/typescript)

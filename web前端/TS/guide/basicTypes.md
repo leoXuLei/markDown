@@ -314,6 +314,61 @@ enum FlagBoolean {
 // 只有数字枚举可具有计算成员，但此表达式的类型为“true”。如果不需要全面性检查，请考虑改用对象文本。ts(18033)
 ```
 
+### 通过枚举将 number 类型字段的值映射中文
+
+```tsx
+// 实例一：
+export enum EProjectStatus {
+  NORMAL = 1,
+  RISKY = 2,
+  URGENT = 3,
+}
+
+export const ProjectStatusMap = {
+  [EProjectStatus.NORMAL]: "进度正常",
+  [EProjectStatus.RISKY]: "存在风险",
+  [EProjectStatus.URGENT]: "进度失控",
+};
+```
+
+```tsx
+// 实例二（详细）：
+export enum EnumRecipeStatus {
+  /** 编辑 */
+  edit = 0,
+  /** 生效 */
+  effective = 1,
+  /** 已废弃 */
+  expired = 2,
+  /** 待审核 */
+  toAudit = 3,
+}
+
+export const RECIPE_STATUS_ZHCH_MAP = {
+  [EnumRecipeStatus.edit]: "编辑",
+  [EnumRecipeStatus.effective]: "生效",
+  [EnumRecipeStatus.expired]: "已废弃",
+  [EnumRecipeStatus.toAudit]: "待审核",
+};
+
+export const recipeStatusOptions = Object.entries(RECIPE_STATUS_ZHCH_MAP)?.map(
+  ([key, value]) => ({
+    label: value,
+    value: key,
+  })
+);
+
+const columns = [
+  {
+    dataIndex: "RecipePower",
+    title: "recipe.recipePower",
+    render(text: EnumRecipeStatus, record: any, idx: number) {
+      return <div className="text">{RECIPE_STATUS_ZHCH_MAP[text]}</div>;
+    },
+  },
+];
+```
+
 ### 实战：enum 规范 map
 
 ```ts

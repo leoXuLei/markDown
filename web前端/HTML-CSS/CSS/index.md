@@ -650,8 +650,7 @@ const Label = (
 **【参考链接】**
 
 - [CSS 知识点及技巧整理](https://juejin.cn/post/6844903567707357197#heading-22)
-- 
-**【实例】：**
+- **【实例】：**
 
 - 实例一
 
@@ -1235,8 +1234,29 @@ currentColor 关键字代表原始的 color 属性的计算值。它允许让继
 }
 ```
 
+```css
+/*滚动条整体宽高及背景 宽高分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/*滚动条滑块 圆角+内阴影*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/*滚动条轨道 圆角+内阴影*/
+::-webkit-scrollbar-track {
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+```
+
 **【参考链接】**
-- [React设置自定义滚动条样式](https://blog.csdn.net/sg_knight/article/details/122689629)
+
+- [React 设置自定义滚动条样式](https://blog.csdn.net/sg_knight/article/details/122689629)
 - [用 CSS 修改滚动条样式](https://www.cnblogs.com/liulangbxc/p/15200433.html)
 
 ## 实现点击 a 元素 b 元素添加样式
@@ -1301,6 +1321,28 @@ const join = (...args) => {
 
 function render() {
   return <div className={join("customer-pop", "bottom")}></div>;
+}
+```
+
+# 思路
+
+**【样式需求实现思路实例一】：**
+
+父盒子水平排列两个子盒子，左盒子宽度是固定百分比，右盒子期望距离左盒子右边`15px`，通过绝对定位来实现。
+
+```css
+.InputProductCom {
+  display: flex;
+  position: relative;
+  align-items: center;
+  .left {
+    width: 85%;
+  }
+  button {
+    position: absolute;
+    left: calc(85% + 15px); // calc动态计算left的值
+    width: 30px;
+  }
 }
 ```
 

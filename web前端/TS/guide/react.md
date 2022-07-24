@@ -356,22 +356,44 @@ const [canBeRelatedSprintList, setCanBeRelatedSprintList] =
 
 ### 常用类型
 
-```jsx
+```tsx
 interface StatisticProps {
-  style?: React.CSSProperties // css属性
-  beginTime?: moment.Moment | undefined // 时间
-  dataList: Array<{ businessLineName: string; data: number }> // 对象数组
-  refresh: () => Promise<void>  // async 函数
-  handleOK: (projectId: string, item: IFolderColumnItem) => Promise<void> // async 函数
+  style?: React.CSSProperties; // css属性
+  beginTime?: moment.Moment | undefined; // 时间
+  dataList: Array<{ businessLineName: string; data: number }>; // 对象数组
+  refresh: () => Promise<void>; // async 函数
+  handleOK: (projectId: string, item: IFolderColumnItem) => Promise<void>; // async 函数
 }
 
-const [timeRange, setTimeRange] = useState<moment.Moment[]>()
-
+const [timeRange, setTimeRange] = useState<moment.Moment[]>(); // moment 时间
 
 export interface IFilterItemProps<T = any> {
-  value?: Array<number | undefined> // 数字/undefined 组成的数组
-  propKey: string
-  onChange(key: string, value: Array<number | undefined>)
+  value?: Array<number | undefined>; // 数字/undefined 组成的数组
+  propKey: string;
+  onChange(key: string, value: Array<number | undefined>);
+}
+```
+
+```tsx
+// div的Ref类型
+interface React.MutableRefObject<T> {
+    current: T;
+}
+
+const containerRef: React.MutableRefObject<HTMLDivElement> = useRef(null as any);
+
+```
+
+**【`key值类型：React.Key`】**
+
+```tsx
+type React.Key = string | number
+
+interface ITreeSelectModalProps extends ModalProps {
+  title: string;
+  visible: boolean;
+  treeData: ITreeNodeItem[];
+  selectedKeys: React.Key[];
 }
 ```
 

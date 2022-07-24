@@ -2,7 +2,7 @@
 
 ## JS 库
 
-### Moment.js
+### `Moment.js`
 
 [在线时间戳转年月日时分秒](http://www.metools.info/code/c31.html)
 [官网](http://momentjs.cn/docs/)
@@ -64,7 +64,7 @@ useEffect(() => {
 }, []);
 ```
 
-### bignumber.js: 处理数据运算
+### `bignumber.js`: 处理数据运算
 
 ```js
 import BigNumber from "bignumber.js";
@@ -209,18 +209,56 @@ y.toFixed(5); // '3.45600'
 
 - [bignumber.js API](https://www.jianshu.com/p/f5d3e379744c?rjxgcFrom=http%3A%2F%2Frjxgc.com&fromSiteName=190Tech)
 
-### path-to-regexp: url 的正则表达式
+### `path-to-regexp`: url 的正则表达式
 
-```js
-//  "path-to-regexp": "^2.4.0",
-import pathToRegexp from "path-to-regexp";
+**【引入方式】：**
+
+```jsx
+// 正确引入方式
+
+const pathToRegexp = require('path-to-regexp');
+
+const res = showRoutes.map((v) =>
+  pathToRegexp?.(v.path!)?.test?.(location.pathname),
+);
 ```
 
-**参考：**
+```jsx
+// import pathToRegexp from 'path-to-regexp';
+// 这种方式引入能执行成功但是界面TS报错，如下：
+
+// 此表达式不可调用。
+//   类型 `typeof import("xxx/node_modules/path-to-regexp/dist/index")` 没有调用签名。ts(2349)
+
+// import { pathToRegexp } from 'path-to-regexp';
+// 这种方式引入代码没有TS报错，但是打印函数`pathToRegexp`都是undefined，不对。
+
+// const { pathToRegexp } = require('path-to-regexp');
+// 这种方式（官网就是）引入代码没有TS报错，但是打印函数`pathToRegexp`都是undefined，不对。
+```
+
+**【使用实例】：**
+
+```js
+const pathToRegexp = require("path-to-regexp");
+
+// 获取路由中最后一个/后面的内容
+// const id = record?.tabKey?.substring?.(
+//   record?.tabKey?.lastIndexOf?.('/') + 1,
+// );
+
+const { pathname, search, query } = location;
+
+// 判断当前页面是否批评详情页的动态路由
+const isRecipeDetailPage =
+  pathToRegexp?.("/recipeDetail/:id")?.test?.(pathname);
+```
+
+**【参考链接】：**
 
 - [url 的正则表达式：path-to-regexp](https://www.jianshu.com/p/7d2dbfdd1b0f)
 
-### react-helmet: 管理文档头
+### `react-helmet`: 管理文档头
 
 ```js
 //  "react-helmet": "^5.2.1",
@@ -243,7 +281,7 @@ class Application extends React.Component {
 }
 ```
 
-### qs: url 中参数 <=> 对象 （互转）
+### `qs`: url 中参数 <=> 对象 （互转）
 
 将 url 中的参数转为对象；将对象转为 url 参数形式
 
@@ -265,11 +303,11 @@ console.log(qs.stringify(a))
 'name=hehe&age=10'
 ```
 
-### react-json-view
+### `react-json-view`
 
 RJV 是一个 React 组件，用于显示和编辑 javascript 数组和 JSON 对象。
 
-### xlsx
+### `xlsx`
 
 导出 excel 表格工具的库
 
@@ -303,7 +341,7 @@ sheet_to_formulae 生成公式列表（具有值后备）。
 
 - [immer —— 提高 React 开发效率的神器](https://zhuanlan.zhihu.com/p/146773995)
 
-## immmer: 处理`immutable data`
+## `immmer`: 处理`immutable data`
 
 > **好处：Immer 简化了对不可变数据结构的处理**
 
@@ -343,7 +381,7 @@ const lastest = produce(subCards, (draft) => {
 });
 ```
 
-## immutability-helper
+## `immutability-helper`
 
 ```jsx
 const moveCard = useCallback(
@@ -365,8 +403,10 @@ const moveCard = useCallback(
 );
 ```
 
-[使用 immutability-helper 更好的更新复杂数据](https://www.jianshu.com/p/5f749e90a6a2)
-[使用 immutability-helper 的经验教训](https://www.jianshu.com/p/5d44a831fad1)
+**【参考链接】：**
+
+- [使用 immutability-helper 更好的更新复杂数据](https://www.jianshu.com/p/5f749e90a6a2)
+- [使用 immutability-helper 的经验教训](https://www.jianshu.com/p/5d44a831fad1)
 
 ## 比对对象是否修改过
 
