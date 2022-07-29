@@ -1,8 +1,8 @@
-## 简介
+# 简介
 
-### 类的由来
+## 类的由来
 
-JavaScript 语言中，==生成实例对象的传统方法是通过构造函数==。下面是一个例子。
+JavaScript 语言中，**生成实例对象的传统方法是通过构造函数**。下面是一个例子。
 
 ```js
 function Point(x, y) {
@@ -17,17 +17,18 @@ Point.prototype.toString = function () {
 var p = new Point(1, 2);
 ```
 
-#### **背景：**
+### **背景：**
 
 上面这种写法跟传统的面向对象语言（比如 C++ 和 Java）差异很大，很容易让新学习这门语言的程序员感到困惑。
 
-ES6 提供了更接近传统语言的写法，==引入了 Class（类）这个概念，作为对象的模板。通过 class 关键字，可以定义类==。
+**ES6 提供了更接近传统语言的写法，引入了 Class（类）这个概念，作为对象的模板。通过 class 关键字，可以定义类**。
 
-#### **本质：**
+### **本质：**
 
-基本上，==ES6 的 class 可以看作只是一个语法糖，它的绝大部分功能，ES5 都可以做到，新的 class 写法只是让对象原型的写法更加清晰、更像面向对象编程的语法而已==。上面的代码用 ES6 的 class 改写，就是下面这样。
+基本上，**ES6 的 class 可以看作只是一个语法糖，它的绝大部分功能，ES5 都可以做到，新的 class 写法只是让对象原型的写法更加清晰、更像面向对象编程的语法而已**。上面的代码用 ES6 的 class 改写，就是下面这样。
 
 ```js
+// 【1】
 class Point {
   constructor(x, y) {
     this.x = x;
@@ -40,25 +41,19 @@ class Point {
 }
 ```
 
-#### **规则：**
+## **基本规则：**
 
-- 【1】==constructor()方法，这就是构造方法，而 this 关键字则代表实例对象==
+> **【规则一】constructor()方法，这就是构造方法，而 this 关键字则代表实例对象**
 
-- 【2】==方法名前面不需要加上 function 这个关键字，直接把函数定义放进去了就可以了。另外，方法与方法之间不需要逗号分隔，加了会报错==。
+上面代码定义了一个“类”，可以看到里面有一个【规则一】。这种新的 Class 写法，本质上与本章开头的 ES5 的构造函数 Point 是一致的。
 
-- 【3】==ES6 的类，完全可以看作构造函数的另一种写法==。实例代码表明，==类的数据类型就是函数，类本身就指向构造函数==。使用的时候，也是直接对类使用 new 命令，跟构造函数的用法完全一致。
+> **【规则二】方法名前面不需要加上 function 这个关键字，直接把函数定义放进去了就可以了。另外，方法与方法之间不需要逗号分隔，加了会报错**
 
-- 【4】==构造函数的 prototype 属性，在 ES6 的“类”上面继续存在。事实上，类的所有方法都定义在类的 prototype 属性上面。 在类的实例上面调用方法，其实就是调用原型上的方法==。
+Point 类除了构造方法，还定义了一个 toString()方法。注意，定义 toString()方法的时候，【规则二】
 
-- 【5】由于类的方法都定义在 prototype 对象上面，==所以类的新方法可以添加在 prototype 对象上面。Object.assign()方法可以很方便地一次向类添加多个方法==。
+> **【规则三】类的数据类型就是函数，类本身就指向构造函数，使用的时候，也是直接对类使用 new 命令，跟构造函数的用法完全一致。**
 
-- 【6】==prototype 对象的 constructor()属性，直接指向“类”的本身，这与 ES5 的行为是一致的==。
-
-- 【7】类的内部所有定义的方法，都是不可枚举的（non-enumerable）。这一点与 ES5 的行为不一致，采用 ES5 的写法内部定义的方法就是可枚举。
-
-上面代码定义了一个“类”，可以看到里面有一个[规则 1]。这种新的 Class 写法，本质上与本章开头的 ES5 的构造函数 Point 是一致的。
-
-Point 类除了构造方法，还定义了一个 toString()方法。注意，定义 toString()方法的时候，[规则 2]
+ES6 的类，完全可以看作构造函数的另一种写法。
 
 ```js
 // 【3】
@@ -70,7 +65,7 @@ typeof Point; // "function"
 Point === Point.prototype.constructor; // true
 ```
 
-上面代码表明，==类的数据类型就是函数，类本身就指向构造函数==。
+上面代码表明，【规则三】。
 
 ```js
 class Bar {
@@ -83,9 +78,12 @@ const b = new Bar();
 b.doStuff(); // "stuff"
 ```
 
-使用的时候，也是直接对类使用 new 命令，跟构造函数的用法完全一致。
+> **【规则四】类的所有方法都定义在类的 prototype 属性上面。 在类的实例上面调用方法，其实就是调用原型上的方法。**
+
+构造函数的`prototype`属性，在 ES6 的“类”上面继续存在。事实上，【规则四】。
 
 ```js
+// 【4】
 class Point {
   constructor() {
     // ...
@@ -109,7 +107,9 @@ Point.prototype = {
 };
 ```
 
-上面代码中，==constructor()、toString()、toValue()这三个方法，其实都是定义在 Point.prototype 上面。因此，在类的实例上面调用方法，其实就是调用原型上的方法==。
+上面代码中，`constructor()`、`toString()`、`toValue()`这三个方法，其实都是定义在`Point.prototype`上面。
+
+因此，在类的实例上面调用方法，其实就是调用原型上的方法。
 
 ```js
 class B {}
@@ -119,6 +119,8 @@ b.constructor === B.prototype.constructor; // true
 ```
 
 上面代码中，b 是 B 类的实例，它的 constructor()方法就是 B 类原型的 constructor()方法。
+
+> **【规则五】由于类的方法都定义在`prototype`对象上面，所以类的新方法可以添加在`prototype`对象上面。`Object.assign()`方法可以很方便地一次向类添加多个方法**
 
 ```js
 // 【5】
@@ -134,13 +136,16 @@ Object.assign(Point.prototype, {
 });
 ```
 
+**prototype 对象的 constructor()属性，直接指向“类”的本身，这与 ES5 的行为是一致的**。
+
 ```js
 Point.prototype.constructor === Point; // true
 ```
 
-prototype 对象的 constructor()属性，直接指向“类”的本身，这与 ES5 的行为是一致的。
+> **【规则六】类的内部所有定义的方法，都是不可枚举的（non-enumerable）。这一点与 ES5 的行为不一致，采用 ES5 的写法内部定义的方法就是可枚举**
 
 ```js
+// 【6】
 class Point {
   constructor(x, y) {
     // ...
@@ -157,7 +162,7 @@ Object.getOwnPropertyNames(Point.prototype);
 // ["constructor","toString"]
 ```
 
-上面代码中，toString()方法是 Point 类内部定义的方法，它是不可枚举的。这一点与 ES5 的行为不一致。
+上面代码中，`toString()`方法是`Point`类内部定义的方法，它是不可枚举的。这一点与 ES5 的行为不一致。
 
 ```js
 var Point = function (x, y) {
@@ -176,7 +181,7 @@ Object.getOwnPropertyNames(Point.prototype);
 
 上面代码采用 ES5 的写法，toString()方法就是可枚举的。
 
-### constructor 方法
+## constructor 方法
 
 > **规则：**
 
@@ -223,7 +228,7 @@ Foo();
 // TypeError: Class constructor Foo cannot be invoked without 'new'
 ```
 
-### 类的实例
+## 类的实例
 
 > **规则：**
 
@@ -302,9 +307,9 @@ p3.printName(); // "Oops"
 
 上面代码在 p1 的原型上添加了一个 printName()方法，由于 p1 的原型就是 p2 的原型，因此 p2 也可以调用这个方法。而且，此后新建的实例 p3 也可以调用这个方法。这意味着，使用实例的**proto**属性改写原型，必须相当谨慎，不推荐使用，因为这会改变“类”的原始定义，影响到所有实例。
 
-### 取值函数（getter）和存值函数（setter）
+## 取值函数（getter）和存值函数（setter）
 
-### 属性表达式
+## 属性表达式
 
 > **规则：**
 
@@ -326,7 +331,7 @@ class Square {
 
 上面代码中，Square 类的方法名 getArea，是从表达式得到的。
 
-### Class 表达式
+## Class 表达式
 
 > **规则：**
 
@@ -377,7 +382,7 @@ person.sayName(); // "张三"
 
 上面代码中，`person`是一个立即执行的类的实例。
 
-### 注意点
+## 注意点
 
 **（1）严格模式**
 
@@ -512,7 +517,7 @@ function selfish(target) {
 const logger = selfish(new Logger());
 ```
 
-## 静态方法
+# 静态方法
 
 - **定义：** ==类相当于实例的原型==，所有在类中定义的方法，都会被实例继承。==如果在一个方法前，加上 static 关键字，就表示该方法不会被实例继承，而是直接通过类来调用，这就称为“静态方法”==。
 
@@ -586,7 +591,7 @@ class Bar extends Foo {
 Bar.classMethod(); // "hello, too"
 ```
 
-## 静态属性
+# 静态属性
 
 - **定义：** 静态属性指的是 Class 本身的属性，即 Class.propName，而不是定义在实例对象（this）上的属性。
 
