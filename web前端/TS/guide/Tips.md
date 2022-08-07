@@ -290,7 +290,7 @@ type ModeOption = typeof ModeOptions[number];
 
 # 问题
 
-# `.d.ts`全局类型文件中声明的枚举，没法当作 map 在运行时使用
+## `.d.ts`全局类型文件中声明的枚举，没法当作 map 在运行时使用
 
 **【报错】**：`[@umijs/runtime] load component failed ReferenceError: EnumRecipeStatus is not defined`
 

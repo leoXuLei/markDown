@@ -178,4 +178,6 @@ const stringifyListData = JSON.stringify([
 
 # Tips
 
+- 报错信息如果有开发文件的话，直接点击进去，在代码中点击左侧即可打断点。
+
 # 问题

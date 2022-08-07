@@ -294,9 +294,9 @@ type ComponentReturnType =
 - [@@@ReactElement、ReactNode 以及 JSX.Element](https://www.jianshu.com/p/95ce2266450a)
 - [React.Component Render 方法](https://zh-hans.reactjs.org/docs/react-component.html#render)
 
-## Tips
+# Tips
 
-### 如何开始
+## 如何开始
 
 可以从下面几个方面开始实践 TS
 
@@ -304,7 +304,7 @@ type ComponentReturnType =
 - 函数参数 —— 接口
 - 组件 state、props —— 接口
 
-### 组件的 Props 和 State 接口
+## 组件的 Props 和 State 接口
 
 class 组件
 
@@ -354,7 +354,7 @@ const [canBeRelatedSprintList, setCanBeRelatedSprintList] =
   useState<Array<{ value?: string; label?: string }>>();
 ```
 
-### 常用类型
+## 常用类型
 
 ```tsx
 interface StatisticProps {
@@ -467,9 +467,9 @@ const columns: ({
 
 ```
 
-### React 组件默认 props
+## React 组件默认 props
 
-#### JS 写法
+### JS 写法
 
 通过组件的 defaultProps 属性可为其 Props 指定默认值。
 
@@ -512,7 +512,7 @@ class BackSellModal extends React.Component {
 }
 ```
 
-#### TS 写法
+### TS 写法
 
 ```ts
 interface Props {
@@ -617,11 +617,11 @@ class Greeting extends React.Component<Props, {}> {
 
 当我们更新了 defaultProps 时整个组件的 Props 也同步更新，所以 defaultProps 中的字段一定是组件所需要的字段。
 
-#### 默认值的判空检查优化
+### 默认值的判空检查优化
 
 见参考资料
 
-#### 实例
+### 实例
 
 ```ts
 export default class CreateButton extends PureComponent<{
@@ -640,7 +640,11 @@ export default class CreateButton extends PureComponent<{
 const { isPricing: false } = this.props;
 ```
 
-## 屏蔽 TSLint 的错误检查
+### 参考资料
+
+- [[1]React + TypeScript 默认 Props 的处理](https://blog.csdn.net/sinat_17775997/article/details/102514747)
+
+# 屏蔽 TSLint 的错误检查
 
 ```js
 // @ts-check  // 在 JavaScript 文件中启用语义检查。必须在文件顶部。
@@ -651,18 +655,14 @@ const { isPricing: false } = this.props;
 // eslint-disable-next-line
 ```
 
-## 参考资料
-
-- [[1]React + TypeScript 默认 Props 的处理](https://blog.csdn.net/sinat_17775997/article/details/102514747)
-
-## 报错
+# 报错
 
 - .js 文件改为.tsx 文件后报错
 
   报错：找不到.js 文件
   解决方法：重启后解决
 
-### 类型报错实例一
+## 类型报错实例一
 
 若直接使用 `options={canBeRelatedSprintList}` 会报错如下，改为下面的 `canBeRelatedSprintList.map`去映射出`Select.Option`即不再报错
 
@@ -701,7 +701,7 @@ const canBeRelatedSprintList: {
 }[] | undefined
 ```
 
-### 类型报错实例二
+## 类型报错实例二
 
 ```jsx
 <Cascader
@@ -774,4 +774,12 @@ loadData={(selectedOptions) => {
 
 ```jsx
 import { CascaderOptionType } from "antd/lib/cascader/index";
+```
+
+- 无法转换的 TS 类型如何解决：`as unknown as xxx`
+
+```tsx
+const CurSelectedNode = nodeId
+  ? (sfcDataStore.current?.plainSFCMap?.[nodeId] as unknown as Element)
+  : null;
 ```
