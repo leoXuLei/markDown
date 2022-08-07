@@ -257,7 +257,7 @@ div.nav
 - Search And Compare：搜索 commit、比较不同分支/commit 节点之间的改动/提交变化
 
 ## `Code Spell Checker`： 拼写检查
-
+`v2.2.4`
 ## `MPE`：MD 预览导出插件
 
 - [使用教程](https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/)

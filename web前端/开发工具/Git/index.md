@@ -30,16 +30,29 @@
   ![](./imgs/git-tools-git-graph-useExample3.png)
   ![](./imgs/git-tools-git-graph-useExample4.png)
 
-# 命令
 
-## git merge
+# 开发
 
-`git merge` 发现冲突如何取消 merge（恢复到执行 `git merge` 命令之前）
+- `commit hook`钩子中规定的 commit 信息中的类型
 
-- 使用`git merge --abort` 命令
-
-[链接](https://blog.csdn.net/weixin_40984292/article/details/100024411)
-[思否链接](https://segmentfault.com/q/1010000000140446)
+```bash
+type must be one of
+[
+  bug,
+  feat,
+  fix,
+  docs,
+  style,
+  refactor, # 重构
+  test,
+  chore, # 杂活
+  revert,
+  merge,
+  cid,
+  del,
+  pub
+] [type-enum]
+```
 
 # ssh
 
