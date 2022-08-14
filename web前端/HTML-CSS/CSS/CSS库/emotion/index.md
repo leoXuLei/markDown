@@ -83,6 +83,232 @@
 }
 ```
 
+# 使用实例
+
+## 实例一
+
+- 实例二
+
+```jsx
+/** @jsx jsx */ // 必须加这个不然样式没有效果
+import { css, jsx } from "@emotion/core";
+
+import * as styles from "./styles";
+
+// 特点：如下，只是在使用样式的最顶层类名，需要通过styles.类名来引入，
+// 该类名下面的子类不需要通过styles.类名来引入，直接类名就能生效。`css={styles.modalWrapperCss}`
+return (
+  <Modal
+    width="100vw"
+    css={styles.modalWrapperCss}
+    style={{ padding: 0 }}
+    centered
+    footer={null}
+    visible={props.visible}
+    title={
+      <div className="modal-header">
+        {detail?.name || "详情"}
+        <div className="modal-header-right">
+          <ConditionComponent isShow={!!detail?.desc}>
+            <Tooltip title={detail?.desc}>
+              <span>
+                <InfoCircleOutlined style={{ marginRight: 5 }} />
+                如何读此报表
+              </span>
+            </Tooltip>
+          </ConditionComponent>
+        </div>
+      </div>
+    }
+    onCancel={() => {
+      props.onClose();
+    }}
+  >
+    <LoadingComponent loading={loading}>
+      <div className="body-content">
+        <div className="graphic-list">
+          <LoadingComponent loading={loading2}>
+            {detail?.graphData?.map((c) => (
+              <Card bordered key={c.name}>
+                <Graphic
+                  data={c}
+                  overviewValue={overviewValue}
+                  onOverviewChange={setOverviewValue}
+                />
+              </Card>
+            ))}
+            <ConditionComponent
+              isShow={!!detail?.graphData.find((c) => c.name === "chart")}
+            >
+              <OverviewDetail
+                overviewValue={overviewValue}
+                filterValue={filterValue}
+                sectionValue={sectionValue}
+              />
+            </ConditionComponent>
+          </LoadingComponent>
+        </div>
+        <div className={classnames("graphic-filter", collapse && "collapsed")}>
+          <div
+            className="graphic-filter-icon"
+            onClick={() => setCollapse(!collapse)}
+          >
+            <IfElseComponent
+              if={<DoubleRightOutlined />}
+              else={<MenuOutlined />}
+              checked={!collapse}
+            />
+          </div>
+          <ConditionComponent isShow={!collapse && !!detail}>
+            <Card bordered={!collapse} className="graphic-filter-card">
+              {detail && (
+                <SectionPage item={detail} onChange={setSectionValue} />
+              )}
+              <div
+                style={{ margin: "18px 0", borderBottom: "1px solid #e5e5e5" }}
+              />
+              <div className="graphic-filter-options">
+                <div
+                  className="graphic-filter-label"
+                  style={{ marginBottom: 12 }}
+                >
+                  筛选
+                </div>
+                <Forms.NormalForm
+                  layout="vertical"
+                  submit={false}
+                  initialValues={initialValues}
+                  components={columns || []}
+                  onValuesChange={onFilterValueChange}
+                />
+              </div>
+            </Card>
+          </ConditionComponent>
+        </div>
+      </div>
+    </LoadingComponent>
+  </Modal>
+);
+```
+
+```ts
+import { css } from "@emotion/core";
+
+export const modalWrapperCss = css`
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &-right {
+      margin-right: 20px;
+      color: rgb(140, 140, 140);
+      font-weight: normal;
+      font-size: 14px;
+      cursor: pointer;
+      &:hover {
+        color: #0171c2;
+      }
+    }
+  }
+  .ant-modal-content {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    .ant-modal-header {
+      flex-shrink: 0;
+      box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+      z-index: 1;
+    }
+    .ant-modal-body {
+      flex-grow: 1;
+      overflow-y: auto;
+      background-color: #f7f7f7;
+      overflow-x: hidden;
+      padding: 24px 40px;
+      .body-content {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        .graphic-list {
+          flex-grow: 1;
+          overflow: auto;
+          .ant-card {
+            &:nth-of-type(n + 2) {
+              margin-top: 20px;
+            }
+          }
+        }
+        .graphic-filter {
+          width: 320px;
+          flex-shrink: 0;
+          padding-left: 14px;
+
+          position: relative;
+          transition: width 218ms ease;
+          font-size: 14px;
+
+          &-options {
+            flex-grow: 1;
+            overflow: auto;
+          }
+          &-label {
+            display: flex;
+            align-items: center;
+            height: 40px;
+          }
+
+          &-section {
+            display: flex;
+            align-items: center;
+            height: 40px;
+            color: #595959;
+          }
+
+          &.collapsed {
+            width: 0;
+            padding-left: 0;
+            .graphic-filter-icon {
+              /* left: 0px */
+            }
+          }
+          &-card {
+            height: 100%;
+            overflow: hidden;
+            & > .ant-card-body {
+              height: 100%;
+              display: flex;
+              overflow: hidden;
+              flex-direction: column;
+            }
+          }
+          &-icon {
+            position: absolute;
+            top: 26px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            color: #8c8c8c;
+            border: 1px solid #e5e5e5;
+            background-color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            &:hover {
+              color: #fff;
+              background-color: #1b9aee;
+              border-color: #1b9aee;
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+```
+
 # 参考链接
 
 - [Emotion 官方文档](https://emotion.sh/docs/introduction)
