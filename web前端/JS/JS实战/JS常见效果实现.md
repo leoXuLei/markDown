@@ -1,4 +1,4 @@
-## 单行写一个评级组件
+# 单行写一个评级组件
 
 ```js
 const getStar = (rate) => {
@@ -14,7 +14,7 @@ getStar(5)  "★★★★★"
 getStar(6)  ""
 ```
 
-## 实现金钱格式化
+# 实现金钱格式化
 
 ```js
 // 正则实现
@@ -47,58 +47,9 @@ moneyFormat(22310.02) "22,310.02"
 moneyFormat(23220.36513) "23,220.36,513"
 ```
 
-## 点击事件后元素滚动进入视图
+# 点击某个元素触发另一个元素的 click 事件
 
-垂直/水平方向都支持
-**垂直滚动：**
-
-```js
-const ele = <Card id={"member-detail"} />;
-const toDetail = () => {
-  const ele = document.getElementById("member-detail");
-
-  if (ele) {
-    ele.scrollIntoView({
-      behavior: "smooth",
-    });
-  }
-};
-```
-
-**水平滚动：**
-
-```jsx
-// 最后一列滚到视区
-const scrollLastIntoView = useCallback(() => {
-  if (isLastItem) {
-    const ele = document.getElementById('last-item')
-    if (ele) {
-      ele?.scrollIntoView({
-        behavior: 'smooth',
-      })
-    }
-  }
-}, [isLastItem])
-
-useEffect(() => {
-  scrollLastIntoView()
-}, [scrollLastIntoView])
-
-return (
-      <FolderColumnItemWrapper id={isLastItem ? 'last-item' : ''}>
-        <div className="folder-picker-handlers">
-          <Tooltip title="创建文件夹">
-            <FolderAddOutlined className="create-icon" onClick={undefined} />
-          </Tooltip>
-        </div>
-      </FolderColumnItemWrapper>
-    )
-  },
-```
-
-## 点击某个元素触发另一个元素的 click 事件
-
-原理： Element?.click.()
+原理： `Element?.click.()`
 
 ```jsx
 
@@ -161,6 +112,8 @@ const Title: React.FC<ITitleProps> = ({ item, readonly, index, onChange }: ITitl
 }
 ```
 
+# 页面跳转
+
 ## a 链接跳转
 
 ```jsx
@@ -201,7 +154,7 @@ export const RenderTitle = ({ sprintName, sprintId, projectId }) => (
 </div>
 ```
 
-## 输入型控件必填效果如何实现
+# 输入型控件必填效果如何实现
 
 可以通过 css 来实现未填提交时提示的效果, 原理就是如此
 
@@ -261,4 +214,28 @@ confirmModal({
     }
   },
 });
+```
+
+# 生成当前时间戳
+
+```js
+export const getCurTimestamp = () => {
+  const timestamp = new Date();
+  return timestamp.valueOf();
+};
+
+const timestamp = new Date();
+timestamp.valueOf(); // 1668496165776
+timestamp.getTime(); // 1668496165776
+
+// 调用 Tips-根据时间戳转换年月日方法 如下
+handledDate(timestamp); // '2022/11/15  15:09'
+```
+
+```js
+
+// Tips: 配方详情编辑时，是前端的增删改，改动后离开页面才会提示掉接口保存，
+// 列表新增数据的id就用时间戳生成，map生成时由于间隔太短，
+// 导致时间戳一致了，不符合id唯一的要求，通过 【时间戳 + 10*index】 来保证id唯一。
+const paramId = getCurTimestamp() + 10 * index, // 参数id用最新的时间戳
 ```

@@ -318,3 +318,5 @@ export const uniqueListFieldValue = (list: IPlainObject[], key: string) => {
 # 参考链接
 
 - [vscode 常用快捷键](https://www.cnblogs.com/bindong/p/6045957.html)
+- [vscode 插件官网](https://marketplace.visualstudio.com/vscode)
+  - 若只能内网办公可下载插件`Download Extension`，然后在vscode中引入安装。

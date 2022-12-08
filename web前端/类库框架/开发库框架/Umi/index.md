@@ -217,3 +217,122 @@ const dogServState = useSelector((_: any) => _.dogServ);
 
 // dispatch同样也能通过useDispatch以hooks的方式获取使用dispatch
 ```
+
+# **国际化功能**
+
+**【umi 配置】**
+
+```jsx
+export default defineConfig({
+  locale: {
+    default: "zh-CN", // 默认语言，当检测不到具体语言时，展示`default`中指定的语言
+    antd: true, // 开启后，支持antd国际化
+    title: true, // 标题国际化。在项目中配置的title及路由中的title可直接使用国际化key，自动被转成对应语言的文案
+    baseNavigator: true, // 开启浏览器语言检测。默认情况下，当前语言环境的
+    // 识别按照：`localStorage`中`umi_locale`值 > 浏览器检测 > default设置的默认语言 > 中文
+    baseSeparator: "-", // 国家（lang）与 语言（language）之间的分隔符，默认为'-'
+  },
+});
+```
+
+**【API】**
+
+- getLocale: 获取当前选择的语言
+- useIntl: 获得`formatMessage`等 api 来进行具体的值的绑定
+- setLocale: 设置切换语言，默认会刷新页面，可以通过设置第二个参数为`false`，来实现无刷新动态切换。
+
+**【使用实例】**
+
+- 多语言文件的内容规范：键-值对组成的字面量
+
+```ts
+// src\locales\en-US\menu.ts
+
+export default {
+  "actions.exit": "Exit",
+};
+
+// src\locales\en-US\common.ts
+export default {
+  "common.deleteConfirm": 'Are you sure you want to delete the "{name}"?',
+};
+```
+
+```ts
+// src\locales\zh-CN\menu.ts
+
+export default {
+  "actions.exit": "退出",
+};
+
+// src\locales\zh-CN\common.ts
+export default {
+  "common.deleteConfirm": '确定要把 "{name}" 删除吗？',
+};
+```
+
+```ts
+// src\locales\en-US.ts
+import menu from "./en-US/menu";
+import common from "./en-US/common";
+export default {
+  ...menu,
+  ...common,
+};
+```
+
+```ts
+// src\locales\zh-CN.ts
+import menu from "./zh-CN/menu";
+import common from "./zh-CN/common";
+export default {
+  ...menu,
+  ...common,
+};
+```
+
+```tsx
+import { getLocale, setLocale, useIntl } from "umi";
+
+const Account = (props: any) => {
+  const { user = "" } = props.user;
+  const history = useHistory();
+  const { formatMessage } = useIntl();
+
+  const [language, setLanguage] = useState(getLocale() === "zh-CN");
+
+  const handleChangeLan = useMemoizedFn(() => {
+    setLocale(language ? "en-US" : "zh-CN", false);
+    setLanguage((prev) => !prev);
+  });
+
+  const modalContent = formatMessage(
+    {
+      id: "common.deleteConfirm",
+    },
+    {
+      name: "名称", // 配置的语言文本支持传参
+    }
+  );
+
+  return (
+    <div className="Account">
+      <span
+        onClick={handleChangeLan}
+        style={{ cursor: "pointer", marginRight: 15 }}
+      >
+        {language ? "English" : "中文"}
+      </span>
+      <span className="exit">
+        {formatMessage({
+          id: "actions.exit",
+        })}
+      </span>
+    </div>
+  );
+};
+```
+
+**【参考链接】**
+
+- [umi3 插件 国际化](https://v3.umijs.org/zh-CN/plugins/plugin-locale)

@@ -136,6 +136,16 @@ RGBA 是代表 Red（红色） Green（绿色） Blue（蓝色）和 Alpha（不
 - [space-around 和 space-evenly 的区别
   ](https://www.chenzhicheng.com/space-around-vs-space-evenly/)
 
+# 阴影`box-shadow`
+
+```css
+/* 这两种box-shadow适用于类似按钮的阴影 */
+.AntdColInner {
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.35);
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.35);
+}
+```
+
 # 参考链接
 
 - [个人总结（css3 新特性）](https://segmentfault.com/a/1190000010780991)

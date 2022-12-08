@@ -180,4 +180,7 @@ const stringifyListData = JSON.stringify([
 
 - 报错信息如果有开发文件的话，直接点击进去，在代码中点击左侧即可打断点。
 
+- 接口数据可以搜索，点开对象，点击空白处`ctrl + F`
+  ![联调Tips](./imgs/chrome-control-preview-search.png)
+
 # 问题

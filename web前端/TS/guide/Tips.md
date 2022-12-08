@@ -16,6 +16,21 @@
 
 - 3. 自身团队内比较优秀的 JS 库或插件，为了提升开发体验
 
+## TS 中的两种文件类型
+
+TS 中有两种文件类型。
+
+- .ts 文件：
+  既包含类型信息又可执行代码。
+  可以被编译成 .js 文件，然后，执行代码。
+  用途：编写程序代码的地方。
+- .d.ts 文件：
+  只包含类型信息的类型声明文件。
+  不会生成 .js 文件，仅用于提供类型信息。
+  用途：为 JS 提供类型信息。
+
+总结：.ts 是 implementation（代码实现文件）；.d.ts 是 declaration（类型声明文件）。
+
 ## 如何编写 TS 声明文件
 
 对于不同形式的声明文件，写法上会有一定的差异。这里需要特别注意一点的是：声明文件中只是对类型的定义，不能进行赋值。
@@ -143,7 +158,8 @@ declare module "querystring" {
 
 **【参考链接】：**
 
-- [(200-06-29)TypeScript 声明文件全解析](https://cloud.tencent.com/developer/article/2033803?from=15425)
+- [(2022-06-29)TypeScript 声明文件全解析](https://cloud.tencent.com/developer/article/2033803?from=15425)
+- [(2022-07-09)TypeScript入门之TS类型声明文件](https://blog.csdn.net/Svik_zy/article/details/123330236)
 
 # **容易忽略的关键字**
 

@@ -409,3 +409,51 @@ export const getRecycleProjectList = async (
   return projectRes;
 };
 ```
+
+## 泛型 + 枚举 的使用
+
+```tsx
+import { GlobalMapData } from "../sfc/const";
+import { EditorDataContext } from "../sfc/Editor/provider";
+import { ISFCDataMap, ITreeNodeItem } from "../sfc/types";
+import { useCallback, useContext, useEffect, useMemo, useRef } from "react";
+import { SingleObj } from "@/utils/types";
+
+type _key = "db" | "plainData" | "treeData";
+type setContextValFun = (val: SingleObj<any>) => void;
+interface AllDataType {
+  db: SingleObj<any>;
+  plainData: Map<string, ISFCDataMap>;
+  treeData: ITreeNodeItem;
+}
+
+const useData = <T extends _key>(
+  _mapKey: T
+): [AllDataType[T] | undefined, setContextValFun, number] => {
+  const { data, changeVal, id } = useContext(EditorDataContext);
+  const _data = useMemo(() => {
+    if (Object.keys(data).length === 0 || !GlobalMapData.has(_mapKey)) {
+      return undefined;
+    }
+    return GlobalMapData.get(_mapKey) as AllDataType[T];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_mapKey, id]); // id 变则data数据变
+
+  const changeContextValue = useCallback(
+    (val) => {
+      changeVal(val);
+    },
+    [changeVal]
+  );
+  return [_data, changeContextValue, id];
+};
+
+export default useData;
+```
+
+```jsx
+// 使用实例
+const [_treeDataInfo] = useData("treeData");
+const [_plaintMapData] = useData("plainData");
+const [_originData, changeContextValue] = useData("db");
+```

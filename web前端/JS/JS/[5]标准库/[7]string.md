@@ -423,9 +423,9 @@ matches.input; // "cat, bat, sat, fat"
 
 上面代码中，`de`表示德语，`sv`表示瑞典语。德语中，`ä`小于`z`，所以返回`-1`；瑞典语中，`ä`大于`z`，所以返回`1`。
 
-## Tips
+# Tips
 
-### 字符串转字符数组
+## 字符串转字符数组
 
 - `Object.values()`
 - `split`
@@ -439,7 +439,7 @@ Object.values('foo')  // ["f", "o", "o"]
 Array.from('foo')     // ["f", "o", "o"]
 ```
 
-### 字符串每隔 n 个字符加个换行符
+## 字符串每隔 n 个字符加个换行符
 
 - replace 正则替换（有异常）
 - 遍历截取并拼接字符串
@@ -531,7 +531,7 @@ splitStrToArr("123456789abcedf", 7).join("\n");
 // f"
 ```
 
-### 字符串去除空格
+## 字符串去除空格
 
 - `trim()`：去除字符串两端的空格（无法去除中间的空格），不改变原字符串。
 - 正则表达式：字符串中间、头、尾的空格都可以选择去除，不改变原字符串。
@@ -556,7 +556,7 @@ str.replace(/^\s*/g, ""); // "23 23 "
 str.replace(/(\s*$)/g, ""); // " 23 23"
 ```
 
-### 字符串遍历
+## 字符串遍历
 
 或者直接字符串转数组再遍历
 
@@ -587,7 +587,7 @@ foreachString2("egg"); // ["e", "g", "g"]
 foreachStrin3("egg"); // ["e", "g", "g"]
 ```
 
-### 数字格式化: 金额数字转字符串并带千分符
+## 数字格式化: 金额数字转字符串并带千分符
 
 效果如下:
 
@@ -601,18 +601,65 @@ foreachStrin3("egg"); // ["e", "g", "g"]
 
 ```js
 // 方法一：number的一个api: number.toLocaleString
-(1234)
-  .toLocaleString()(
-    // "1,234"
-    12345
-  )
-  .toLocaleString()(
-    // "12,345"
-    123456
-  )
-  .toLocaleString()(
-    // "123,456"
-    123457
-  )
-  .toLocaleString(); // "1,234,567"
+
+// (1234).toLocaleString()  // "1,234"
+
+// (12345).toLocaleString() // // "12,345"
+
+// (123456).toLocaleString() // "123,456"
+
+// (1234567).toLocaleString(); // "1,234,567"
+```
+
+## 字符串字节数
+
+```js
+// 匹配双字节字符（包括汉字在内、中文括号`（）`等）
+var reg = /[^\x00-\xff]/;
+
+const strA =
+  "[U02.OP02.P01]加烯（Ex输出）XXXabcdefghijk(已完成)123 (恢复运行中)";
+
+const replaceOne = strA.replace(/[^\x00-\xff]/g, "cv");
+const replaceOneLen = replaceOne.length; // 66
+
+// 如下可以发现，不仅是汉字能匹配上，中文括号也能匹配上
+// replaceOne =  '[U02.OP02.P01]cvcvcvExcvcvcvXXXabcdefghijk(cvcvcv)123 (cvcvcvcvcv)'
+
+// 仅匹配汉字
+const replaceTwo = a.replace(/[\u4e00-\u9fa5]/g, "cv");
+const replaceTwoLen = replaceTwoLen.length; // 64，比66少的2就是两个中文括号字符，
+// replaceTwo = '[U02.OP02.P01]cvcv（Excvcv）XXXabcdefghijk(cvcvcv)123 (cvcvcvcvcv)'
+```
+
+### 根据指定的字符串字节长度，来截取字符串
+
+```jsx
+// 获取字符串字节长度，双字节字符占两个字符
+export const getStringCharLenReg = (str: string) => {
+  return (str || "")?.replace?.(/[^\x00-\xff]/g, "cv")?.length;
+};
+
+// 根据指定字符串字节长度，来截取字符串，返回字符串截取index
+export const getStringCharSliceIndexByMaxBytesCount = (
+  str: string,
+  maxBytesCount: number
+) => {
+  const strLen = str?.length;
+  let bytesCount = 0;
+
+  for (let i = 0; i < strLen; i++) {
+    const curChar = str.charAt(i);
+    if (/[^\x00-\xff]/?.test(curChar)) {
+      bytesCount += 2;
+    } else {
+      bytesCount += 1;
+    }
+    // 大于等于指定字节长度，返回字符串当前字符的下标
+    if (bytesCount >= maxBytesCount) {
+      return bytesCount === maxBytesCount ? i : i - 1;
+    }
+  }
+  return bytesCount;
+};
 ```

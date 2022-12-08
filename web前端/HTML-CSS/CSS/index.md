@@ -645,7 +645,6 @@ const Label = (
 }
 ```
 
-
 # 实战
 
 ## 如何修改 antd 组件的样式
@@ -902,6 +901,8 @@ export const ContextMenuItem: FC<IContextMenuItem> = (props) => {
 
 # Tips
 
+- 设置 `flex、justify-content: space-around` 后，某些 span 包裹的文字会占两行，如何让其占一行，设置 `flex-basic` 为 auto，即 `flex: none`。
+
 ## 设置颜色时的 `currentColor` 关键字
 
 currentColor 关键字代表原始的 color 属性的计算值。它允许让继承自属性或子元素的属性颜色属性以默认值不再继承。
@@ -941,90 +942,6 @@ currentColor 关键字代表原始的 color 属性的计算值。它允许让继
 
 - [css position 定位 top 百分比的问题](https://www.imooc.com/article/12794)
 - [CSS 绝对定位 top: 100%和 bottom:0 的区别](https://www.jianshu.com/p/e37e586249f3)
-
-## 设置自定义滚动条样式
-
-```css
-::-webkit-scrollbar {
-  display: none;
-}
-```
-
-```css
-/*滚动条整体宽高及背景 宽高分别对应横竖滚动条的尺寸*/
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-/*滚动条滑块 圆角+内阴影*/
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-/*滚动条轨道 圆角+内阴影*/
-::-webkit-scrollbar-track {
-  border-radius: 0;
-  background-color: rgba(0, 0, 0, 0.1);
-}
-```
-
-**【参考链接】**
-
-- [React 设置自定义滚动条样式](https://blog.csdn.net/sg_knight/article/details/122689629)
-- [用 CSS 修改滚动条样式](https://www.cnblogs.com/liulangbxc/p/15200433.html)
-
-## 实现点击 a 元素 b 元素添加样式
-
-**【最终做法】：** JS 实现
-
-```tsx
-// .high-light {
-//   background-color: #fff;
-//   transition: background-color 0.5s ease-in 0.5s;
-//   animation: changebackgroundcolor 0.5s ease-in-out 0s 1 alternate running forwards;
-// }
-
-const intervalWorkloadRef = useRef < HTMLDivElement > null;
-
-const onClickFormula = useCallback((ref: React.RefObject<HTMLDivElement>) => {
-  ref?.current?.classList?.add("high-light");
-  setTimeout(() => {
-    ref?.current?.classList?.remove("high-light");
-  }, 500);
-}, []);
-
-const Page = () => {
-  return (
-    <CanClickText onClick={() => onClickFormula(intervalWorkloadRef)}>
-      {totalWorkDays ?? "-"}
-    </CanClickText>
-  );
-};
-```
-
-**【简陋做法】：** CSS 实现，但是只是一瞬间，太短了
-
-```css
-a:hover .b {
-  background: red;
-}
-```
-
-## 用纯 CSS 禁止鼠标点击事件
-
-```css
-.disabled {
-  pointer-events: none;
-  cursor: default;
-  opacity: 0.6;
-}
-```
-
-**【参考链接】**
-
-- [用纯 CSS 禁止鼠标点击事件](https://www.cnblogs.com/karajanking/p/5889300.html)
 
 ## 组件 className 前缀统一
 

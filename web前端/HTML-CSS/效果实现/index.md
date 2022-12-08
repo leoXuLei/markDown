@@ -138,7 +138,179 @@ const info = '点击“全部成员”，可以根据角色来查看成员列表
 </Tooltip>
 ```
 
-# CSS
+# 滚动
+
+## 点击事件后元素滚动进入视图
+
+垂直/水平方向都支持
+**垂直滚动：**
+
+```js
+const ele = <Card id={"member-detail"} />;
+const toDetail = () => {
+  const ele = document.getElementById("member-detail");
+
+  if (ele) {
+    ele.scrollIntoView({
+      behavior: "smooth",
+    });
+  }
+};
+```
+
+**水平滚动：**
+
+```jsx
+// 最后一列滚到视区
+const scrollLastIntoView = useCallback(() => {
+  if (isLastItem) {
+    const ele = document.getElementById('last-item')
+    if (ele) {
+      ele?.scrollIntoView({
+        behavior: 'smooth',
+      })
+    }
+  }
+}, [isLastItem])
+
+useEffect(() => {
+  scrollLastIntoView()
+}, [scrollLastIntoView])
+
+return (
+      <FolderColumnItemWrapper id={isLastItem ? 'last-item' : ''}>
+        <div className="folder-picker-handlers">
+          <Tooltip title="创建文件夹">
+            <FolderAddOutlined className="create-icon" onClick={undefined} />
+          </Tooltip>
+        </div>
+      </FolderColumnItemWrapper>
+    )
+  },
+```
+
+## 自定义滚动条样式
+
+```css
+::-webkit-scrollbar {
+  display: none;
+}
+```
+
+```css
+/*滚动条整体宽高及背景 宽高分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/*滚动条滑块 圆角+内阴影*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/*滚动条轨道 圆角+内阴影*/
+::-webkit-scrollbar-track {
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+```
+
+**【参考链接】**
+
+- [React 设置自定义滚动条样式](https://blog.csdn.net/sg_knight/article/details/122689629)
+- [用 CSS 修改滚动条样式](https://www.cnblogs.com/liulangbxc/p/15200433.html)
+
+# 点击
+
+## CSS 实现禁止鼠标点击事件
+
+```css
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
+```
+
+**【参考链接】**
+
+- [用纯 CSS 禁止鼠标点击事件](https://www.cnblogs.com/karajanking/p/5889300.html)
+
+## 点击 a 元素 给 b 元素添加样式
+
+**【最终做法】：** JS 实现
+
+```tsx
+// .high-light {
+//   background-color: #fff;
+//   transition: background-color 0.5s ease-in 0.5s;
+//   animation: changebackgroundcolor 0.5s ease-in-out 0s 1 alternate running forwards;
+// }
+
+const intervalWorkloadRef = useRef < HTMLDivElement > null;
+
+const onClickFormula = useCallback((ref: React.RefObject<HTMLDivElement>) => {
+  ref?.current?.classList?.add("high-light");
+  setTimeout(() => {
+    ref?.current?.classList?.remove("high-light");
+  }, 500);
+}, []);
+
+const Page = () => {
+  return (
+    <CanClickText onClick={() => onClickFormula(intervalWorkloadRef)}>
+      {totalWorkDays ?? "-"}
+    </CanClickText>
+  );
+};
+```
+
+**【简陋做法】：** CSS 实现，但是只是一瞬间，太短了
+
+```css
+a:hover .b {
+  background: red;
+}
+```
+
+## 按钮点击时（按下时，弹起就消失）的样式
+
+设置按钮点击时候(按下的时候，弹起就消失了)的样式用`&:active{}`。
+
+ps: 元素是 active 时，如何设置它的伪元素的样式。
+
+```css
+.AntdColInner {
+  border: 1px solid #bfbfbf;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  /* 正常显示时阴影在右下 */
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.35);
+  will-change: transform;
+
+  &:active {
+    &::after {
+      content: "";
+      position: absolute;
+      width: 94%;
+      height: 80%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      /* border: 1px dotted #4b4b4b; */
+    }
+    /* 鼠标点击按下时阴影在左上，并设置往左上移动1px */
+    box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.35);
+    transform: translate(1px, 1px);
+  }
+}
+```
+
+# 阴影
 
 ## 浮层 modalbox-shadow 效果
 
@@ -155,6 +327,8 @@ const info = '点击“全部成员”，可以根据角色来查看成员列表
 ```
 
 ![](./imgs//demo-box-shadow.png)
+
+# 线条
 
 ## 画一条水平分隔直线
 
@@ -180,9 +354,11 @@ const info = '点击“全部成员”，可以根据角色来查看成员列表
 }
 ```
 
+# 图形
+
 ## 纯 CSS 实现自适应正方形
 
-### 方案一：CSS3 vw 单位
+> 方案一：CSS3 vw 单位
 
 ==CSS3 中新增了一组相对于可视区域百分比的长度单位 vw, vh, vmin, vmax==。其中 vw 是相对于视口宽度百分比的单位，1vw = 1% viewport width， vh 是相对于视口高度百分比的单位，1vh = 1% viewport height；==vmin 是相对当前视口宽高中较小的一个的百分比单位，同理 vmax 是相对当前视口宽高中较大的一个的百分比单位==。该单位浏览器兼容性如下（见原链接）。
 
@@ -214,7 +390,7 @@ const info = '点击“全部成员”，可以根据角色来查看成员列表
 </html>
 ```
 
-### 方案二：设置垂直方向的 padding 撑开容器
+> 方案二：设置垂直方向的 padding 撑开容器
 
 在 CSS 盒模型中，一个比较容易被忽略的就是 margin, padding 的百分比数值计算。按照规定，**margin, padding 的百分比数值是相对 父元素的宽度计算的**。由此可以发现只需将元素垂直方向的一个 padding 值设定为与 width 相同的百分比就可以制作出自适应正方形了。
 
@@ -308,7 +484,7 @@ const info = '点击“全部成员”，可以根据角色来查看成员列表
 
 ![](../imgs/效果实现-css实现自适应正方形-4.png)
 
-### 方案三：利用伪元素的 margin(padding)-top 撑开容器
+> 方案三：利用伪元素的 margin(padding)-top 撑开容器
 
 在方案二中，我们利用百分比数值的 padding-bottom 属性撑开容器内部空间，但是这样做会导致在元素上设置的 max-height 属性失效。==而失效的原因是 max-height 属性只限制于 height，也就是只会对元素的 content height 起作用==。那么我们是不是能用一个子元素撑开 content 部分的高度，从而使 max-height 属性生效呢？我们来试试：
 

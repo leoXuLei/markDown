@@ -27,6 +27,14 @@
 
 - 难以理解的 class
 
+> **优点：Hooks 相比类组件的优点**：
+
+- 代码可读性更强，
+  原本同一块功能的代码逻辑被拆分在了不同的生命周期函数中，容易使开发者不利于维护和迭代，通过 React Hooks 可以将功能代码聚合，方便阅读维护；
+
+- 组件树层级变浅，
+  在原本的代码中，我们经常使用 HOC/render props 等方式来复用组件的状态，增强功能等，无疑增加了组件树层数及渲染，而在 React Hooks 中，这些功能都可以通过强大的自定义的 Hooks 来实现；
+
 > **Hooks 上手**：
 
 审批组管理页面：增删查改数据。
@@ -463,7 +471,7 @@ useEffect(() => {
 
 通常，组件卸载时需要清除 effect 创建的诸如订阅或计时器 ID 等资源。要实现这一点，useEffect 函数需返回一个清除函数。
 
-**为防止内存泄漏，清除函数会在组件卸载前执行。另外，如果组件多次渲染（通常如此），则在执行下一个 effect 之前，上一个 effect 就已被清除**。在上述示例中，意味着组件的每一次更新都会创建新的订阅。若想避免每次更新都触发 effect 的执行
+**为防止内存泄漏，清除函数会在组件卸载前执行。另外，如果组件多次渲染（通常如此），则在执行下一个 effect 之前，上一个 effect 就已被清除**。即先执行上一个 effect 中 return 的函数，然后再执行本 effect 中非 return 的函数。在上述示例中，意味着组件的每一次更新都会创建新的订阅。若想避免每次更新都触发 effect 的执行
 
 > 【3】**effect 的执行时机**
 
@@ -874,7 +882,7 @@ function CountMyRenders() {
 
 ### 保存状态用 state 还是 ref？
 
-- **只是在函数事件中用到的数据**就用 ref。
+- **只在函数事件中用到的数据**就用 ref。
 - **只要`render`中用到的数据**就用 state (即更新后页面会发生变化)。
 - **若更新 `ref.current`的事件中同时有`setState`更新其它 `state` 的操作**，这种情况也是可以用 `ref` 保存状态数据：事件触发才会显示的一些状态。比如打开新增、复制不同弹窗，配置的弹窗数据（title，表单控件） 可以用 ref 保存，因为在更新 ref 的同时也控制了弹窗的显隐 `visible` 状态的变化，`state`更新能引起页面的重新渲染，自然就能使用到最新的 `ref.current` 了。
 
@@ -989,6 +997,10 @@ return (
 >
 > - `useContext(MyContext)` 相当于 class 组件中的 `static contextType = MyContext` 或者 `<MyContext.Consumer>`。
 > - ==`useContext(MyContext)` 只是让你能够读取 context 的值以及订阅 context 的变化。你仍然需要在上层组件树中使用 `<MyContext.Provider>` 来为下层组件提供 context==。
+>
+> **Tips**：
+>
+> - **useContext 只能在 Context.Provide 所在组件 A 的后代组件中使用，哪怕是在组件 A 中使用，都没法获取到值**
 
 ```jsx
 const value = useContext(MyContext);
@@ -1347,44 +1359,6 @@ export default LayoutEffectTest;
 ```
 
 - [useLayoutEffect](https://juejin.cn/post/6844903985338400782)
-
-# 自定义 Hook
-
-通过自定义 Hook，可以将组件逻辑提取到可重用的函数中。
-
-目前为止，在 React 中有两种流行的方式来共享组件之间的状态逻辑: `render props` 和高阶组件，现在让我们来看看 Hook 是如何在让你不增加组件的情况下解决相同问题的。
-
-> **规则：**
->
-> - 自定义 Hook 是一个函数，其名称必须以 “use” 开头，函数内部可以调用其他的 Hook
-> - 在两个组件中使用相同的 Hook 会共享 state 吗？不会。
->   自定义 Hook 是一种重用状态逻辑的机制(例如设置为订阅并存储当前值)，**所以每次使用自定义 Hook 时，其中的所有 state 和副作用都是完全隔离的**。
->   **Hook 是一种复用状态逻辑的方式，它不复用 state 本身。事实上 Hook 的每次调用都有一个完全独立的 state**：参考`自定义Hook-实例一`
-
-## 实例一
-
-```jsx
-import { getOriginalTaskInitInfo } from 'client/ekko/services/original-task'
-import { useCallback, useEffect, useState } from 'react'
-
-export function useOriginalStateFlow() {
-  const [info, setInfo] = useState<IOriginalTaskInit>()
-  const refresh = useCallback(async () => {
-    const response = await getOriginalTaskInitInfo()
-    if (response.success) setInfo(response.result)
-  }, [])
-
-  useEffect(() => {
-    refresh()
-  }, [refresh])
-
-  return info?.flow
-}
-
-
-const flow = useOriginalStateFlow()
-// 这种自定义hook的请求，只要使用该hook的组件挂载都会触发重新请求（甚至是更新渲染的时候）
-```
 
 # Tips
 

@@ -326,8 +326,6 @@ export default {
 
 ## Tips
 
-- 接口数据可以搜索，点开对象，点击空白处`ctrl + F`
-  ![联调Tips](../imgs/联调Tips.png)
 
 - 接口循环调用 慎重
   新建迭代时候
