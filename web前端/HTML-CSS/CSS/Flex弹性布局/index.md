@@ -184,6 +184,18 @@ flex 是 `flex-grow、flex-shrink、flex-basis` 的缩写。故其取值可以�
 - [@@(2016-01-12)【CSS 趣味】flex 缺省的 auto 跟 0 到底有何区别](https://segmentfault.com/a/1190000004288826)
 - [@(2021-05-28)flex: 1 flex: auto flex: none flex: 0 到底有什么 区别 ？使用场景？](https://juejin.cn/post/6967177565458923557)
 
+# 问题
+
+## flex 布局的盒子文字溢出显示省略号失效
+
+解决方法：只要给文字包裹一层`span`就解决了。
+
+## flex 布局子元素宽度超出父元素时设置`flex:1`并不能限制子元素的尺寸
+
+**【参考链接】**
+
+- [flex 布局子元素宽度超出父元素问题](https://juejin.cn/post/6974356682574921765#comment)
+
 # 参考链接
 
 - [(2015-07-10)阮一峰-Flex 布局教程：语法篇](https://www.ruanyifeng.com/blog/2015/07/flex-grammar.html)

@@ -19,37 +19,46 @@
 
 # 文本属性： text-
 
-- **`text-align`：水平对齐方式**
-  - left 把文本排列到左边。默认值。
-  - right 把文本排列到右边。
-  - center 把文本排列到中间。
-  - justify 实现两端对齐文本效果。
-  - inherit 规定应该从父元素继承 text-align 属性的值。
-- **`vertical-align`：垂直对齐方式**
-- **`line-height`：行高（行与行之间的距离）**
-- **`white-space`：元素内的空白怎样处理**
+## **`text-align`：水平对齐方式**
 
-  - normal 默认。空白会被浏览器忽略。
-  - pre 空白会被浏览器保留。其行为方式类似 HTML 中的 `<pre>` 标签。
-  - nowrap 文本不会换行，文本会在在同一行上继续，直到遇到 `<br>` 标签为止。
-  - pre-wrap 保留空白符序列，但是正常地进行换行。// 空白符序列即空格
-  - pre-line 合并空白符序列，但是保留换行符。
-  - inherit 规定应该从父元素继承 white-space 属性的值。
+- left 把文本排列到左边。默认值。
+- right 把文本排列到右边。
+- center 把文本排列到中间。
+- justify 实现两端对齐文本效果。
+- inherit 规定应该从父元素继承 text-align 属性的值。
 
-- **`text-overflow`：文本溢出**
+## **`vertical-align`：垂直对齐方式**
 
-  - text-clip 修剪文本。
-  - ellipsis 显示省略符号来代表被修剪的文本。
+## **`line-height`：行高（行与行之间的距离）**
 
-- **`text-shadow`：文本溢出**
-  值格式：`h-shadow v-shadow blur color;`
+## **`white-space`：元素内的空白（空格、回车换行符）怎样处理**
 
-  - h-shadow 必需。水平阴影的位置。允许负值。
-  - v-shadow 必需。垂直阴影的位置。允许负值。
-  - blur 可选。模糊的距离。
-  - color 可选。阴影的颜色
+- normal 默认。空白会被浏览器忽略。
+- pre 空白会被浏览器保留。其行为方式类似 HTML 中的 `<pre>` 标签。
+- nowrap 文本不会换行，文本会在在同一行上继续，直到遇到 `<br>` 标签为止。
+- pre-wrap 保留空白符序列，但是正常地进行换行。（空白符序列即空格）
+- pre-line 合并空白符序列，但是保留换行符。
+- inherit 规定应该从父元素继承 white-space 属性的值。
 
-- **`text-indent`：首行文本缩进**
+- 【其它】
+  - pre-wrap 和 pre 的区别就是会自适应容器的边界进行换行
+
+## **`text-overflow`：文本溢出**
+
+- text-clip 修剪文本。
+- ellipsis 显示省略符号来代表被修剪的文本。
+
+## **`text-shadow`：文本阴影**
+
+值格式：`h-shadow v-shadow blur color;`
+
+- h-shadow 必需。水平阴影的位置。允许负值。
+- v-shadow 必需。垂直阴影的位置。允许负值。
+- blur 可选。模糊的距离。
+- color 可选。阴影的颜色
+
+## **`text-indent`：首行文本缩进**
+
 - **`letter-spacing`：字母/汉字之间的间隔**
 
   - 0：正常
