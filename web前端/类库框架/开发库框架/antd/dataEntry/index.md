@@ -1,5 +1,19 @@
 # 数据录入
 
+## Input
+
+**【Input 组件设置`autoComplete="off"`无效】**
+
+问题描述：antd 的 Input 组件不支持`autoComplete="off"`。
+
+解决方法：设置`autoComplete="new-password"`
+
+```tsx
+<Form.Item name="User" label="用户">
+  <Input autoComplete="new-password" />
+</Form.Item>
+```
+
 ## DatePicker
 
 ```jsx

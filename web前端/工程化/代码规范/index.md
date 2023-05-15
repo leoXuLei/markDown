@@ -1,9 +1,50 @@
-## 命名规范
+# 常见命名规则
 
-### 文件/文件夹命名
+> **【帕斯卡命名法(Pascal):大驼峰】**
+
+```js
+ShowMessage();
+const PassWord = "";
+```
+
+单字之间不以空格断开或连接号（-）、下划线（\_）连结，**第一个单字首字母采用大写字母；后续首字母亦用大写字母**。
+
+例如：`FirstName、LastName`。**每一个单字的首字母都采用大写字母的命名格式**，被称为“Pascal 命名法”，也有人称之为“大驼峰式命名法”（Upper Camel Case），为驼峰式大小写的子集。
+
+> **【驼峰命名法（Camel）:小驼峰】**
+
+```js
+// 驼峰命名法分为：小驼峰式 和 大驼峰式
+// 小驼峰 示例
+userName;
+camelCase;
+
+// 大驼峰示例
+UserName;
+CamelCase;
+```
+
+驼峰法的意思是：**除第一个单词之外，其他单词首字母大写**。例如：变量 `myStudentCount` 的第一个单词全部小写，后面的单词首字母大写。
+
+> **【下划线命名法（UnderScoreCase）】**
+
+```js
+show_message();
+const user_name = "";
+```
+
+逻辑断点（单词）用的是下划线隔开。
+
+> **【参考链接】**
+
+- [四种常用的命名规则：帕斯卡命名法、驼峰命名法、下划线命名法、匈牙利命名法](https://blog.csdn.net/weixin_55076626/article/details/121795671)
+
+# 命名规范
+
+## 文件/文件夹命名
 
 - 小写字母中滑线分割，相对于大小驼峰来说，输入更加便捷
-- 语义化 - 分割, 英语单词不要用 - 分割
+- 语义化 - 分割，英语单词不要用 - 分割
 
 ```js
 // good
@@ -27,7 +68,7 @@ import AutoComplete from './auto-complete'
 
 ```
 
-### 组件
+## 组件
 
 - 组件属性名为 [`I${组件名} Props`]
 
@@ -70,7 +111,7 @@ export default Checkbox;
 }
 ```
 
-## 变量
+# 变量
 
 - **用有意义且常用的单词命名变量**
 
@@ -196,7 +237,11 @@ function createMicrobrewery(name = "Hipster Brew Co.") {
 }
 ```
 
-### 常量
+## 命名
+
+- `boolean`类型的变量命名以`is`开头：`isSorted`、`isFinished`、`isVisible`
+
+## 常量
 
 常量（如表单各种字段名）应当全局只写一遍，后面都是引入
 
@@ -215,7 +260,7 @@ export const LEG_FIELD = {
 itemData[LEG_FIELD.MATURITY_INCOME_TYPE] !== MATURITY_INCOME_TYPE_MAP.COUPON;
 ```
 
-## 函数
+# 函数
 
 - **参数越少越好**
   如果参数超过两个，使用 ES2015/ES6 的解构语法，不用考虑参数的顺序。
@@ -760,7 +805,7 @@ for (let i = 0; i < list.length; i++) {
 
   放心删吧，你可以在代码库历史版本中找他它。
 
-### 命名规范
+## 命名规范
 
 - 命名方法： 小驼峰式命名法
 - 命名规范： 前缀应该为动词
@@ -790,7 +835,7 @@ function loadData() {}
 function fetchData() {}
 ```
 
-### 函数注释规范
+## 函数注释规范
 
 > **参考链接：**
 
@@ -798,7 +843,7 @@ function fetchData() {}
 - [Javascript 注释规范](https://segmentfault.com/a/1190000015204718)
 - [JS 开发规范（一）： 命名与注释规范详解](https://juejin.cn/post/6844903492415406088#heading-10)
 
-## 类
+# 类
 
 - **使用 class**
   在 ES2015/ES6 之前，没有类的语法，只能用构造函数的方式模拟类，可读性非常差。
@@ -946,7 +991,7 @@ const car = new Car('Ford','F-150','red')
 - **不要滥用继承**
   很多时候继承被滥用，导致可读性很差，要搞清楚两个类之间的关系，继承表达的一个属于关系，而不是包含关系
 
-## SOLID
+# SOLID
 
 SOLID 是几个单词首字母组合而来，分别表示 单一功能原则、开闭原则、里氏替换原则、接口隔离原则以及依赖反转原则。
 
@@ -1334,7 +1379,7 @@ const inventoryTracker = new InventoryTracker(
 inventoryTracker.requestItems();
 ```
 
-## 异步
+# 异步
 
 SOLID 是几个单词首字母组合而来，分别表示 单一功能原则、开闭原则、里氏替换原则、接口隔离原则以及依赖反转原则。
 
@@ -1398,7 +1443,7 @@ async function getCleanCodeArticle() {
 }
 ```
 
-## 错误处理
+# 错误处理
 
 - **不要忽略抛异常**
 
@@ -1426,7 +1471,7 @@ try {
 }
 ```
 
-## 参考资料
+# 参考资料
 
 - [JavaScript 代码整洁之道](https://mp.weixin.qq.com/s/FhmWGE12vbiVG5HsT3YJlA)
 

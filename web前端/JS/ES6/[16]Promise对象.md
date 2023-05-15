@@ -1361,6 +1361,82 @@ Promise.try(() => database.users.get({id: userId}))
 
 事实上，`Promise.try`就是模拟`try`代码块，就像`promise.catch`模拟的是`catch`代码块。
 
+# 实战
+
+## 父子组件异步任务先后执行问题
+
+> **Promise 父组件等所有子组件数据保存后再刷新数据。**
+
+在父组件点击保存数据按钮，代码如下。
+
+```tsx
+// 通过ref，没有保存数据的tab都要保存下数据
+const saveAllTabsData = useMemoizedFn(async () => {
+  const modifiedTabKeys = Object.entries(tabInfoModifiedMap)
+    .map(([tabKey, isTabModified]) => {
+      if (isTabModified) {
+        return tabKey;
+      }
+      return null;
+    })
+    .filter(Boolean);
+  // 遍历tabInfoModifiedMap，哪个tab修改过数据，就去调用哪个tab下的submit方法
+  await Promise.allSettled(
+    modifiedTabKeys.map((modifiedTabKeyItem) => {
+      const curTabRef =
+        tabRefMap[modifiedTabKeyItem as ERecipeDetailTabPaneKey.recipeHeader];
+      return curTabRef?.current?.handleSubmit?.();
+    })
+  );
+
+  // await Promise.allSettled 确保各个Tab子组件都保存完数据后，再开始刷新配方详情数据
+
+  getDetail();
+  handleIsInfoSaved("all");
+});
+```
+
+子组件都是 Tabs 下的 Tabpane。其中的公式 Tab 保存数据逻辑如下。
+
+```tsx
+const handleSubmitFormulasChange = useMemoizedFn(async () => {
+  if (!formulaModuleDataModified || !_originData?.batchId) {
+    return;
+  }
+  // 公式数据没变化直接return
+  if (isFormulaDataEqual) {
+    return;
+  }
+  const convertedFormulas = convertV1ToV0Data?.({ formulas }) || {};
+
+  await modRecipeFormula({
+    UserID: userId,
+    RecipeID: _originData?.batchId,
+    DefaultFormula: checkedDefaultFormulaId!,
+    ...convertedFormulas,
+  });
+  setFormulaModuleDataModified(false);
+  onModStatusChange?.(ERecipeDetailTabPaneKey.formula, false);
+  console.log("修改公式模块-（公式Data）保存完毕————接口调用完毕");
+});
+
+useImperativeHandle(ref, () => ({
+  handleSubmit: handleSubmitFormulasChange,
+}));
+```
+
+为了测试效果：父组件中的刷新数据操作在所有 Tab 子组件保存数据之后，可在 Tab 子组件保存逻辑中加上如下代码（延时等待效果）去测试，根据调接口先后顺序及打印内容先后来判断是否实现。
+
+```jsx
+const promiseTimer = useMemoizedFn(async (ms) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, ms, "setTimeoutDone");
+  });
+});
+
+await promiseTimer(5000);
+```
+
 # Tips
 
 ## 快速点击，多次请求同一接口，怎样让渲染结果为最后一次请求的结果

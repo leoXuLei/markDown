@@ -141,8 +141,8 @@ link 和@import 的区别：
 - 组合选择符：四种
 
   ```
-  后代选取器(以空格分隔)  div p { }
-  子元素选择器(以大于号分隔）div > p{}
+  后代选取器（以空格分隔） div p { }
+  子元素选择器（以大于号分隔）div > p{}
   相邻兄弟选择器（以加号分隔） div + p{}
   普通兄弟选择器（以波浪号分隔）div ~ p{}
   ```
@@ -344,6 +344,25 @@ div:not(#container) {
 /* 把除了p标签之外的所有标签都选中 */
 :not(p) {
 }
+```
+
+【`:not()`排除多个类写法】
+```less
+.ant-table.ant-table-small.ant-table-bordered
+  > .ant-table-container
+  .ant-table-tbody
+  tr:not(.row-selected):not(.ant-table-row-selected) {
+  .text {
+    background: #f5f5f5;
+    // disabled列且没有值得单元格改变padding
+    &:empty {
+      padding: 19px;
+    }
+  }
+}
+
+// 错误写法：
+// tr:not('.row-selected,.ant-table-row-selected') {}
 ```
 
 ### 其它

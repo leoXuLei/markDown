@@ -581,6 +581,177 @@ const res = [
 
 ### 实例五： 见`典型需求/excel导出数据处理`
 
+### 实例六： 配方详情工序各层级数据处理
+
+从配方详情工序数据\_originData 中，按照当前 sfc 层级，处理目标节点及其后代节点的参数信息。
+
+```tsx
+// 任意层级procedure节点处理
+const procedureParamContentCommonHandle = useMemoizedFn(
+  (paramData: Record<string, any>, targetNode: Record<string, any>) => {
+    paramData["Name"] = targetNode?.["Name"];
+    paramData["Desc"] = targetNode?.["Remark"];
+    const { STParam, FBParam } =
+      targetNode?.["ProcedureParams"]?.reduce(
+        (totalObj: any, paramItem: any) => {
+          const paramType = paramItem["ParamType"];
+          const handledParam = {
+            Name: paramItem["ParamName"],
+            Type: DATA_TYPE_ZHCH_MAP[paramItem["DataType"] as EDataType.Number],
+            EU: paramItem["ParamEU"],
+          };
+          if (paramType === EParamType.InputParam) {
+            totalObj.STParam.push(handledParam);
+          } else if (paramType === EParamType.OutParam) {
+            totalObj.FBParam.push(handledParam);
+          }
+          return totalObj;
+        },
+        {
+          STParam: [],
+          FBParam: [],
+        }
+      ) || {};
+    paramData["STParam"] = STParam || [];
+    paramData["FBParam"] = FBParam || [];
+  }
+);
+
+// 获取 recipe层 SFC节点和子节点的参数信息
+const recipeLevelParamContentHandle = useMemoizedFn(
+  (paramData: Record<string, any>, targetNode: Record<string, any>) => {
+    procedureParamContentCommonHandle(paramData, targetNode);
+    paramData["Units"] = targetNode?.["Units"]?.map((unitItem: any) => {
+      const handledUnitItem: any = {};
+      unitLevelParamContentHandle(handledUnitItem, unitItem);
+      return handledUnitItem;
+    });
+  }
+);
+
+// 获取 unit层 SFC节点和子节点的参数信息
+const unitLevelParamContentHandle = useMemoizedFn(
+  (paramData: Record<string, any>, targetNode: Record<string, any>) => {
+    procedureParamContentCommonHandle(paramData, targetNode);
+    paramData["UnitEquipProp"] = targetNode?.ID
+      ? getUnitEquipmentClassInfoParamOptionsByUnitId(targetNode?.ID as string)
+      : [];
+    paramData["Operations"] = targetNode?.["Operations"]?.map(
+      (operationItem: any) => {
+        const handledOperationItem: any = {};
+        operationLevelParamContentHandle(handledOperationItem, operationItem);
+        return handledOperationItem;
+      }
+    );
+  }
+);
+
+// 获取 operation层 SFC节点和子节点的参数信息
+const operationLevelParamContentHandle = useMemoizedFn(
+  (paramData: Record<string, any>, targetNode: Record<string, any>) => {
+    procedureParamContentCommonHandle(paramData, targetNode);
+    paramData["Phases"] = targetNode?.["Phases"]?.map((phaseItem: any) => {
+      const handledPhaseItemItem: any = {};
+      phaseLevelParamContentHandle(handledPhaseItemItem, phaseItem);
+      return handledPhaseItemItem;
+    });
+  }
+);
+
+// 获取 phase层 SFC节点和子节点的参数信息
+const phaseLevelParamContentHandle = useMemoizedFn(
+  (paramData: Record<string, any>, targetNode: Record<string, any>) => {
+    paramData["Name"] = targetNode?.["Name"];
+    paramData["Desc"] = targetNode?.["Remark"];
+    const { STParam, FBParam } =
+      targetNode?.["Param"]?.reduce(
+        (totalObj: any, paramItem: any) => {
+          const paramType = paramItem["Type"];
+          const handledParam = {
+            Name: paramItem["Name"],
+            Type: DATA_TYPE_ZHCH_MAP[paramItem["DataType"] as EDataType.Number],
+            EU: paramItem["Unit"],
+          };
+          if (paramType === EParamType.InputParam) {
+            totalObj.STParam.push(handledParam);
+          } else if (paramType === EParamType.OutParam) {
+            totalObj.FBParam.push(handledParam);
+          }
+          return totalObj;
+        },
+        {
+          STParam: [],
+          FBParam: [],
+        }
+      ) || {};
+    paramData["STParam"] = STParam || [];
+    paramData["FBParam"] = FBParam || [];
+
+    paramData["Mat"] = [
+      {
+        STType:
+          PHASE_OUT_PARAM_DATA_TYPE_ZHCH_MAP[
+            targetNode?.["MatDataType"] as EPhaseOutParamDataType.Number
+          ],
+        FBType: "数值",
+        EU: targetNode?.["MatUnit"],
+      },
+    ];
+  }
+);
+
+// 获取 当前SFC节点和子节点的参数信息
+const getParamContent = useMemoizedFn(() => {
+  const treeSelectdSplitList = treeSelectedKey?.split?.("#");
+  const curLevelType = treeSelectdSplitList?.[0];
+  const leftTreeSelectNodeId = treeSelectdSplitList?.[1];
+
+  const selectNodeFindInfos = treeSelectdSplitList[2]
+    ? treeSelectdSplitList[2].split("-")
+    : [];
+
+  const recipeChildrenKeys = ["Units", "Operations", "Phases"];
+
+  const findCurSelectedNodeConfigs =
+    selectNodeFindInfos?.map?.((item, index) => {
+      return {
+        keyName: "Name",
+        keyValue: item,
+        childrenKey: recipeChildrenKeys[index],
+      };
+    }) || [];
+
+  // 从V0版本的_originData中找到目标节点
+  const targetNode = findNodeFromV0OriginDBData(
+    v0ProcessData,
+    findCurSelectedNodeConfigs
+  );
+  console.log("targetNode", targetNode);
+
+  let paramContent = {};
+  // 暂时先不根据当前层级取获取当前节点及其后代节点的参数信息了，直接recipe层级
+  // switch (curLevelType) {
+  //   case SFC_LEVEL.RECIPE:
+  //     recipeLevelParamContentHandle(paramContent, targetNode);
+  //     break;
+  //   case SFC_LEVEL.UNIT:
+  //     unitLevelParamContentHandle(paramContent, targetNode);
+  //     break;
+  //   case SFC_LEVEL.OPERATION:
+  //     operationLevelParamContentHandle(paramContent, targetNode);
+  //     break;
+  //   case SFC_LEVEL.PHASE:
+  //     phaseLevelParamContentHandle(paramContent, targetNode);
+  //     break;
+  //   default:
+  //     break;
+  // }
+  recipeLevelParamContentHandle(paramContent, targetNode);
+  console.log("getParamContent :>> paramContent :>> ", paramContent);
+  return paramContent;
+});
+```
+
 # 其它
 
 ## 比较两个对象的属性变化

@@ -247,19 +247,36 @@ n.x // undefined
 
 上面代码中，`n`是一个原始类型的数值。直接在它上面新增一个属性`x`，不会报错，但毫无作用，总是返回`undefined`。**这是因为一旦被调用属性，`n`就自动转为`Number`的实例对象，调用结束后，该对象自动销毁**。所以，下一次调用`n`的属性时，实际取到的是另一个对象，属性`x`当然就读不出来。
 
-## Tips
-### 数字转为百分比并保留两位小数
+# Tips
+## 数字转为百分比并保留两位小数
 ```js
 `${(Number.parseFloat(0.12345)*100).toFixed(2)}%` // "12.35%"
 ```
-### 数字保留两位小数
+## 数字转为指定位数的有效数字
+
+
+`Number.prototype.toPrecision()`方法用于将一个数转为指定位数的有效数字（即小数点前后一共的位数，且不包含小数点），然后再返回对应的字符串。
+
+```tsx
+<InputNumber
+  style={{ width: "100%" }}
+  disabled={isInParam || unitPropTag}
+  // 关联设备绑定位号查到的位号值，显示格式：6位有效数字并四舍五入
+  // eslint-disable-next-line react/jsx-no-bind
+  formatter={(value) =>
+    unitPropTag ? Number(Number(value)?.toPrecision?.(6)) : value
+  }
+/>
+```
+
+## 数字保留两位小数
 - `number.toFixed(2)`：四舍五入，返回的是字符串
 - `Math.floor(number * 100) / 100`：不四舍五入，返回的是数字
 ```js
 (15.7784514000).toFixed(2) // "15.78"
 Math.floor(15.7784514000 * 100) / 100 // 15.77
 ```
-### 浮点数转整数
+## 浮点数转整数
 
 - `Math.floor(x)`：向下取整、`Math.ceil(x)`：向上取整
 - `x | 0`：将 x（不管是整数或小数）转为 32 位整数。
@@ -273,7 +290,7 @@ Math.ceil(-2.9); // -2
 -2.9 | 0 // -2
 ```
 
-### 判断数字是不是整数
+## 判断数字是不是整数
 ```js
 // 【1】
 function judgeRound(num) {
@@ -295,7 +312,7 @@ judgeRound(3.6) // false
 judgeRound(3.0) // true
 judgeRound(0.0) // true
 ```
-### 使用 `&` 判断奇偶性
+## 使用 `&` 判断奇偶性
 
 ```js
 // 偶数 `&` 1 === 0
@@ -305,5 +322,5 @@ console.log(8 & 1); // 0
 ```
 
 
-### 只允许输入数字
+## 只允许输入数字
 

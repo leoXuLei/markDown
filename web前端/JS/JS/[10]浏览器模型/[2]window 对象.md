@@ -822,3 +822,21 @@ frames.myframe === myFrame; // true
 ```
 
 另外，`name`属性的值会自动成为子窗口的名称，可以用在`window.open`方法的第二个参数，或者`<a>`和`<frame>`标签的`target`属性。
+
+# 实战
+
+## 即将离开当前页面（刷新或关闭）时触发的事件
+
+`window.onbeforeunload`事件在即将离开当前页面（刷新或关闭）时触发。
+
+```tsx
+useEffect(() => {
+  window.onbeforeunload = function (event) {
+    if (isRecipeDetailModified) {
+      // 只有设置了event.returnValue浏览器才会弹出确认框
+      event.returnValue = "";
+    }
+    return;
+  };
+}, [isRecipeDetailModified]);
+```

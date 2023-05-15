@@ -7,7 +7,11 @@
 
 ## Elements Dom 树
 
-某些事件触发显示的 DOM 元素不好让其暂停显示查看 DOM 结构及样式，如 antd 的`message.info` 显示提示。
+> 【如何知道 React 组件中哪个 state 或者 JSX 元素变化导致的重新 render】
+
+操作，同时打开控制台 element，观察重新 render 时候，element 中哪些元素发生了高亮变化，即是哪个 jsx 元素发生了数据变化。
+
+> 某些事件触发显示的 DOM 元素不好让其暂停显示查看 DOM 结构及样式，如 antd 的`message.info` 显示提示。
 
 解决方案：找到其 DOM 节点，触发的瞬间快速的右键/copy/copy element。再编辑节点复制一下即可。效果如下。
 

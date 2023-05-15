@@ -1,3 +1,53 @@
+# `String.prototype.replace()`使用实例
+
+```tsx
+const inputStr = 'PARAM("[U03.OP02].参数001.ST")';
+
+// `参数001` 改为 `参数001xg` 后期望得到'PARAM("[U03.OP02].参数001xg.ST")'
+
+inputStr.match(/(\])(\.)(.+)(\.)([A-Z]+)/g); // ['].参数001.ST']
+
+inputStr.replace(/(\])(\.)(.+)(\.)([A-Z]+)/g, ""); // 'PARAM("[U03.OP02")'
+
+inputStr.replace(/(\])(\.)(.+)(\.)([A-Z]+)/g, "$&");
+// 'PARAM("[U03.OP02].参数001.ST")'
+// $&：匹配的子字符串
+
+inputStr.replace(/(\])(\.)(.+)(\.)([A-Z]+)/g, "$1");
+// 'PARAM("[U03.OP02]")'
+// $1：匹配成功的第n组内容(n=1) 即 ']'
+// $2：匹配成功的第n组内容(n=2) 即 '.'
+// $3：匹配成功的第n组内容(n=3) 即 一个或多个字符：参数001
+// $4：匹配成功的第n组内容(n=4) 即 '.'
+// $5：匹配成功的第n组内容(n=5) 即 一个或多个字母'ST'
+
+inputStr.replace(/(\])(\.)(.+)(\.)([A-Z]+)/g, "$1$2");
+// 'PARAM("[U03.OP02].")'
+
+inputStr.replace(/(\])(\.)(.+)(\.)([A-Z]+)/g, "$1$2$3");
+// 'PARAM("[U03.OP02].参数001")'
+
+inputStr.replace(/(\])(\.)(.+)(\.)([A-Z]+)/g, "$1$2$3$4");
+// 'PARAM("[U03.OP02].参数001.")'
+
+inputStr.replace(/(\])(\.)(.+)(\.)([A-Z]+)/g, "$1$2$3$4$5");
+// 'PARAM("[U03.OP02].参数001.ST")'
+```
+
+最终实现如下。
+
+```tsx
+// 被复制节点A及其后代节点的表达式相关属性（字符串属性，如sfc，param.expSrc）需要替换表达式中A的名称为复制后的节点的名称
+const replaceStepItemPartsProperty = (property: string) => {
+  return oldFormattedParam && latestFormattedParam
+    ? property?.replace(
+        new RegExp(`(\])(\.)(${oldFormattedParam})(\.)`, "g"),
+        `$1$2${latestFormattedParam}$4`
+      )
+    : property;
+};
+```
+
 # 匹配邮箱
 
 ```js
@@ -160,6 +210,30 @@ export const canUseCNAndNumberAndENSpecialCharactersReg =
 // 允许使用英文、数字、中文特殊字符，长度不超过 32 个字符！
 export const canUseCNAndNumberAndCNSpecialCharactersReg =
   /^[a-zA-Z0-9·~！@#￥%…&*（）—+-=【】{}、|；‘’：“”，。、《》？]{1,32}$/;
+```
+
+# 问题
+
+## 字符串字段输入引号导致 sfc 渲染不出来
+
+**【问题描述】**：没有处理之前，输入引号后，sfc 程序渲染不出来，控制台报错`cannot read data from undefined`，应该是 x6 内部解析时数据有问题又没有做容错。
+
+**【解决方法】**：处理如下，修改时通过正则替换双引号为`"&quot;"`。问题解决。
+
+```tsx
+// 更新转换描述
+operateTargetNode.attributes.description = (
+  param?.transitionDescription || ""
+)?.replace(/\"/g, "&quot;");
+```
+
+同时需要注意，读的时候，即获取值展示在界面之前还要反向转换一下。不然界面上引号都会变成`&quot;`
+
+```tsx
+setFormValues((prev) => ({
+  ...prev,
+  transitionDescription: (description || "")?.replace(/&quot;/g, '"'),
+}));
 ```
 
 # 参考链接

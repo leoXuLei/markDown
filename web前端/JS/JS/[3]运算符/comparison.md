@@ -372,7 +372,9 @@ NaN === NaN // false
 
 ### 大于小于号比较
 
-所以一些 table 数值列的比较大小，可以直接比较或者包一个 Number 比较
+判断>= 这种，即使 Number(xx)，Number(xx)不是个 number， >= 或者 <= 会始终返回 false，不用去容错。
+
+所以一些 table 数值列的比较大小，可以直接比较或者包一个 Number 比较。
 
 ```jsx
 const falseEleList = [0, false, "", null, undefined, NaN];
