@@ -257,7 +257,9 @@ div.nav
 - Search And Compare：搜索 commit、比较不同分支/commit 节点之间的改动/提交变化
 
 ## `Code Spell Checker`： 拼写检查
+
 `v2.2.4`
+
 ## `MPE`：MD 预览导出插件
 
 - [使用教程](https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/)
@@ -306,6 +308,10 @@ export const uniqueListFieldValue = (list: IPlainObject[], key: string) => {
 - [VSCODE 使用插件 Doxygen Documentation Generator](https://blog.csdn.net/my_id_kt/article/details/122852676)
 - [vscode 注释汇总](https://blog.csdn.net/weixin_38318244/article/details/115631697)
 
+## `Doxygen Documentation Generator`：文件修改信息、时间
+
+`Document this`
+
 # MarkDown
 
 - [Markdown 的五大 VSCode 扩展插件](https://www.jdon.com/56553)
@@ -319,4 +325,4 @@ export const uniqueListFieldValue = (list: IPlainObject[], key: string) => {
 
 - [vscode 常用快捷键](https://www.cnblogs.com/bindong/p/6045957.html)
 - [vscode 插件官网](https://marketplace.visualstudio.com/vscode)
-  - 若只能内网办公可下载插件`Download Extension`，然后在vscode中引入安装。
+  - 若只能内网办公可下载插件`Download Extension`，然后在 vscode 中引入安装。

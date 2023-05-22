@@ -194,6 +194,8 @@ return (
   },
 ```
 
+# 滚动条
+
 ## 自定义滚动条样式
 
 ```css
@@ -226,6 +228,22 @@ return (
 
 - [React 设置自定义滚动条样式](https://blog.csdn.net/sg_knight/article/details/122689629)
 - [用 CSS 修改滚动条样式](https://www.cnblogs.com/liulangbxc/p/15200433.html)
+
+## 只修改某个类的滚动条样式
+
+`.ClassName::-webkit-scrollbar` 即可实现让某个盒子有滚动效果，只是看不到滚动条。
+
+```css
+.LeftContextMenu {
+  max-height: calc(100% - 40px);
+  overflow-y: auto;
+}
+
+.LeftContextMenu::-webkit-scrollbar {
+  width: 0px;
+  height: 8px;
+}
+```
 
 # 点击
 

@@ -827,6 +827,103 @@ const Parent = () => {
 export default Parent;
 ```
 
+> **实例四：**
+
+如下代码，先点击两次`修改父组件的state值`按钮，再点击两次`修改父组件的useRef值`按钮，最后再点击一次`修改父组件的state值`按钮。打印如下：
+
+```json
+memoedStateValue重新计算
+memoedRefValue重新计算
+父组件father从新渲染 0
+父组件father从新渲染numRef 100
+____子组件Son从新渲染 0
+
+
+// 先点击两次
+memoedStateValue重新计算
+父组件father从新渲染 1
+父组件father从新渲染numRef 100
+____子组件Son从新渲染 1
+memoedStateValue重新计算
+父组件father从新渲染 2
+父组件father从新渲染numRef 100
+____子组件Son从新渲染 2
+
+// 再点击两次
+执行handleModFatherNumRef
+执行handleModFatherNumRef
+
+// 最后再点击两次
+memoedStateValue重新计算
+memoedRefValue重新计算
+父组件father从新渲染 3
+父组件father从新渲染numRef 102
+____子组件Son从新渲染 3
+```
+
+根据打印情况和界面变化，可以得出结论，单纯改变 useRef 的值不会引起 useMemo 的重新计算，也不会引起重新渲染。
+
+```tsx
+import React, {
+  useReducer,
+  useCallback,
+  useState,
+  useRef,
+  useMemo,
+} from "react";
+import { useMemoizedFn } from "ahooks";
+import Son from "./son";
+
+const Resume = () => {
+  const [num, setNum] = useState(0);
+  const numRef = useRef<number>(100);
+
+  const handleModFatherState = useMemoizedFn(() => {
+    setNum((prev) => prev + 1);
+  });
+
+  const handleModFatherNumRef = useMemoizedFn(() => {
+    console.log("执行handleModFatherNumRef");
+    numRef.current += 1;
+  });
+
+  const testArrowFun = () => {
+    return `${numRef.current}___固定文本`;
+  };
+
+  const testUseCallBackArrowFun = useCallback(() => {
+    return `${numRef.current}___固定文本2`;
+  }, [numRef.current]);
+
+  const memoedStateValue = useMemo(() => {
+    console.log("memoedStateValue重新计算");
+    return 10 * num;
+  }, [num]);
+
+  const memoedRefValue = useMemo(() => {
+    console.log("memoedRefValue重新计算");
+    return numRef.current + 5;
+  }, [numRef.current]);
+
+  console.log("父组件father从新渲染num", num);
+  console.log("父组件father从新渲染numRef", numRef.current);
+  return (
+    <>
+      <button onClick={handleModFatherState}>修改父组件的state值</button>
+      <button onClick={handleModFatherNumRef}>修改父组件的useRef值</button>
+
+      <div>父组件-memoedStateValue: {memoedStateValue}</div>
+      <div>父组件-memoedRefValue: {memoedRefValue}</div>
+      <div>testArrowFun()：{testArrowFun()}</div>
+      <div>testUseCallBackArrowFun()：{testUseCallBackArrowFun()}</div>
+      <Son num={num} />
+    </>
+  );
+};
+
+export default Resume;
+```
+
 ### state 状态 vs ref 引用
 
 考虑这样一个场景:咱们想要计算组件渲染的次数。
