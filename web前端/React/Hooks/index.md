@@ -69,9 +69,9 @@ Hook 本质就是 JavaScript 函数，但是在使用它时需要遵循两条规
 - [React Hooks: 没有魔法，只是数组](https://zhuanlan.zhihu.com/p/66923924)
 - [React Hooks-02 为什么不能在循环、条件或嵌套函数中调用 Hooks](https://juejin.cn/post/6959086536834940965)
 
-# 基本 Hook
+# **【基本 Hook】**
 
-## useState 【维护状态】
+# useState 【维护状态】
 
 ```jsx
 const [state, setState] = useState(initialState);
@@ -134,7 +134,7 @@ class Example extends React.Component {
 }
 ```
 
-### 函数式更新
+## 函数式更新
 
 > **函数式更新:** > **如果新的 state 需要通过使用先前的 state 计算得出，那么可以将函数传递给 setState。该函数将接收先前的 state，并返回一个更新后的值**。
 
@@ -156,7 +156,7 @@ function Counter({ initialCount }) {
 
 “+” 和 “-” 按钮采用函数式形式，因为被更新的 state 需要基于之前的 state。但是“重置”按钮则采用普通形式，因为它总是把 count 设置回初始值。
 
-### 规则
+## 规则
 
 - > 【1】跳过 state 更新：与 class 组件中的 `this.setState` 方法不同，**如果你的更新函数返回值与当前 state 完全相同(浅比较)，则随后的重渲染会被完全跳过**。
 
@@ -199,7 +199,7 @@ function Counter({ initialCount }) {
   });
   ```
 
-### Tips
+## Tips
 
 - > 【1】**`useState`函数式写法中返回之前可以做一些同步操作**
 
@@ -353,7 +353,7 @@ useEffect(() => {
   - [简单易懂的 React useState() Hook 指南](https://segmentfault.com/a/1190000021010240?utm_source=tag-newest#item-3)
   - [useState 的使用小结](https://www.haorooms.com/post/reacthooks_usestate)
 
-## useEffect【完成副作用操作】
+# useEffect【完成副作用操作】
 
 > **作用**：
 > Effect Hook 可以让你在函数组件中执行副作用操作，何时执行：**默认情况下，它在第一次渲染之后和每次更新之后都会执行，React 保证了每次运行 effect 的同时，DOM 都已经更新完毕。**
@@ -370,7 +370,7 @@ useEffect(() => {
 
 **默认情况下，effect 将在每轮渲染结束后执行，但你可以选择让它在只有某些值改变的时候才执行**。
 
-### 两种副作用操作
+## 两种副作用操作
 
 > **副作用操作分类**：
 >
@@ -424,7 +424,7 @@ React 不是在组件卸载的时候执行清除操作，好像是每次 effect 
 
 **为防止内存泄漏，清除函数会在组件卸载前执行。另外，如果组件多次渲染（通常如此），则在执行下一个 effect 之前，上一个 effect 就已被清除**。
 
-### effect 的条件执行 = 性能优化
+## effect 的条件执行 = 性能优化
 
 > **依赖数组**：useEffect 的第二个参数，依赖数组中的变量改变才会触发 effect 的执行
 >
@@ -457,7 +457,7 @@ useEffect(() => {
 
 如果你要使用此优化方式，**请确保依赖数组中包含了所有外部作用域中会随时间变化并且在 effect 中使用的变量，否则你的代码会引用到先前渲染中的旧变量**。
 
-### 提示
+## 提示
 
 > 【1】使用多个 Effect 实现关注点分离
 
@@ -483,7 +483,7 @@ useEffect(() => {
 
 此外，从 React 18 开始，当它是离散的用户输入（如点击）的结果时，或者当它是由 flushSync 包装的更新结果时，传递给 useEffect 的函数将在屏幕布局和绘制之前同步执行。这种行为便于事件系统或 flushSync 的调用者观察该效果的结果。
 
-### Tips
+## Tips
 
 - > 【1】**`useLifecycles`相当于 DidMount**
 
@@ -496,9 +496,9 @@ useLifecycles(async () => {
 });
 ```
 
-# 额外的 Hook
+# **【额外的 Hook】**
 
-## useMemo 【缓存值】
+# useMemo 【缓存值】
 
 > **定义：**
 > 返回一个 memoized 值。**把“创建”函数和依赖项数组作为参数传入 useMemo，它仅会在某个依赖项改变时才重新计算 memoized 值。这种优化有助于避免在每次渲染时都进行高开销的计算**。
@@ -574,7 +574,7 @@ const handledData = useMemo(
 );
 ```
 
-## useCallback【缓存函数】
+# useCallback【缓存函数】
 
 > **定义：**
 > 返回一个 memoized 回调函数。**把内联回调函数及依赖项数组作为参数传入 useCallback，它将返回该回调函数的 memoized 版本，该回调函数仅在某个依赖项改变时才会更新**。当你把回调函数传递给经过优化的并使用引用相等性去避免非必要渲染（例如 shouldComponentUpdate）的子组件时，它将非常有用。
@@ -653,7 +653,7 @@ const recoverProject = useCallback(
 );
 ```
 
-## useRef 【访问 DOM/存数据】
+# useRef 【访问 DOM/存数据】
 
 > **定义：**
 > useRef **返回一个可变的 ref 对象，其 .current 属性被初始化为传入的参数（initialValue）**。返回的 ref 对象在组件的整个生命周期内持续存在。
@@ -703,9 +703,12 @@ function TextInputWithFocusButton() {
 - 【2】ref 在本组件保存值
   useRef 用来保存值的话只能在本组件用，如果传递给子组件，子组件都不会更新，因为父组件都没有更新就更不提子组件了，==**因为 useState 值的更新会触发组件重新渲染，而 useRef 的值`.current`更新不会触发重新渲染**==。所以在本组件用作保存表单控件的值是蛮好的。
 
-### 变更 ref 不会引发渲染问题？？
+## 变更 ref 不会引发渲染问题
 
-若`ref.current`对象发生变化，监听`ref.current`对象的 `useMemo` 也是会更新的，然后 `useMemo` 的值在 render 中被使用所以会触发界面渲染。
+> **【结果】**
+>
+> 1. **若只有`ref.current`发生变化，监听`ref.current`的 `useMemo` 不会更新，`ref.current`的值在 render 中直接被使用也不会更新，即不会触发界面渲染 render**。
+> 2. **若`ref.current`改变的同时伴随着某个`state` 的改变，且`useMemo`的依赖数组中有这个`state`才会引起该`useMemo`的更新，从而触发界面渲染 render。或者该`state`在 render 中直接被使用也会触发界面渲染 render**。
 
 > **实例一：某些情况依赖数组需要监听 ref.current 或下面属性**
 
@@ -776,9 +779,9 @@ const treeData = useMemo(() => {
 />
 ```
 
-> **实例三：实例一再次测试结果** ？？待再次测试
+> **实例三：**
 
-==最新测试结果：监听 currt 或者 current 下的属性（基本/引用）都是没法更新渲染页面的，也没法触发 useMemo 的更新==
+最新测试结果：监听 currt 或者 current 下的属性（基本/引用）都是没法更新渲染页面的，也没法触发 useMemo 的更新。
 
 但是事件方法中是可以打印最新的 currt 或者 current 下的属性（基本/引用）。
 
@@ -861,7 +864,7 @@ memoedRefValue重新计算
 ____子组件Son从新渲染 3
 ```
 
-根据打印情况和界面变化，可以得出结论，单纯改变 useRef 的值不会引起 useMemo 的重新计算，也不会引起重新渲染。
+根据打印情况和界面变化，可以得出结论，==单纯改变 `useRef` 的值不会引起 `useMemo` 的重新计算，也不会引起重新渲染==。
 
 ```tsx
 import React, {
@@ -924,7 +927,102 @@ const Resume = () => {
 export default Resume;
 ```
 
-### state 状态 vs ref 引用
+### **结论**
+
+> **实例五：**
+
+**【问题描述】**：
+`useRef.current` 作为 `useMemo` 的依赖，`useRef.current` 改变后能触发 `useMemo` 的更新吗？从而触发重新 render？。
+
+如下：`\_attr` 是个 useMemo 返回值，其监听依赖中有个 useRef 值，打印发现，`useRef.current` 值改变是能触发 `useMemo` 的更新。
+
+```tsx
+export default function useNode(opts: _opts[]): [_htmlAttr | null, Function] {
+  const _refElemnt = useRef<_htmlAttr | null>(null as any);
+  const [_v, _setV] = useState<any>(null);
+  const _args = useRef<_opts[]>(opts);
+
+  const resizeObserver = useMemo(() => {
+    return new ResizeObserver((entries: ResizeObserverEntry[]) => {
+      let domEle = entries[0].target as HTMLElement;
+      let _obj = _args.current.reduce((pre: SingleObj<any>, next: _opts) => {
+        if (next in pre) {
+          return pre;
+        }
+        pre[next] = domEle[next];
+        return pre;
+      }, {});
+      _refElemnt.current = _obj;
+      console.log("设置 _refElemnt.current :>> ", _refElemnt.current);
+
+      // 【本hook中唯一的一个setState】
+      _setV(Date.now());
+    });
+  }, []);
+
+  const ref: _setNodeFunc = (node) => {
+    console.log("node :>> ", node);
+    if (node !== null) {
+      resizeObserver.observe(node);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      resizeObserver.disconnect();
+      _refElemnt.current = null;
+    };
+  }, [resizeObserver]);
+
+  const _attr: _htmlAttr | null = useMemo(() => {
+    console.log("useNode :>> _attr :>> 重新计算");
+    if (_refElemnt.current) {
+      return JSON.parse(JSON.stringify(_refElemnt.current));
+    }
+    return {};
+  }, [_refElemnt.current]);
+
+  return [_attr, ref];
+}
+```
+
+**【实际测试结果】**：
+
+- 测试结果
+  - 注释`_setV(Date.now());`，拖动 sfc 区域窗口大小，确实一直在打印`设置 _refElemnt.current :>> `，即更新了`_refElemnt.current`，但是只有`useRef.current`的改变，不会触发 useMemo 的更新，也不会触发重新 render。
+  - 保留`_setV(Date.now());`，拖动 sfc 区域窗口大小，一直在打印`设置 _refElemnt.current :>> `，即更新了`_refElemnt.current`，触发了监听`_refElemnt.current`的 useMemo 的更新，也触发了重新 render。
+  - 综上所述，==**若只有`.current`改变，不会引起 useMemo 的更新和重新 render。若`.current`改变的同时伴随着 state 的改变，才会引起 useMemo 的更新和重新 render**==。
+
+**【`.current`需要放入 useMemo 的依赖数组中吗】**：
+如下代码，useMemo 中使用到的`.current`，
+
+- **若依赖数组中有 state`-v`，则不需要加入依赖数组，state`-v`改变后，打印的`_refElemnt.current`是最新的值**。如下代码。
+
+```tsx
+const _attr: _htmlAttr | null = useMemo(() => {
+  console.log("useNode :>> _attr :>> 重新计算");
+  console.log("_______refElemnt.current :>> ", _refElemnt.current);
+  console.log("______v :>> ", _v);
+  if (_refElemnt.current) {
+    return JSON.parse(JSON.stringify(_refElemnt.current));
+  }
+  return {};
+}, [_v]);
+```
+
+- **若依赖数组中没有任何 state，则`_refElemnt.current`必须加入依赖数组，这样 hook 中若有 state 发生改变重新 render 时，会触发 useMemo 的更新，如下代码**。
+
+```tsx
+const _attr: _htmlAttr | null = useMemo(() => {
+  console.log("useNode :>> _attr :>> 重新计算");
+  if (_refElemnt.current) {
+    return JSON.parse(JSON.stringify(_refElemnt.current));
+  }
+  return {};
+}, [_refElemnt.current]);
+```
+
+## state 状态 vs ref 引用
 
 考虑这样一个场景:咱们想要计算组件渲染的次数。
 
@@ -977,13 +1075,13 @@ function CountMyRenders() {
 
 单击几次按钮来触发重新渲染。每次渲染组件时，countRenderRef 可变引用的值都会使`countRenderRef.current ++`递增。 重要的是，更改不会触发组件重新渲染。
 
-### 保存状态用 state 还是 ref？
+## 保存状态用 state 还是 ref？
 
 - **只在函数事件中用到的数据**就用 ref。
 - **只要`render`中用到的数据**就用 state (即更新后页面会发生变化)。
 - **若更新 `ref.current`的事件中同时有`setState`更新其它 `state` 的操作**，这种情况也是可以用 `ref` 保存状态数据：事件触发才会显示的一些状态。比如打开新增、复制不同弹窗，配置的弹窗数据（title，表单控件） 可以用 ref 保存，因为在更新 ref 的同时也控制了弹窗的显隐 `visible` 状态的变化，`state`更新能引起页面的重新渲染，自然就能使用到最新的 `ref.current` 了。
 
-### input 绑定设置 ref 后获取、设置值
+## input 绑定设置 ref 后获取、设置值
 
 > **实例一： 非受控 input 获取值、设置值**
 
@@ -1087,7 +1185,7 @@ return (
 );
 ```
 
-## useContext 【使用共享状态】
+# useContext 【使用共享状态】
 
 > **作用**：
 > 作用参考 class 组件中的 context
@@ -1218,7 +1316,7 @@ export const ResourceItem = React.memo(
 ）
 ```
 
-## useReducer【类似 redux】
+# useReducer【类似 redux】
 
 > **使用场景：**
 > 在某些场景下，useReducer 会比 useState 更适用，**当 state 是一些逻辑较复杂且包含多个子值的状态**，或者下一个 state 依赖于之前的 state 等等的特定场景，我们就可以用这个钩子来代替 useState，它的工作方式犹如 Redux。
@@ -1287,7 +1385,7 @@ const List = () => {
 };
 ```
 
-## useImperativeHandle【使用子组件暴露的属性/方法】
+# useImperativeHandle【使用子组件暴露的属性/方法】
 
 > **作用**：
 > useImperativeHandle：配合 forwardRef 使用，可以让你在使用 ref 时，自定义暴露给父组件的实例值，不能让父组件想干嘛就干嘛，**可以让我们在父组件调用到子组件暴露出来的属性/方法。**
@@ -1361,7 +1459,7 @@ export default Parent;
 
 总结：类似于 vue 在组件上用 ref 标志，然后 this.$refs.xxx 来操作 dom 或者调用子组件值/方法，只是 react 把它“用两个钩子来表示”。
 
-### forwardRef
+## forwardRef
 
 > React.forwardRef：要访问的是一个组件，操作组件里的具体 DOM 或者访问暴露出的属性方法，我们就需要用到 **React.forwardRef 这个高阶组件，来转发 ref。**
 
@@ -1410,7 +1508,7 @@ function Parent() {
 }
 ```
 
-## useLayoutEffect【完成副作用操作，会阻塞浏览器绘制】
+# useLayoutEffect【完成副作用操作，会阻塞浏览器绘制】
 
 > **用途：**
 > useLayoutEffect：其函数签名与 useEffect 相同，**但它会在所有的 DOM 变更之后同步调用 effect。可以使用它来读取 DOM 布局并同步触发重渲染**。在浏览器执行绘制之前，useLayoutEffect 内部的更新计划将被同步刷新。也就是说它会阻塞浏览器绘制。所以尽可能使用 useEffect 以避免阻塞视觉更新。
