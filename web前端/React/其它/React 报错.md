@@ -87,3 +87,5 @@ HTML 实体必须被转义
 # Uncaught DOMException: Failed to execute 'insertBefore' on 'Node': The node before which the new node is to be inserted is not a child of this node.
 
 插入节点，跟 react 底层 diff 相关，很可能是 JSX 块的问题。详见`Antv/X6`实例。
+
+- [React-issue-Failed to execute 'insertBefore' on 'Node' #13278](https://github.com/facebook/react/issues/13278)

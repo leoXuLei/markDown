@@ -1,4 +1,20 @@
-## 如何引入全局的静态依赖
+# Umi 配置
+
+## `Hash`
+
+配置是否让生成的文件包含 hash 后缀，通常用于增量发布和避免浏览器加载缓存。
+
+启用 hash 后，产物通常是这样，ps: html 文件始终没有 hash。
+
+```bash
++ dist
+  - logo.sw892d.png
+  - umi.df723s.js
+  - umi.8sd8fw.css
+  - index.html
+```
+
+# 如何引入全局的静态依赖
 
 ```js
 // src\pages\document.ejs
@@ -207,7 +223,7 @@ function mapActionProps(dispatch: any) {
 export default connect(mapStateProps, mapActionProps)(Login);
 ```
 
-## umi api
+## Umi Dva 相关 api
 
 ```ts
 // useSelector：以hooks 的方式获取部分数据
@@ -216,6 +232,60 @@ export default connect(mapStateProps, mapActionProps)(Login);
 const dogServState = useSelector((_: any) => _.dogServ);
 
 // dispatch同样也能通过useDispatch以hooks的方式获取使用dispatch
+```
+
+## 问题
+
+### `effects` 中使用 `yield call/put` 当请求 Promise 报错后，后续不会再走了
+
+**【问题描述】**
+
+如下，循环调用获取狗状态接口。但是只要获取狗状态接口返回 403 之后，就不会再循环调用了。
+
+**【问题原因】**
+
+原因是如果 yield call 调用的是一个 Promise 对象，那只有在 Promise 返回的是 resolve 情况下，下面跟着的 yield put 及后面的代码才会执行，若返回了 reject 则后面的代码不会执行。并且再次 dispatch 也无效。
+
+**【解决方法】**
+
+用 `try catch` 包裹 `yield` 语句即可解决。
+
+```tsx
+const fetchRecipeEditorDogRight = useMemoizedFn(() => {
+  props?.fetchRecipeEditorDogRight?.();
+  dogRightTimerRef.current = setTimeout(() => {
+    fetchRecipeEditorDogRight();
+  }, 1000 * 5);
+});
+
+function mapActionProps(dispatch: any) {
+  return {
+    fetchRecipeEditorDogRight: () => {
+      dispatch({
+        type: 'dogServ/fetchRecipeEditorDogRight',
+      });
+    },
+
+  };
+}
+
+*fetchRecipeEditorDogRight({ payload }: any, { call, put }: any): any {
+  try {
+    const recipeEditorDogRightRes = yield call(getRecipeEditorDogRight, {
+      ...payload,
+    });
+    yield put({
+      type: 'setDogRightInfo',
+      payload: {
+        dogRightInfo: recipeEditorDogRightRes,
+      },
+    });
+  } catch (error) {
+    console.log('error', error);
+  }
+}
+
+
 ```
 
 # **国际化功能**

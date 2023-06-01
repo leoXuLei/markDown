@@ -1,4 +1,4 @@
-## Row Col
+# Row Col
 
 ![rowCol](../imgs/rowCol.png)
 
@@ -39,7 +39,45 @@
 </Row>
 ```
 
-## Modal
+## Row 设置 Gutter 后水平栅格间隔没有生效
+
+**【问题描述】**：
+
+- 通过给`:global(.ant-col)`设置样式能生效，但是还是没有水平间隔
+
+**【解决方法】**：
+
+- 通过给`<Clo />`的子元素设置样式（`border`），发现水平间隔正常了。
+
+```tsx
+// .AntdColInner {
+//     border: 1px solid #bfbfbf;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//   }
+
+const keys = useMemo(() => {
+  return [
+    NUMBER_KEYS_CONFIG,
+    COMPARISON_KEYS_CONFIG,
+    MATH_KEYS_CONFIG,
+    LOGIC_KEYS_CONFIG,
+  ].map((configList, index) => (
+    <Row gutter={[8, 8]} key={index}>
+      {configList?.map((configItem) => (
+        <Col key={configItem.bindKey} span={configItem.span}>
+          <div className={styles.AntdColInner}>{configItem.title}</div>
+        </Col>
+      ))}
+    </Row>
+  ));
+}, []);
+```
+
+# Modal
+
+弹窗内容中的元素的 `className` 如果要想生效，Modal 必须设置`wrapClassName={styles.StepConfigModal}`，且`.less`文件中 className 需要写在`styles.StepConfigModal`下。
 
 ```js
 <Modal
@@ -64,7 +102,7 @@
 </Modal>
 ```
 
-## Popover
+# Popover
 
 - 如何修改 antd 中 popover 自带的样式，通过`overlayClassName`属性
 - popover/ToolTip 设置在 root 标签外面，如何设置样式，

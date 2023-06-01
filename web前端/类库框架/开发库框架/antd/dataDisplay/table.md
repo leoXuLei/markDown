@@ -1,21 +1,21 @@
-### rowSelection
+# rowSelection
 
 | 参数             | 说明                                             | 类型             | 备注                                                                     |
 | ---------------- | ------------------------------------------------ | ---------------- | ------------------------------------------------------------------------ |
 | getCheckboxProps | 选择框的默认属性配置（如让某条 record 不能勾选） | Function(record) | `getCheckboxProps: record => ({ disabled: record.status === '已推送' })` |
 
-### 树形数据展示 可展开
+## 树形数据展示 可展开
 
 [链接](https://3x.ant.design/components/table-cn/#components-table-demo-expand-children)
 ![tableColumnsFilters](../imgs/table-expand.png)
 
-### Column
+# Column
 
 | 参数    | 说明             | 类型     | 备注 |
 | ------- | ---------------- | -------- | ---- |
 | filters | 表头的筛选菜单项 | object[] |
 
-#### sorter 排序
+## sorter 排序
 
 - 假分页排序（前端排序）
 
@@ -108,12 +108,12 @@ public onChange = ({ current, pageSize }, filter, { order, field }) => {
 </SmartTable>
 ```
 
-##### 排序概念
+### 排序概念
 
 - 用 DESC 表示按倒序排序(即：从大到小排序) ---降序排列
 - 用 ASC 表示按正序排序(即：从小到大排序)---升序排列
 
-#### filters 表头的筛选菜单项
+## filters 表头的筛选菜单项
 
 ```js
 const TRADE_CODE_FILTERS_COLUMNS = [
@@ -164,7 +164,7 @@ public onExpandedChange = (pagination, filter, sorter) => {
 ![tableColumnsFilters](../imgs/tableColumnsFilters.png)
 ![tableColumnsFilters1](../imgs/tableColumnsFilters1.png)
 
-#### 列筛选
+## 列筛选
 
 只能筛选当前页面，且相当于是表单中的一个控件
 
@@ -271,7 +271,7 @@ const fetchTable = async (
   }
 ```
 
-## scroll
+# scroll
 
 table 未设置 scroll，则列太多后会超出布局显示，设置`scroll.x`即可
 
@@ -291,9 +291,79 @@ scroll={{
 }}
 ```
 
-## 功能
+# `设置行属性onRow` 用法
 
-### 导出
+**onRow 可设置的事件有单击行、双击行、行右键、鼠标移入行、鼠标移出行**。
+
+以下 api 适用于`onRow`、`onHeaderRow`、`onCell`、`onHeaderCell`。
+
+```tsx
+const _onRow = useMemoizedFn((record: any, index: any) => {
+  return {
+    onClick: () => {
+      if (isSelectedTable) {
+        const rowKey = getRowKeyByRecord(record, idx!);
+        setSelected(rowKey, record, idx);
+        props.select?.extraHandleChange?.(record, idx!);
+      }
+    },
+    onDoubleClick: () => {
+      props.select?.onRowDoubleClick?.(record, idx!);
+    },
+    onContextMenu: (e: MouseEvent) => {
+      props.select?.onRowContextMenu?.(record, idx!, e);
+    },
+    onMouseEnter: () => {}, // 鼠标移入行
+    onMouseLeave: () => {}, // 鼠标移出行
+  };
+});
+```
+
+## 设置单元格属性 `onCell`
+
+```tsx
+  {
+    dataIndex: 'Code',
+    title: 'material.code',
+    showTooltipTitle: true,
+    onCell: () => {
+      return {
+        style: {
+          maxWidth: 100, // 100px没有生效，但是可以让子盒子的宽度变成columnItem的width
+        },
+      };
+    },
+  },
+```
+
+## 列单元格 `onCell`双击事件
+
+```tsx
+{
+// width: item?.width ?? 160,
+// render: () => {}
+
+onCell: (record: any) => onPhaseMatSourceCell(item.dataIndex, record),
+
+}
+
+
+const onPhaseMatSourceCell = useMemoizedFn(
+  (dataIndex: string, record: any) => ({
+    onDoubleClick: (event: any) => {
+      if (['materialName', 'materialCode'].includes(dataIndex)) {
+        onClickMenuSelect();
+      }
+    },
+  }),
+);
+
+
+```
+
+# 功能
+
+## 导出
 
 ```js
 public getColumns = async () => {
@@ -328,17 +398,17 @@ public getColumns = async () => {
 };
 ```
 
-## 问题
+# 问题
 
-### 嵌套子表格 和 固定列 错位问题
+## 嵌套子表格 和 固定列 错位问题
 
 antd 3.x 的 bug， 4.x 已经解决
 
-### 唯一 rowKey 设置的不符合
+## 唯一 rowKey 设置的不符合
 
 - 若`rowKey={record.id}` ，而两条 record 的 id 又一样，第一次渲染没问题，再次更新 dataSource 时，就会出现其中一条 record 一直存在 table 中无法删除的问题，除非组件卸载。
 
-#### table 数据 dataSource 改变了但是界面未更新
+### table 数据 dataSource 改变了但是界面未更新
 
 table 缺少 rowKey 造成的
 
@@ -347,6 +417,6 @@ table 缺少 rowKey 造成的
 rowKey={record => record.operateTime + record.productCode}
 ```
 
-### column 对应的 key 在 record 的某个属性的下面
+## column 对应的 key 在 record 的某个属性的下面
 
 不需要处理，render 的时候多取一级即可。

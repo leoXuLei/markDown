@@ -439,9 +439,9 @@ class Location {}
 
 在 `Control` 类内部，是允许通过 `SelectableControl` 的实例来访问私有成员 `state` 的。 实际上， `SelectableControl` 接口和拥有 `select` 方法的 `Control` 类是一样的。 `Button` 和 `TextBox` 类是 `SelectableControl` 的子类（因为它们都继承自 `Control` 并有 `select` 方法），但 `Image` 和 `Location` 类并不是这样的。
 
-## Tip
+# Tip
 
-### 使用接口的某个属性类型
+## 使用接口的某个属性类型
 
 ```ts
 /** 任务模板-基础类型 */

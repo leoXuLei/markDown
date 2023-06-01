@@ -213,9 +213,38 @@ setSprintIdList((prev) => {
 });
 ```
 
-- > 【2】一个 state 受另一个 state 影响用 useEffect 去监听去处理，一个值受另一个 state 影响用 useMemo 去监听去处理，（state 是会有主动更新的，值是只有被动更新的）
+- > 【2】**`useState`函数式写法中不能再直接 setState 别的状态**
 
-- > 【3】**一个 state 状态：B 只有某些情况才随着另一个 state 状态：A 的变化而变化:**
+像【4】那样，通过调用函数间接更新 state 是可以的。
+
+```tsx
+// 正确写法
+const onSetOperateNodes = useMemoizedFn((id) => {
+  console.log("sfc设置::> setCurOperateNodeId", id);
+  if (curOperateNodeId === id) {
+    setOperateNodeFlag((prevState) => !prevState);
+  }
+  setCurOperateNodeId(id);
+});
+```
+
+```tsx
+// 有问题写法，也能打印console，但是改变了setOperateNodeFlag，没有引起监听operateNodeFlag的useMemo的更新
+const onSetOperateNodes = useMemoizedFn((id) => {
+  console.log("sfc设置::> setCurOperateNodeId", id);
+  setCurOperateNodeId((prevState) => {
+    if (id === prevState) {
+      console.log("进来了");
+      setOperateNodeFlag((prevState) => !prevState);
+    }
+    return id;
+  });
+});
+```
+
+- > 【3】一个 state 受另一个 state 影响用 useEffect 去监听去处理，一个值受另一个 state 影响用 useMemo 去监听去处理，（state 是会有主动更新的，值是只有被动更新的）
+
+- > 【4】**一个 state 状态：B 只有某些情况才随着另一个 state 状态：A 的变化而变化:**
 
   使用 setState 的`(prev) => {... return xxx}`形式去更新 A，并在其中判断情况去更新 B
 
@@ -250,7 +279,7 @@ const retSelectProject = useCallback(() => {
 }, [context.project, onSelectProject]);
 ```
 
-- > 【4】**相关数据合并使用单个 state 对象**
+- > 【5】**相关数据合并使用单个 state 对象**
 
 在使用 state 之前，**我们需要考虑状态拆分的「粒度」问题。如果粒度过细，代码就会变得比较冗余。如果粒度过粗，代码的可复用性就会降低**。那么，到底哪些 state 应该合并，哪些 state 应该拆分呢？我总结了下面两点：
 
@@ -267,7 +296,7 @@ const retSelectProject = useCallback(() => {
 onChange={e => setFormData(prev => ({ ...prev, username: e.target.value }))}
 ```
 
-- > 【5】**子组件调用父组件的 setState 函数**
+- > 【6】**子组件调用父组件的 setState 函数**
 
 Class 写法参考`异步编程/父子组件函数等待异步调用完成`
 
@@ -283,7 +312,7 @@ onModalCancel((pre) => ({
 }));
 ```
 
-- > 【6】**模拟 setState 第二个参数回调函数**
+- > 【7】**模拟 setState 第二个参数回调函数**
   > ==正常是没有这个场景的，很可能是因为状态管理、代码组织的有问题==
 
 期望是更新状态后，后续执行函数里面用的状态是最新的，其实并不是，这时候状态还没更新。
@@ -335,7 +364,7 @@ useEffect(() => {
   }, [resetFlag]);
 ```
 
-- > 【7】**我依赖了某些值，但是我不要在初始化就执行回调方法，我要让依赖改变再去执行回调方法**
+- > 【8】**我依赖了某些值，但是我不要在初始化就执行回调方法，我要让依赖改变时去执行回调方法**
   > 借助 useRef 钩子解决。
 
 ```jsx
@@ -1556,6 +1585,12 @@ export default LayoutEffectTest;
 - [useLayoutEffect](https://juejin.cn/post/6844903985338400782)
 
 # Tips
+
+## Hook 的执行顺序
+
+如`规则`中描述的 hook 的渲染是通过“依次遍历”来定位每个 hooks 内容的。即顺序执行的。
+
+由于 hook 组件中，前后多个 useEffect 是从上到下，顺序执行的。所以如果在前面的 useEffect 中做了同步操作（比如设置 ref 的值，`phaseBindMatInfoRef.current = xxx;`）。那么在后面的 useEffect 中是可以获取到最新的值的（`phaseBindMatInfoRef.current`）。
 
 ## useState 和 useRef 的区别
 
