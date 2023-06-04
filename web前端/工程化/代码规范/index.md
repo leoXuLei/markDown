@@ -1443,6 +1443,16 @@ async function getCleanCodeArticle() {
 }
 ```
 
+# 导出规范
+
+- `src/components/index`导出组件
+
+```tsx
+export * from "./common";
+export { default as NormalForm } from "./normal-form";
+export { default as ModalForm } from "./modal-form";
+```
+
 # 错误处理
 
 - **不要忽略抛异常**

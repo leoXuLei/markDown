@@ -386,6 +386,7 @@ useEffect(() => {
 
 > **作用**：
 > Effect Hook 可以让你在函数组件中执行副作用操作，何时执行：**默认情况下，它在第一次渲染之后和每次更新之后都会执行，React 保证了每次运行 effect 的同时，DOM 都已经更新完毕。**
+>
 > 副作用：数据获取，设置订阅以及手动更改 React 组件中的 DOM 都属于副作用
 
 > **本质**：
@@ -486,6 +487,62 @@ useEffect(() => {
 
 如果你要使用此优化方式，**请确保依赖数组中包含了所有外部作用域中会随时间变化并且在 effect 中使用的变量，否则你的代码会引用到先前渲染中的旧变量**。
 
+## `return`的清除函数何时执行
+
+> **执行时机：如果组件多次渲染（通常如此），则先执行上一个 effect 中 return 的函数，然后再执行本 effect 中非 return 的函数**
+
+通常，组件卸载时需要清除 effect 创建的诸如订阅或计时器 ID 等资源。要实现这一点，useEffect 函数需返回一个清除函数。
+
+**为防止内存泄漏，清除函数会在组件卸载前执行。另外，如果组件多次渲染（通常如此），则在执行下一个 effect 之前，上一个 effect 就已被清除**。即先执行上一个 effect 中 return 的函数，然后再执行本 effect 中非 return 的函数。
+
+**【`return`清除函数执行时机测试】**
+
+如下，多个配方详情页 Tab 来回切换时，除了第一次挂载，先走 2222，不走 1111，后面每次 recipeDetail 发生变化后，都是先走 1111 所在的清除函数，然后再走 2222。
+
+可以理解成，**`useEffect`内相当于`didMount`和`didUpdate`，`useEffect`内返回的清除函数相当于`willUpdate`**。
+
+```tsx
+useEffect(() => {
+  console.log("每次recipeDetail变化后后走2222");
+  if (!recipeDetail.ID) {
+    return;
+  }
+  // 切换配方详情tab之后，根据ID取curRecipeLatestZoomRef.current，没有设置成初始值
+  curRecipeLatestZoomRef.current = recipeZoomMapRef.current?.[
+    recipeDetail.ID
+  ] || {
+    [SFC_LEVEL.RECIPE]: 1,
+    [SFC_LEVEL.UNIT]: 1,
+    [SFC_LEVEL.OPERATION]: 1,
+    [SFC_LEVEL.PHASE]: 1,
+  };
+
+  console.log("recipeZoomMapRef.current", recipeZoomMapRef.current);
+
+  return () => {
+    console.log("每次recipeDetail变化后先走1111");
+    if (!recipeDetail.ID) {
+      return;
+    }
+    // 切换配方详情tab之前记住curRecipeLatestZoomRef.current
+    recipeZoomMapRef.current = {
+      ...recipeZoomMapRef.current,
+      [recipeDetail.ID]: curRecipeLatestZoomRef.current,
+    };
+  };
+}, [recipeDetail]);
+```
+
+如下，**在监听依赖为空数组的`useEffect`中的清除函数，相当于 `willUnMount`**。
+
+```tsx
+useEffect(() => {
+  return () => {
+    console.log("真的卸载了");
+  };
+}, []);
+```
+
 ## 提示
 
 > 【1】使用多个 Effect 实现关注点分离
@@ -496,13 +553,7 @@ useEffect(() => {
 
 **Hook 允许我们按照代码的用途分离他们**， 而不是像生命周期函数那样。React 将按照 effect 声明的顺序依次调用组件中的每一个 effect。
 
-> 【2】**清除 effect**
-
-通常，组件卸载时需要清除 effect 创建的诸如订阅或计时器 ID 等资源。要实现这一点，useEffect 函数需返回一个清除函数。
-
-**为防止内存泄漏，清除函数会在组件卸载前执行。另外，如果组件多次渲染（通常如此），则在执行下一个 effect 之前，上一个 effect 就已被清除**。即先执行上一个 effect 中 return 的函数，然后再执行本 effect 中非 return 的函数。在上述示例中，意味着组件的每一次更新都会创建新的订阅。若想避免每次更新都触发 effect 的执行
-
-> 【3】**effect 的执行时机**
+> 【2】**effect 的执行时机**
 
 详细见[官网](https://zh-hans.reactjs.org/docs/hooks-reference.html#usestate)
 
@@ -1800,6 +1851,93 @@ function App() {
   );
 }
 export default App;
+```
+
+## 事件中更新了最新 state，后续事件中能拿到最新值？
+
+`ListSelect` 弹窗组件为了方便快速选择，除了要支持正常的单击选中，点击确定提交功能外，还期望支持双击快速提交功能。Tree 控件也是期望如此。
+
+`ListSelect` 组件代码如下，自定义的 List 每个元素是 div，本身就有`onDoubleClick`事件。且双击事件触发之前是会先触发两次单击事件，开始还担心单击事件设置了`setSelectedItem(item)`，触发双击事件时候直接调用`handleOk()`中的`selectedItem`不是单击中设置的最新的，经过测试发现是最新的设置的值，可以推测一下：**事件中更新状态`stateA`，后续事件中若使用到`stateA`，值会是最新设置的值**。
+
+```tsx
+// ListSelectModal
+
+const ListSelectModal = () => {
+  const [selectedItem, setSelectedItem] = useState<IOption>();
+
+  // 弹窗onOk事件
+  const handleOk = useMemoizedFn(async () => {
+    if (!selectedItem) {
+      return;
+    }
+    onSubmit(selectedItem);
+  });
+
+  const onDoubleClickSubmit = useMemoizedFn((item) => {
+    handleOk();
+  });
+
+  return (
+    <div className={styles.ListContainer}>
+      {filteredList.map((item) => (
+        <div
+          key={item.value}
+          className={classNames(
+            styles.ListItem,
+            selectedItem?.value === item?.value && styles.Selected
+          )}
+          // eslint-disable-next-line react/jsx-no-bind
+          onClick={() => setSelectedItem(item)}
+          // eslint-disable-next-line react/jsx-no-bind
+          onDoubleClick={() => onDoubleClickSubmit(item)}
+        >
+          {item.label}
+        </div>
+      ))}
+    </div>
+  );
+};
+```
+
+```tsx
+const ProcedureAndRunningStateSelect = () => {
+  const onTreeSelect = useMemoizedFn(
+    (selectedKeysValue: string[], info: any) => {
+      console.log("单击:: >>", selectedKeysValue, info);
+      // 取消选择则直接return
+      if (!selectedKeysValue?.length) {
+        return;
+      }
+      // 保存选择的配方程序及描述
+      setSelectedKeys(selectedKeysValue);
+      selectedProcedureDescRef.current =
+        info?.node?.title?.split?.("]")?.[1] || "";
+    }
+  );
+
+  // 直接调用Modal的提交函数即可，单击单选的onTreeSelect中设置的状态和ref数据再modal的提交函数中能都读取到。
+  const onTreeDoubleSelect = useMemoizedFn(() => {
+    onSubmitSelectModal();
+  });
+
+  return (
+    <TreeSelectModal
+      title="otherInfo.pleaseSelectRecipeProgram"
+      width={400}
+      visible={showSelectRecipeProceducre}
+      treeData={handledTreeData}
+      selectedKeys={selectedKeys}
+      // onSelect和onDoubleSelect最终会传递到最底层组件的Tree中
+      onSelect={onTreeSelect}
+      onDoubleSelect={onTreeDoubleSelect}
+      onOk={onSubmitSelectModal}
+      onCancel={handleCloseModal}
+    />
+
+    // 传递到最底层组件的Tree中
+    // onDoubleClick={onDoubleSelect as any}
+  );
+};
 ```
 
 # 配置

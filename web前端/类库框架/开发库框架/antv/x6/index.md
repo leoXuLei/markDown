@@ -1,4 +1,244 @@
-## X6 设置 scroll 滚动条后页面崩溃
+# 文档
+
+## 进阶实践
+
+【自定义边】
+可以设置`pointEvents`，设置边不能选中，就能解决边挡住自定义节点导致自定义节点不能选中的问题。
+
+【使用标签 Labels】
+
+- 标签位置
+- 标签样式
+
+```tsx
+const Jump = Shape.Edge.define({
+  shape: "jump",
+  label: {
+    position: {
+      // 指定标签的位置，默认值为0.5表示标签位于边长度的中心位置。
+      distance: 1,
+      // 设置指定标签（位置）的偏移量
+      offset: {
+        x: 25,
+        y: -15,
+      },
+    },
+  },
+  attrs: {
+    text: {
+      fill: "#333333",
+      fontSize: 14,
+      // ref: 'wrap',
+      // refX: 25,
+      // refY: '100%', // 设置refY无效
+      // refY2: -20,
+      text: "aaa",
+    },
+    wrap: {
+      connection: true,
+      strokeWidth: size * 2,
+      strokeLinejoin: "round",
+    },
+    line: {
+      connection: true,
+      stroke: "#333333",
+      // strokeDasharray: `${size} ${size}`,
+      strokeWidth: 2,
+      strokeLinejoin: "round",
+      targetMarker: {
+        name: "block",
+        tagName: "path",
+        strokeWidth: 2,
+        // d: 'M 1 0 -1 0',
+        // d: 'M 10 -5 0 0 10 5 Z',
+      },
+    },
+  },
+  connector: {
+    name: "curve",
+  },
+  propHooks(metadata) {
+    const { desc, target } = metadata;
+    // const { y: targetY } = (target || {}) as any;
+    if (desc) {
+      ObjectExt.setByPath(metadata, "attrs/text/text", desc);
+    }
+    return metadata;
+  },
+});
+```
+
+# 自定义节点
+
+## `基类Cell`自定义节点
+
+```tsx
+// import React from 'react'
+import { ObjectExt } from "@antv/x6";
+import Base, { fmtEllipsisObjToInLineStyle } from "./base";
+
+const size = 40;
+const Transition = Base.define({
+  shape: "transition",
+  width: size * 4.5,
+  height: 18,
+  zIndex: 100, // 节点/边在画布中的层级，默认根据节点/边添加顺序自动确定
+
+  // 指定了渲染节点/边时使用的SVG/HTML 片段，使用JSON格式描述
+  markup: [
+    {
+      tagName: "rect",
+      selector: "body",
+    },
+    {
+      tagName: "rect",
+      selector: "show",
+    },
+    {
+      tagName: "text",
+      selector: "label",
+    },
+    {
+      tagName: "foreignObject",
+      selector: "description",
+    },
+  ],
+  attrs: {
+    body: {
+      "fill-opacity": 0,
+      "stroke-opacity": 0,
+    },
+    show: {
+      width: size,
+      height: 4,
+      x: 0,
+      "fill-opacity": 1,
+      fill: "#ff00ff",
+    },
+    label: {
+      fontSize: 16,
+      fill: "#333333",
+      refX: -10,
+      refY: 3,
+      ref: "show",
+      // x: -12,
+      // y: 3,
+      textAnchor: "end",
+      textVerticalAnchor: "middle",
+    },
+    description: {
+      fontSize: 12,
+      refX: 0,
+      refY: 0,
+      x: size + 12,
+      y: 3,
+      textAnchor: "left",
+      textVerticalAnchor: "middle",
+    },
+    empty: {
+      width: size * 3.5,
+      height: 4,
+      x: size,
+      fill: "transplant",
+      strokeWidth: 0,
+      stroke: "orange",
+    },
+  },
+  ports: {
+    items: [
+      {
+        id: "in",
+        group: "in",
+        args: {
+          x: size / 2,
+          y: 0,
+        },
+      },
+      {
+        id: "out",
+        group: "out",
+        args: {
+          x: size / 2,
+          y: 4,
+        },
+      },
+    ],
+  },
+  propHooks(metadata) {
+    const { description, ordinal, condition } = metadata;
+    const styleStr = fmtEllipsisObjToInLineStyle(
+      {
+        width: `${size * 3}px`,
+      },
+      2
+    );
+
+    if (description || condition) {
+      const text = description || condition;
+      ObjectExt.setByPath(
+        metadata,
+        "attrs/description/html",
+        `
+        <body xmlns="http://www.w3.org/1999/xhtml">
+          <div style="${styleStr}" title="${text}">${text}</div>
+        </body>
+      `
+      );
+    }
+    if (ordinal) {
+      ObjectExt.setByPath(
+        metadata,
+        "attrs/label/text",
+        `T${Number(ordinal) + 1}`
+      );
+    }
+    return metadata;
+  },
+});
+
+export default Transition;
+```
+
+#### markup
+
+```tsx
+interface JSONMarkup {
+  // 与tagName对应的元素命名空间，默认使用SVG元素命名空间 `"http://www.w3.org/2000/svg"`，当tagName指定的标签时HTML元素时，需要使用HTML元素的命名空间`"http://www.w3.org/1999/xhtml"`
+  ns?: string | null;
+
+  // SVG/HTML元素标签名
+  tagName: string;
+
+  // SVG/HTML元素的唯一标识，通过该唯一标识为该元素指定属性样式。
+  selector?: string | null;
+
+  // 群组选择器，通过群组选择器可以为该群组对应的多个元素指定样式。
+  groupSelector?: string | string[] | null;
+
+  // 该SVG/HTML元素的默认属性键值对，通常用于定义那些不变的通用属性，这些默认样式也可以在实例化节点时被覆盖。markup的attrs属性只支持原生的SVG属性，X6的自定义属性在这里不可用。
+  attrs?: Attr.SimpleAttrs;
+
+  // 该SVG/HTML元素的行内样式键值对
+  style?: JQuery.PlainObject<string | number>;
+  // 该SVG/HTML元素的css样式名
+  className?: string | string[];
+  children?: JSONMarkup[];
+  // 该SVG/HTML元素的文本内容
+  textContent?: string;
+}
+```
+
+#### attrs
+
+attrs 选项是一个复杂对象，该对象的 key 是节点中 SVG 元素的选择器（Selector），对应的值是应用到该 SVG 元素的 SVG 属性值（如 fill 和 stroke）。
+
+选择器（Selector）通过节点的 markup 确定，如 Shape.Rect 节点定义了'body'（代表<rect>元素）和'label'（代表<text>元素）两个选择器。
+
+另外，我们还可以使用 CSS 选择器来指定节点样式，这样我们就不用记住预定的选择器名称，只需要根据渲染后的 DOM 结构来定义样式即可。使用 CSS 选择器时需要注意，指定的 CSS 选择器可能选中多个元素，这时对应的属性样式将同时应用到多个元素中。
+
+# `【问题】`
+
+# X6 设置 scroll 滚动条后页面崩溃
 
 **【问题描述】**
 
@@ -179,7 +419,7 @@ const SFCEditor: FC<SFCEditorPropsOmit> = (props) => {
 export default SFCEditor;
 ```
 
-## X6 设置 scroll 滚动条后画布与视口偏移异常
+# X6 设置 scroll 滚动条后画布与视口偏移异常
 
 **【问题描述】**
 
@@ -301,7 +541,7 @@ graphRef.current = new Graph({
 });
 ```
 
-### gpt QA
+## gpt QA
 
 > **【QA1】**
 
@@ -379,4 +619,337 @@ const graph = new Graph({
 
 // 设置滚动条位置为最左侧和最顶部
 graphRef.current?.setScrollbarPosition(0, 0);
+```
+
+# 多个模板详情渲染 sfc 后，其中一个 sfc 销毁后会对另一个的 sfc 造成样式影响
+
+**【问题描述】**
+
+从 op 模板列表中双击出来两个 op 模板详情 Tabpane，都点到 op 根节点，然后第一个模板详情切换到 phase 节点后，第二个模板详情的 sfc 流程图中的节点都没有节点名称和转换条件描述了，且通过`chrome-Elements`发现是有 Html 元素的，只是没有渲染成功。
+
+**【问题原因】**
+
+原因是`.x6-node foreignobject {}`这个选择器的样式消失了，SFC 渲染正常时 通过`chrome-Elements` 可以看到 X6 专属全局样式`html-head-style`中有`.x6-graph 等`相关样式，但是在第一个模板详情从 op 根节点切换到 phase 节点时，这整个 style: `html-head-style`都会消失，消失后在任意一个 op 模板详情重新点击回到 op 根节点，又会重新加载`html-head-style`以及`.x6-graph`相关样式，此时 sfc 流程图中的节点名称和转换条件描述就会正常渲染.
+
+**【分析过程】**
+
+- 猜测一：**sfc 重新渲染导致时没有渲染成功**（已排除）
+  - 除了 sfc 字符串变化或者 selectKey 变化引起工序页面重新渲染，size 变化也会引起重新渲染，所以把 size 相关逻辑注释，size 写死，重新操作，根据打印，可以发现工序页面没有重新 render，GraphView 也没有重新 render，但是从 op 根节点切换到 phase 节点后，问题依然出现。
+  - 所以可以排除是因为 react 数据原因导致的样式加载失败。
+- 猜测二：**GraphView 组件内部的 X6 内部变化导致的** （已确定）
+  - 第一个模板详情从 op 根节点切换到 phase 节点时，发生了什么？sfc 渲染模块会销毁，即 GraphView 组件会卸载，果然去组件中发现初始化 graph 的 useEffect 中卸载时会执行如下的清除函数。销毁画布以及回收资源。猜测就是因为回收了全局的 X6 样式资源，导致其它模板详情正在渲染的 sfc 的 foreignobject 下的元素样式类没有生效。
+  ```jsx
+  return () => {
+    // 可以调用graph.dispose方法进行画布的销毁以及资源的回收
+    graphRef.current?.dispose();
+    graphRef.current = null as any;
+    sfcInfo.current = null as any;
+    containerRef.current = null as any;
+  };
+  ```
+  - 通过注释`graphRef.current?.dispose();`，重新验证，果然 sfc 能够渲染正常了。
+
+**【解决方法】**
+
+- 1. 查找官网 Graph 相关 api，没有发现 dispose 可以传递参数，或者`new Graph({})`时传递 key。
+- 2. 官网发现官方的 x6 用户使用交流群，加入后在群里描述了问题，负责人回复：可以升级一个版本试试看能不能解决。
+
+  - 查看 sfc 插件项目中的 x6 版本`@antv/x6: 1.11.3`，在 npm 的 X6 发版历史中看到该版本是两年之前的了。确实版本太旧了。
+  - 升级最新版本`2.1.5`发现 api 变化太多，寻找最新的`1.x`版本，是`1.34.6`，官网上也是这个版本，升级`1.34.6`后，在配方编辑器再次测试，发现任一模板详情从 op 根节点切换到 phase 节点时，`chrome-Elements`中`html-head-style`没有消失，**始终是存在的，bug 现象消失，问题解决**。
+
+**【后续影响一】**
+
+发现 sfc 新增、删除节点、扩展分支时，sfc 中的元素都会闪烁一下，（暂未解决）
+
+- 只是闪烁，暂时未发现会影响 sfc 界面的增删改。先不管。
+
+**【后续影响二：画布拖动失效】** （已经解决）
+
+已经设置了画布拖动，但是没有效果，通过对比 131 机器上的之前版本，发现拖动的 class 类名也没有设置到`.x6-graph`这个元素上。
+
+- 2.1 分析问题，在 GraphView 中打印如下
+
+```tsx
+useEffect(() => {
+  let currentPanning = graphRef.current?.isPannable() || false;
+  console.log("panning", panning); // 打印panning值为undefined，因为props没有传入
+  // 如下打印值：调用graphapi: 画布是否可以平移，打印值为true
+  console.log("graphRef.current?.isPannable()", graphRef.current?.isPannable());
+  if (currentPanning !== panning) {
+    graphRef.current?.togglePanning(panning);
+  }
+}, [panning]);
+```
+
+- 2.2 打印`graphRef.current?.isPannable()`值是 true，但是 sfc 画布任然不能拖动。
+- 2.3 查看官网 api，百度搜索`antv X6 画布设置拖动不生效`问题，查询测试搞了三个小时左右，任然没有进展。
+- 2.4 将问题向保哥描述，让我在 Graph 渲染完成的回调中再次打印`graphRef.current?.isPannable()`，发现值是 false，说明开始渲染时候拖动设置为 true 了，但是渲染结束的时候又变成了 false，说明中间某个过程将值从 true 变成了 false。如上面代码，可以发现，有个`if(currentPanning!==panning)`的判断处理，currentPanning 为 true，panning 没有传入值即为 undefined，if 一定会进入，然后执行了`graphRef.current?.togglePanning(panning);`切换画布能否拖动的设置值，传入的 panning 为 false，意思就是将画布设置成不能拖动，所以在下面的 Graph 渲染完成的回调中打印值是 false。
+
+```tsx
+graphRef.current.on("render:done", () => {
+  setRenderDone(true);
+  // 如下打印值：调用graphapi: 画布是否可以平移，打印值为false
+  console.log("graphRef.current?.isPannable()", graphRef.current?.isPannable());
+});
+```
+
+- 2.5 将上上面代码修改如下，画布不能拖动问题即可解决。即 panning 为 undefined 时，togglePanning 函数传入 true，即默认画布是支持拖动的。
+
+```tsx
+useEffect(() => {
+  let currentPanning = graphRef.current?.isPannable() || false;
+  if (currentPanning !== panning) {
+    graphRef.current?.togglePanning(panning ?? true);
+  }
+}, [panning]);
+```
+
+- 2.6 那为什么 x6 是`1.11.3`版本时候，`graphRef.current?.togglePanning(panning)`，即传入值为 undefined，也能将画布设置成支持拖动呢，**说明 x6 `1.34.6`版本时，`togglePanning`函数的内部实现已经发生了变化，之前传入 undefined，内部有默认值 true，现在传入 undefined，内部不再有默认值了，undefined 直接当 false 用了，所以才会将初始化 Graph 时设置好的 true 状态再次修改为 false 状态**。
+- 2.7 收获，分析问题思路不对
+  - 很明显不是 react 数据状态的问题，出题出在 X6 依赖库，所以排查时候，对于调用 X6 拖动相关 api 的地方，要重点注意，很明显有这么一段代码`if(currentPanning!== panning) {graphRef.current?.togglePannin(panning);}`。
+  - 对于以上重点代码，如果能够采用控制变量法，依次的去注释掉、修改参数。肯定是可以自己独立快速解决掉这个问题的。
+- 3. ~~选中 sfc 中的 `recipe、unit、operation` 文字，会报错如下，（发现 131 机器旧版本也有这个问题，所以不需要管）~~
+
+  ```tsx
+  Uncaught Error: 未找到 [801154c4-e413-408b-af14-b175dc3477fe] 操作节点
+  at SFCDataStore.getNodeById (index.js:3024)
+
+  // _this.getNodeById(targetId, '操作')
+  ```
+
+# 拖拽画布后切换左侧 Tree 节点，重新渲染 sfc 再次定位到刚刚拖拽的区域
+
+**【背景】**
+此时 SFC 插件`EditorGraphView`画布只是设置了`panning`: 即画布可以拖动，没有设置`scroll`: 即滚动画布（出现滚动条）
+
+**【`Transform`API】**
+
+- `zoomToRect`：缩放和平移画布，使得 rect 表示的矩形区域充满视口
+- `translate`：获取画布平移量。
+- `fitToContent`：通过平移和重置画布大小，使其适应画布内容，返回画布的矩形区域。
+- `getContentArea`：获取画布内容的矩形区域，使用`画布本地坐标`表示。
+- `getContentBBox`：获取画布内容的矩形区域，使用`画布坐标`表示。
+- centerPoint
+
+```jsx
+// sfc wrapper
+<g class="x6-graph-svg-viewport" transform="matrix(1,0,0,1,-65,-53)">
+  <g class="x6-graph-svg-primer"></g>
+  <g class="x6-graph-svg-stage"></g> // sfc主体
+  <g class="x6-graph-svg-decorator"></g>
+  <g class="x6-graph-svg-overlay"></g>
+</g>
+```
+
+```tsx
+graphRef.current.getContentArea();
+// 返回格式为Rectangle {x: 70, y: 58.5, width: 210, height: 621}
+// 其中(x,y)为Rectangle.topLeft的(x,y)值，
+//    (width,height)为`class="x6-graph-svg-viewport"`的(width,height)
+```
+
+**【实现思路】**
+
+之前每次 sfc 重新渲染时都有个逻辑（如果滚动了，定位到原点），所以这个逻辑执行加个条件即可，即切换左侧 Tree 的 `selectedKey` 才执行。最终实现如下：
+
+```tsx
+const baseKeyChangedRef = useRef<boolean>(false); // baseKey是否发生变化ref
+
+// 第一次不执行（不执行didMount），后续每次依赖更新都执行
+useUpdateEffect(() => {
+  baseKeyChangedRef.current = true;
+}, [baseKey]);
+
+useEffect(() => {
+  // 获取滚动位置
+  const position = graphRef.current?.translate() || { tx: 0, ty: 0 };
+  // position: {tx: -30, ty: -743}
+  if (baseKeyChangedRef.current) {
+    // 如果已滚动,则还原至0
+    if (position.tx !== 0 || position.ty !== 0) {
+      graphRef.current?.translate(0, 0);
+      baseKeyChangedRef.current = false;
+    }
+  }
+}, [
+  // 这里只监听sfcData数据变化,变化后,渲染graphData
+  _sfcDataStr,
+]);
+```
+
+# 每个配方详情页签切换左侧 Tree 节点，各层级 SFC 放大/缩小值保存
+
+**【背景】**
+此时 SFC 插件`EditorGraphView`画布只是设置了`panning`: 即画布可以拖动，没有设置`scroll`: 即滚动画布（出现滚动条）
+
+**【实现思路】**
+
+```tsx
+// batch-sfc\src\sfc\Editor\EditorGraphView.tsx
+
+const EditorGraphView = () => {
+  const baseKeyChangedRef = useRef<boolean>(false); // baseKey是否发生变化ref
+
+  useUpdateEffect(() => {
+    baseKeyChangedRef.current = true;
+  }, [baseKey]);
+
+  // 更新graph 数据
+  useEffect(() => {
+    graphRef.current?.cleanSelection();
+    if (isKeepZoom) {
+      if (keepZoomLevel) {
+        graphRef.current?.zoom(keepZoomLevel, {
+          absolute: true,
+          center: { x: 0, y: 0 },
+        });
+      }
+    } else {
+      const zoom = graphRef.current?.zoom() || 1;
+      // 还原缩放
+      if (zoom > 1 || zoom < 1) {
+        graphRef.current?.zoom(1, { absolute: true, center: { x: 0, y: 0 } });
+      }
+    }
+    // ....
+
+    graphRef.current?.model.fromJSON(graphData);
+  }, [
+    // 这里只监听sfcData数据变化,变化后,渲染graphData
+    _sfcDataStr,
+  ]);
+};
+```
+
+```tsx
+// vxbatch_recipeeditor\src\pages\recipe-detail\process-procedure\index.tsx
+
+type TypeZoomRef = Record<SFC_LEVEL, number>;
+
+const ProcessProcedure = (props, ref) => {
+  // 当前配方详情工序-各层级sfc的zoom
+  const curRecipeLatestZoomRef = useRef<TypeZoomRef>({
+    [SFC_LEVEL.RECIPE]: 1,
+    [SFC_LEVEL.UNIT]: 1,
+    [SFC_LEVEL.OPERATION]: 1,
+    [SFC_LEVEL.PHASE]: 1,
+  });
+
+  // Map: 各配方详情工序的各层级sfc的zoom map
+  const recipeZoomMapRef = useRef<Record<string, TypeZoomRef>>();
+
+  useEffect(() => {
+    if (!recipeDetail.ID) {
+      return;
+    }
+    // 切换配方详情tab之后，根据ID取存储map中的curRecipeLatestZoomRef.current，没有则设置成初始值
+    curRecipeLatestZoomRef.current = recipeZoomMapRef.current?.[
+      recipeDetail.ID
+    ] || {
+      [SFC_LEVEL.RECIPE]: 1,
+      [SFC_LEVEL.UNIT]: 1,
+      [SFC_LEVEL.OPERATION]: 1,
+      [SFC_LEVEL.PHASE]: 1,
+    };
+
+    return () => {
+      if (!recipeDetail.ID) {
+        return;
+      }
+      // 切换配方详情tab之前记住curRecipeLatestZoomRef.current
+      recipeZoomMapRef.current = {
+        ...recipeZoomMapRef.current,
+        [recipeDetail.ID]: curRecipeLatestZoomRef.current,
+      };
+    };
+  }, [recipeDetail]);
+
+  const rememberLatestZoomLevel = useMemoizedFn(() => {
+    const latestZoom = editorControllerRef.current?.getZoom();
+    const handledLatestZoom = Number(latestZoom.toFixed(1));
+    curRecipeLatestZoomRef.current = {
+      ...curRecipeLatestZoomRef.current,
+      [curLevelType]: handledLatestZoom,
+    } as Record<SFC_LEVEL, number>;
+  });
+
+  // SFC-放大
+  const _zoomOut = useMemoizedFn(() => {
+    editorControllerRef.current?.zoom?.(0.2);
+    rememberLatestZoomLevel();
+  });
+
+  // SFC-缩小
+  const _zoomIn = useMemoizedFn(() => {
+    editorControllerRef.current?.zoom?.(-0.2);
+    rememberLatestZoomLevel();
+  });
+
+  // SFC-正常
+  const _zoomNormal = useMemoizedFn(() => {
+    editorControllerRef.current?.zoom?.(1, { absolute: true });
+    rememberLatestZoomLevel();
+  });
+
+  return (
+    <SFCEditor
+      baseKeys={!selectedKeys?.length ? [treeSelectedKey] : selectedKeys}
+      isKeepZoom={true}
+      keepZoomLevel={
+        curRecipeLatestZoomRef.current?.[curLevelType as SFC_LEVEL.RECIPE]
+      }
+      // ....
+    >
+      {(graph, sfcInfo) => (
+        <SFCEditorController
+          ref={editorControllerRef}
+          selectKeys={selectedKeys}
+          graph={graph}
+          sfcInfo={sfcInfo}
+        >
+          <div>
+            <Button.Group>
+              <Button
+                icon={<ZoomInOutlined />}
+                size="middle"
+                onClick={_zoomOut}
+              >
+                放大
+              </Button>
+              <Button icon={<ZoomOutOutlined />} onClick={_zoomIn}>
+                缩小
+              </Button>
+              <Button icon={<RedoOutlined />} onClick={_zoomNormal}>
+                正常
+              </Button>
+            </Button.Group>
+          </div>
+        </SFCEditorController>
+      )}
+    </SFCEditor>
+  );
+};
+```
+
+**【测试】**
+
+配方编辑器测试如下。打开两个配方详情，一个各层级 sfc 层级不断放大，一个各层级 sfc 层级不断缩小，`recipeZoomMapRef.current`打印如下。
+
+且来回切换详情页 tab，及切换各层级，发现都是离开该层级时的缩放值。效果正常。
+
+```tsx
+{
+    "1332541634600010002": {
+        "Recipe": 2,
+        "Unit": 1.4,
+        "Operation": 1,
+        "Phase": 1
+    },
+    "1332533129800010001": {
+        "Recipe": 0.8,
+        "Unit": 0.6,
+        "Operation": 0.4,
+        "Phase": 1
+    }
+}
 ```

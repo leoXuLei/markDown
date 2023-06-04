@@ -180,6 +180,27 @@ const stringifyListData = JSON.stringify([
 ]);
 ```
 
+**【出现新问题】：**
+
+recipeDetail 的长 number 解析又有问题了，Cells 字段，如果值过多，就会解析不成功。原因是换行符。
+
+```jsx
+(config) => {
+      try {
+        const handledConfig = config?.replace?.(
+          /(?<=[:[,])([\s\n\t\r]+)(\d{16,})/g,
+          '"$2"',
+        );
+        // \n\t?\r?
+        return handledConfig && JSON.parse(handledConfig);
+      } catch (e) {
+        console.error({
+          message: 'transformResponse：JSON parsing error',
+        });
+      }
+    },
+```
+
 # Tips
 
 - 报错信息如果有开发文件的话，直接点击进去，在代码中点击左侧即可打断点。

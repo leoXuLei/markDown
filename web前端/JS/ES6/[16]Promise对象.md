@@ -1365,7 +1365,10 @@ Promise.try(() => database.users.get({id: userId}))
 
 ## 父子组件异步任务先后执行问题
 
-> **Promise 父组件等所有子组件数据保存后再刷新数据。**
+- `async` 配合 `await`
+- `setTimeOut`
+
+> **Promise 父组件等所有子组件数据保存后再刷新数据。（`async` 配合 `await`）**
 
 在父组件点击保存数据按钮，代码如下。
 
@@ -1435,6 +1438,27 @@ const promiseTimer = useMemoizedFn(async (ms) => {
 });
 
 await promiseTimer(5000);
+```
+
+> **父子组件，如何在父/子组件中等待调用子/父中的函数后再执行操作。（`setTimeOut`）**
+
+```tsx
+// 通过ref，没有保存数据的tab都要保存下数据
+const saveAllTabsData = useMemoizedFn(() => {
+  // 遍历tabInfoModifiedMap，哪个tab修改过数据，就去调用哪个tab下的submit方法
+  Object.entries(tabInfoModifiedMap).forEach(([tabKey, isTabModified]) => {
+    if (isTabModified) {
+      const curTabRef =
+        tabRefMap[tabKey as ERecipeDetailTabPaneKey.recipeHeader];
+      curTabRef?.current?.handleSubmit?.();
+    }
+  });
+  // 各个子组件保存完数据后，重新获取数据，用setTimeout确保重新获取数据在都保存完之后
+  setTimeout(() => {
+    getDetail();
+    handleIsInfoSaved("all");
+  }, 500);
+});
 ```
 
 # Tips

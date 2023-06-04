@@ -1171,6 +1171,28 @@ PS:假如作者不关闭或者 merge 你的这个 Pull Request，你可以一直
 
 出现上面这种情况的话说明出现冲突了，处理冲突后，git add 和 git commit 走一波即可。
 
+> **`git revert` 后使用 `cherry-pick` 也是可以的**
+
+**【问题描述】**
+
+如下两个分支的提交记录，`sfc的画布由拖动改为滚动条`功能最开始是在`branch_XuLei_SFC分支`上提交的，但是提交后发现不该在此分支提交，于是执行一次`git revert 71185469`回退提交。然后在`branch_XuLei_SFC分支`上新建分支`fix_5.0_bug`。
+
+此时想要在分支`fix_5.0_bug`上加上 commit 为`71185469`的那次提交，也是可以通过`cherry-pick`实现。执行`git cherry-pick 71185469`即可。
+
+```jsx
+// branch_XuLei_SFC分支提交记录
+- Revert "feat: sfc的画布由拖动改为滚动条" // 57fe87be
+- feat: sfc的画布由拖动改为滚动条  // 71185469
+```
+
+```jsx
+// fix_5.0_bug分支提交记录
+- fix: 【转换条件弹窗】空sfc时新增位号表达式时jumpStepId容错 // 8b5de291
+- feat: sfc的画布由拖动改为滚动条 //  087ec2a9
+- Revert "feat: sfc的画布由拖动改为滚动条" // 57fe87be
+- feat: sfc的画布由拖动改为滚动条  // 71185469
+```
+
 # 其它
 
 - [如何删除某次 commit](https://juejin.cn/post/6998320974185627655)

@@ -145,6 +145,12 @@
 - [VS Code 常用快捷键总结](https://www.cnblogs.com/schut/p/10461840.html)
 - [VScode 快捷键（最全）](https://www.cnblogs.com/jpfss/p/10956650.html)
 
+# 使用
+
+- 如何重载项目：`Ctrl+shift+P`，输入`> Reload Project`
+- 如何`TypeScript`重启 TS 服务器：`Ctrl+shift+P`，输入`>restart`
+- 如何`ESLint`重启 ESLint 服务器：`Ctrl+shift+P`，输入`>restart`
+
 # 插件
 
 ## `snippets` 代码片段

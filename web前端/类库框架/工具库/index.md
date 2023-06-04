@@ -420,12 +420,9 @@ useEffect(() => {
 }, [milestones, currentMilestones]);
 ```
 
-# React Hooks
+# uuid
 
-## `ahooks`
-
-- 开始用`ahooks`的`useMemoizedFn`来替换 useCallback，不需要再纠结各种依赖的问题了。提高不少效率。
-
-**【参考链接】：**
-
-- [aHook 官网-useMemoizedFn](https://ahooks.js.org/zh-CN/hooks/use-memoized-fn)
+```jsx
+"7314c08f-444b-4df1-97eb-a2372f2fb348".replace(/[-a-z]/g, "");
+// ("731408444419723722348");
+```

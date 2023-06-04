@@ -160,6 +160,44 @@ obj.123 // 报错
 obj[123] // "hello world"
 ```
 
+### 读取对象属性：`.运算符` vs `[]运算符`
+
+`beCopiedStepItem?.nextLevelKeyName`读取的是`beCopiedStepItem`的`nextLevelKeyName`属性，`nextLevelKeyName`就是属性名。
+
+`beCopiedStepItem?.[nextLevelKeyName]`读取的是`beCopiedStepItem`的`[nextLevelKeyName]`计算之后的字符串对应的属性。`[nextLevelKeyName]的值`才是属性名。
+
+```tsx
+const replaceBeCopiedStepItemPartsPropertyFun = (property: string) => {
+  return beCopiedStepItem?.[nextLevelKeyName]
+    ? property?.replace?.(
+        new RegExp(beCopiedStepItem?.[nextLevelKeyName], "g"),
+        item?.[nextLevelKeyName]
+      )
+    : property;
+};
+```
+
+#### `属性名字符串]`in object`
+
+如下代码，判断 item 中有属性，应该用`"binaryIndex" in item`，而不是`binaryIndex in item`，不然会取`binaryIndex`的值，即判断的是 `1 in item`。
+
+```tsx
+const onCheckBoxChange = useMemoizedFn((e: any, item: any, record: any) => {
+  const { dataIndex, binaryIndex } = item || {};
+  const isChecked = e?.target?.checked;
+  let curSelectedNodeId = selectedKey?.split?.("#")?.[1];
+  if (typeof isChecked !== "boolean" || !curSelectedNodeId) {
+    return;
+  }
+  // xx后释放等五列编辑时，需要重新计算字段releaseFlag的值
+  if (
+    releaseAfterColumnDataIndex?.includes(dataIndex) &&
+    "binaryIndex" in item
+  ) {
+  }
+});
+```
+
 ### 属性的赋值：增
 
 点运算符和方括号运算符，不仅可以用来读取值，还可以用来赋值。
