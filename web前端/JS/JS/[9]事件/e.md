@@ -1,4 +1,4 @@
-## e.presist
+# e.presist
 
 注意：
 
@@ -44,5 +44,39 @@
   }}
   placeholder="搜索业务线"
   className="businessline-input"
+/>
+```
+
+# e.target.value 和 e.target.ariaValueNow
+
+`e?.target?.ariaValueNow`的值好像是上次 onChange 事件的参数 value。
+
+```tsx
+<InputNumber
+  value={section}
+  style={{ width: "64px", height: "24px" }}
+  onBlur={(e) => {
+    // e?.target?.value：onBlur前控件显示的值，不一定是全数字字符串
+    const onBlurBeforeValue = Number(e?.target?.value);
+
+    // e?.target?.ariaValueNow：onBlur后控件显示的值，全数字字符串
+    const onBlurAfterValue = Number(e?.target?.ariaValueNow);
+
+    // 失去焦点后若值小于5，则填充为5
+    if (
+      ((!!onBlurBeforeValue || onBlurBeforeValue === 0) &&
+        onBlurBeforeValue < 5) ||
+      ((!!onBlurAfterValue || onBlurAfterValue === 0) && onBlurAfterValue < 5)
+    ) {
+      onChange?.({ section: 5 });
+    }
+  }}
+  onChange={(value: number | null) => {
+    if (value !== null) {
+      onChange?.({
+        section: value,
+      });
+    }
+  }}
 />
 ```

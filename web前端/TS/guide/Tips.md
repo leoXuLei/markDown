@@ -106,6 +106,12 @@ declare namespace User {
 declare function User(id: number): string;
 ```
 
+- TS 项目如何新增全局类型声明
+
+```bash
+.d.ts 文件中的顶级声明必须以 "declare" 或 "export" 修饰符开头。ts(1046)
+```
+
 **【npm 包】：**
 对于没有提供声明文件的 npm 包，我们可以创建一个 types 目录，来管理自己写的声明文件，同时需要在配置文件 `tsconfig.json` 中的 paths 和 basrUrl 中配置：
 
@@ -159,7 +165,7 @@ declare module "querystring" {
 **【参考链接】：**
 
 - [(2022-06-29)TypeScript 声明文件全解析](https://cloud.tencent.com/developer/article/2033803?from=15425)
-- [(2022-07-09)TypeScript入门之TS类型声明文件](https://blog.csdn.net/Svik_zy/article/details/123330236)
+- [(2022-07-09)TypeScript 入门之 TS 类型声明文件](https://blog.csdn.net/Svik_zy/article/details/123330236)
 
 # **容易忽略的关键字**
 
@@ -179,6 +185,21 @@ interface IProps {
 type Ikey = keyof IProps; // Ikea = 'name' | 'count'
 
 function testKeyof(props: Ikey): void {}
+```
+
+```ts
+// 国际化资源
+const resources = {
+  "zh-CN": {
+    translation: zhCN,
+  },
+  "en-US": {
+    translation: enUS,
+  },
+};
+
+type IngType = keyof typeof resources;
+// "zh-CN" | "en-US"
 ```
 
 ## `extends`
@@ -300,7 +321,7 @@ type AA = ParamType<string>; // string
 
 ```ts
 declare const ModeOptions: ["default", "multiple", "tags", "combobox"];
-type ModeOption = typeof ModeOptions[number];
+type ModeOption = (typeof ModeOptions)[number];
 // type ModeOption = "default" | "multiple" | "tags" | "combobox"
 ```
 

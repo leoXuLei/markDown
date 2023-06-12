@@ -543,10 +543,12 @@ type PickPerson = Pick<Person, "name">;
 // PickPerson === { name: string }
 ```
 
-#### Exclude：从T中排除可分配给U的那些类型
+#### Exclude：从联合类型 T 中排除可分配给U的那些类型
 > **用法含义**
-Exclude是进行排除 T 类型中满足 U 的类型从而返回新的类型，==**相对于下面的Omit操作符来说Omit是针对于key&value/接口形式的，而Exclude是针对于联合类型来操作的**==。
-
+Exclude是进行排除联合类型T类型中满足 U 的类型从而返回新的类型，
+==**相对于下面的Omit操作符来说Omit是针对于key&value/接口形式的，而Exclude是针对于联合类型来操作的**==。
+Exclude 是从联合类型里面排除某一个或几个。
+Omit 是从对象属性里面排除某一个或几个属性。
 
 
 ```ts
@@ -564,7 +566,47 @@ let a: string | number;
 
 type CustomType = Exclude<typeof a, string>; // number类型
 ```
-#### Extract：从T中提取可分配给U的那些类型
+
+
+**【分析过程】**
+
+从定义来看，意思是判断 T 是否继承 U，如果是返回 never 否则返回 T，但是这样说其实也不正确，返回的并不是完整的 T，并且这个 Exclude 也不是表面这个意思。
+
+例如下面这个例子：
+
+```ts
+type A = "a" | "b" | "c";
+type B = "a" | "d";
+
+type C = Exclude<A, B>;
+// type C = "b" | "c"
+```
+
+你以为的 Exclude 可能是这样的：
+
+```ts
+// 你以为的Exclude
+type D = "a" | "b" | "c" extends "a" | "d" ? never : "a" | "b" | "c";
+// type D = "a" | "b" | "c"
+```
+
+实际上的 Exclude
+
+```ts
+// 实际上的Exclude
+type D =
+  | ("a" extends "a" | "d" ? never : "a")
+  | ("b" extends "a" | "d" ? never : "b")
+  | ("c" extends "a" | "d" ? never : "c");
+// type D = "b" | "c"
+```
+
+**【参考链接】**
+
+- [TypeScript - 理清 Omit 与 Exclude 的关系与区别](https://juejin.cn/post/7091311285995831304)
+
+- [typescript 之 Exclude 和 Extract](https://juejin.cn/post/7086448143830614023#heading-3)
+#### Extract：从联合类型 T 中提取可分配给U的那些类型
 
 ```ts
 /**

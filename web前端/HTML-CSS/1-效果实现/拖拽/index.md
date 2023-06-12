@@ -1,4 +1,64 @@
-#
+# 实例
+
+## 原生拖拽实例一
+
+询问 gpt 拖放实例如下：
+
+```tsx
+import React, { useState } from "react";
+import { useMemoizedFn } from "ahooks";
+
+const TestDragAndDropComponent = () => {
+  const [dragging, setDragging] = useState(false);
+
+  const handleDragStart = useMemoizedFn((event) => {
+    console.log("event.target.id", event.target.id);
+    event.dataTransfer.setData("text/plain", event.target.id);
+    setDragging(true);
+  });
+
+  const handleDragEnd = useMemoizedFn(() => {
+    setDragging(false);
+  });
+
+  return (
+    <div>
+      <div
+        id="drag-me"
+        draggable="true"
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        style={{ backgroundColor: dragging ? "blue" : "red" }}
+      >
+        Drag me!
+      </div>
+      <div
+        id="drop-here"
+        // eslint-disable-next-line react/jsx-no-bind
+        onDrop={(event) => {
+          event.preventDefault();
+          const data = event.dataTransfer.getData("text/plain");
+          const draggedElement = document.getElementById(data);
+          (event.target as any)?.appendChild?.(draggedElement);
+        }}
+        // eslint-disable-next-line react/jsx-no-bind
+        onDragOver={(event) => {
+          event.preventDefault();
+        }}
+        style={{
+          marginTop: "20px",
+          padding: "10px",
+          border: "1px solid black",
+        }}
+      >
+        Drop here!
+      </div>
+    </div>
+  );
+};
+
+export default TestDragAndDropComponent;
+```
 
 # 参考链接
 

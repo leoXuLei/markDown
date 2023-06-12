@@ -340,9 +340,16 @@ null == undefined; // true
 !(1 == "1");
 ```
 
-## Tips
+```js
+NaN !== NaN; // ture
 
-### 判断 == 相等运算符
+// 等同于
+!(NaN == NaN); // === !false === true
+```
+
+# Tips
+
+## 判断 == 相等运算符
 
 **规则如下：**
 
@@ -370,10 +377,22 @@ NaN === NaN // false
 [1,2,3] == '1,2,3' // === String([1,2,3]) == '1,2,3'   true
 ```
 
-### 大于小于号比较
+## 大于小于号比较
 
-判断>= 这种，即使 Number(xx)，Number(xx)不是个 number， >= 或者 <= 会始终返回 false，不用去容错。
+判断 A >= B 这种，等同于 Number(A) >= Number(B)，需要容错，如果 A 或者 B 是 Null，会等于 0，因为`Number(null) === 0`。
 
+**【注意 null】**
+
+`undefined < 5`相当于`Number(undefined)< 5`===`NaN < 5`，所以返回 false。
+
+`null < 5`相当于`Number(null)< 5`===`0 < 5`，所以返回 true。
+
+```js
+undefined < 5; // false
+null < 5; // ture
+```
+
+【六个特殊 Boolean 值的】
 所以一些 table 数值列的比较大小，可以直接比较或者包一个 Number 比较。
 
 ```jsx

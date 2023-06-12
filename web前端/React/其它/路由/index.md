@@ -318,3 +318,10 @@ diff 算法是 react 的核心思想。当你添加了一个 key 之后，因为
 
 - [关于动态路由切换组件没有重新挂载的问题](https://blog.csdn.net/weixin_43824519/article/details/119932327)
 - [react 多个路由共用同一个组件模块，切换路由跳转页面不刷新问题](https://www.jianshu.com/p/0ec8fc865a15)
+
+# Tips
+
+```jsx
+const { state, pathname } = props.location;
+// props.location.state.top 为上个页面（当前页面点击后退回到的那个页面）的路由信息
+```
