@@ -31,8 +31,8 @@ Webpack4 相对于之前的版本，有了较多的变化，
 - yarn 更新到最新版
   `npm install yarn@latest -g`
 
-- yarn 升级指定版本
-  `yarn upgrade v1.21.3`
+- `yarn upgrade` 升级指定版本
+  `yarn upgrade @contrix/contrix-ui@1.0.16`
 
 - `npm install / yarn`: 安装依赖
   删除 node_modules 文件夹后，重新安装依赖包

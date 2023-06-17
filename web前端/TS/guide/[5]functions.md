@@ -1,12 +1,10 @@
-# 函数
-
-## 介绍
+# 介绍
 
 函数是 JavaScript 应用程序的基础。 它帮助你实现**抽象层，模拟类，信息隐藏和模块**。 在 TypeScript 里，虽然已经支持类，命名空间和模块，但函数仍然是主要的定义行为的地方。 TypeScript 为 JavaScript 函数添加了额外的功能，让我们可以更容易地使用。
 
-## 函数类型
+# 函数类型
 
-### 为函数定义类型
+## 为函数定义类型
 
 ```ts
 function add(x: number, y: number): number {
@@ -20,7 +18,7 @@ let myAdd = function (x: number, y: number): number {
 
 我们可以给每个参数添加类型之后再为函数本身添加返回值类型。 **TS 能够根据返回语句自动推断出返回值类型，因此我们通常省略它**。
 
-### 书写完整函数类型
+## 书写完整函数类型
 
 ```ts
 let myAdd: (x: number, y: number) => number = function (
@@ -48,7 +46,7 @@ let myAdd: (baseValue: number, increment: number) => number = function (
 
 函数的类型只是由参数类型和返回值组成的。 函数中使用的捕获变量不会体现在类型里。 实际上，这些变量是函数的隐藏状态并不是组成 API 的一部分。
 
-### 推断类型
+## 推断类型
 
 在赋值语句的一边指定了类型但是另一边没有类型的话，TS 编译器会自动识别出类型：
 
@@ -66,7 +64,7 @@ let myAdd: (baseValue: number, increment: number) => number = function (x, y) {
 
 这叫做“按上下文归类”，是类型推论的一种。 它帮助我们更好地为程序指定类型。
 
-## 可选参数和默认参数
+# 可选参数和默认参数
 
 传递给一个函数的参数个数必须与函数期望的参数个数一致。
 
@@ -139,7 +137,7 @@ let result3 = buildName("Bob", "Adams"); // okay and returns "Bob Adams"
 let result4 = buildName(undefined, "Adams"); // okay and returns "Will Adams"
 ```
 
-## 剩余参数
+# 剩余参数
 
 必要参数，默认参数和可选参数有个共同点：它们表示某一个参数。 有时，==你想同时操作多个参数，或者你并不知道会有多少参数传递进来==。 在 JS 里，你可以使用 arguments 来访问所有传入的参数。
 
@@ -164,13 +162,13 @@ function buildName(firstName: string, ...restOfName: string[]) {
 let buildNameFun: (fname: string, ...rest: string[]) => string = buildName;
 ```
 
-## this 和箭头函数
+# this 和箭头函数
 
-## this 参数
+# this 参数
 
-## 重载
+# 重载
 
-## Tips
+# Tips
 
 - 函数类型：
   - 定义函数类型
@@ -200,9 +198,9 @@ let buildNameFun: (fname: string, ...rest: string[]) => string = buildName;
   }
   ```
 
-## 实例
+# 实例
 
-### 一般函数声明
+## 一般函数声明
 
 ```typescript
 // 第一种形式
@@ -242,7 +240,7 @@ const h: g = function (pass: string): string {
 };
 ```
 
-### 箭头函数声明
+## 箭头函数声明
 
 ```typescript
 let myAdd: (x: number, y: number) => number = function (
@@ -278,7 +276,7 @@ const myAdd = (x: number, y: number) => x + y;
 
 - [ts 定义返回函数类型](https://blog.csdn.net/youngsailor/article/details/94284412)
 
-### 实例
+## 其它
 
 ```jsx
 export const handledSelectedFilesInfo = (list: IResource[]): string[] => {
@@ -296,4 +294,35 @@ export const handledSelectedFilesInfo = (list: IResource[]): string[] => {
   }
   return fileInfo;
 };
+```
+
+### 参数是个复杂对象的函数如何描述
+
+**【需求】**
+
+`interface` 去描述一个函数`getResExplorerConfigMode`，`getResExplorerConfigMode`的参数是一个对象，对象有两个属性，props 属性是 string 类型，onOk 属性是函数类型，参数是一个 any 类型。
+
+**【实现】**
+
+两种写法如下。
+
+```tsx
+// 第一种写法
+interface BasicState {
+  getResExplorerConfigMode:
+    | ((obj: { props: any; onOk: (d: any) => void }) => void)
+    | null;
+}
+```
+
+```tsx
+// 第二种写法：interface描述函数
+
+interface IGetResExplorerConfigModeFun {
+  (obj: { props: any; onOk: (d: any) => void }): void;
+}
+
+interface BasicState {
+  getResExplorerConfigMode: IGetResExplorerConfigModeFun | null;
+}
 ```

@@ -145,9 +145,86 @@ PS C:\Windows\system32> yarn -v
 # npm 全局安装clean-mark 也测试成功了
 ```
 
+# 工具
+
+## nvm：Node 的版本管理工具
+
+**简介:** Node 的版本管理工具
+
+> 背景：我们可能同时在进行多个个项目，而多个不同的项目所使用的 node 版本又是不一样的，或者是要用更新的 node 版本进行试验和学习。这种情况下，对于**维护多个版本的 node**将会是一件非常麻烦的事情，而 nvm 就是为解决这个问题而产生的，他可以**方便的在同一台设备上进行多个 node 版本之间切换**，而这个正是 nvm 的价值所在，详情可以查看官网 NVM 官网。
+
+**安装:**
+
+1. 下载 nvm
+   如果已经单独安装了 node，建议卸载，然后继续向下看。直接进入[安装包下载地址](https://github.com/coreybutler/nvm-windows/releases)。选择 nvm-setup.zip，下载后直接安装。
+
+2. 配置环境变量
+   正常安装完毕，环境变量无需配置，可以进行查看，如果没有自动配置成功，需要手动进行配置。
+
+3. 验证是否安装成功
+   执行`nvm -v`，出现下图提示说明安装成功
+   &emsp;&emsp; ![nvm_v](./imgs/nvm_v.png)
+
+**使用:**
+
+```js
+nvm list/ls     // 本机中所有的node的版本列表
+nvm install latest  // 安装最新版本
+nvm install 4.8.4  // 安装指定版本node
+nvm use 10.8.0  // 使用指定node版本
+```
+
+![nvmInstallExample](./imgs/nvmInstallExample.png)
+
+**参考:**
+
+- [nvm，nrm 介绍及使用](https://www.jianshu.com/p/ab63d08cced4)
+- [教你如何使用 nvm](https://www.jianshu.com/p/f8e175403dfb)
+
+# 概念
+
+## 设置 NPM 镜像源
+
+```bash
+Usage:
+  npm config set <key> <value>
+  npm config get [<key>]
+  npm config delete <key>
+  npm config list [--json]
+  npm config edit
+  npm set <key> <value>
+  npm get [<key>]
+```
+
+```bash
+npm config set registry http://xx.xx.xx.xx:8888/repository/npm-group
+
+/npm i -g yarn// 以上是安装yarn
+
+yarn config set registry http://xx.xx.xx.xx:8888/repository/npm-group
+```
+
+## UMD
+
+**【ask chatGpt】**
+
+【Q: UMD 是什么意思】
+
+A:
+
+"UMD" 是 "Universal Module Definition" 的缩写，通常翻译为 "通用模块定义"。它是一种 JavaScript 模块规范，旨在使模块能够在多个环境中运行，包括浏览器、Node.js 和 AMD (Asynchronous Module Definition)等模块加载器。
+
+UMD 模块定义允许开发者编写可以在不同的 JavaScript 环境中使用的代码，并且可以在 CommonJS、AMD 和全局变量（global）等多种模块系统中使用。这种灵活性使 UMD 成为一种流行的模块规范之一，特别适用于需要同时支持浏览器和 Node.js 等环境的项目。
+
+【Q: react 项目中，UMD 是什么意思】
+
+A:
+
+UMD 模块既可以作为 CommonJS 模块（使用 require()），也可以作为 AMD 模块（使用 define()）来加载，还可以通过 script 标签在浏览器中直接引入。这使得 UMD 成为编写可移植性高的 JavaScript 库和组件的一种常见方式。在 React 中，许多库和插件都采用了 UMD 规范进行打包和发布。
+
 # 问题
 
-## 1. nvm install 失败
+## 1.nvm install 失败
 
 报错：`Could not retrieve https://nodejs.org/dist/latest/SHASUMS256.txt.`
 
@@ -165,7 +242,7 @@ PS C:\Windows\system32> yarn -v
 
 参考资料：[使用 nvm-windows 安装 NodeJs 遇到的问题](https://blog.csdn.net/lisa2017_/article/details/107105016)
 
-## 2. npm i yarn -g 失败
+## 2.npm i yarn -g 失败
 
 &emsp;&emsp;![npmYarnError](./imgs/npmYarnError.png)
 
@@ -176,7 +253,7 @@ PS C:\Windows\system32> yarn -v
 - 报错：`npm WARN checkPermissions Missing write access to /usr/local/lib/node_modules`
 - 解决方法： 命令前加上`sudo`
 
-## 3. 报错：无法加载文件 xxxx，因为在此系统上禁止运行脚本
+## 3.报错：无法加载文件 xxxx，因为在此系统上禁止运行脚本
 
 报错：`无法加载文件 C:\Program Files\nodejs\npm.ps1，因为在此系统上禁止运行脚本。`
 
@@ -210,14 +287,14 @@ set-executionpolicy remotesigned # 输入y同意
 - [Powershell 执行策略限制相关](https://www.cnblogs.com/luckyuns/p/12851317.html)
 - [无法加载文件 xxxx，因为在此系统上禁止运行脚本](https://blog.csdn.net/mehnr/article/details/104497019/)
 
-## 4. yarn install 失败
+## 4.yarn install 失败
 
 报错：Fetching packages...`Three appears to be trouble with your network connection, Retrying...`
 &emsp;&emsp;![yarnInstallError](./imgs/yarnInstallError.png)
 
 解决方法：网络由手机热点改成网线/wifi
 
-## 5. tyarn start 报错
+## 5.tyarn start 报错
 
 ```bash
 tyarn start
@@ -229,63 +306,28 @@ tyarn start
 
 解决方法：先 tyarn 一下就好了
 
-## 6. 后端本地联调时 ping 不通
+## 6.后端本地联调时 ping 不通
 
 可能是防火墙未关闭
 
-# nvm
+# 依赖
 
-**简介:** node 的版本管理工具 nvm
+## Single-spa
 
-> 我们可能同时在进行多个个项目，而多个不同的项目所使用的 node 版本又是不一样的，或者是要用更新的 node 版本进行试验和学习。这种情况下，对于**维护多个版本的 node**将会是一件非常麻烦的事情，而 nvm 就是为解决这个问题而产生的，他可以**方便的在同一台设备上进行多个 node 版本之间切换**，而这个正是 nvm 的价值所在，详情可以查看官网 NVM 官网。
+**【ask chatGpt】**
 
-**安装:**
+【Q：前端中的 Single-Spa 是什么】
 
-1. 下载 nvm
-   如果已经单独安装了 node，建议卸载，然后继续向下看。直接进入[安装包下载地址](https://github.com/coreybutler/nvm-windows/releases)。选择 nvm-setup.zip，下载后直接安装。
+A：
 
-2. 配置环境变量
-   正常安装完毕，环境变量无需配置，可以进行查看，如果没有自动配置成功，需要手动进行配置。
+Single-spa 是一个用于构建前端微服务应用程序的 JavaScript 框架。**它允许开发者将不同的前端应用程序（如 React、Angular、Vue 等）集成到一个单独的页面中，实现多个应用程序之间的无缝切换和通信**。
 
-3. 验证是否安装成功
-   执行`nvm -v`，出现下图提示说明安装成功
-   &emsp;&emsp; ![nvm_v](./imgs/nvm_v.png)
+Single-spa 的核心思想是利用浏览器自带的路由机制来实现前端微服务的跨应用共享状态、组件复用和协同开发。Single-spa 支持使用不同的框架编写应用程序，并提供了统一的生命周期、通信和错误处理机制，使得开发者可以更轻松地创建可扩展、易维护的微服务应用程序。
 
-**使用:**
+Single-spa 还提供了丰富的插件和工具库，用于简化前端应用程序的打包、部署和测试等工作。它能够很好地支持现代化的前端开发流程，并在多个行业和领域广泛应用。
 
-```js
-nvm list/ls     // 本机中所有的node的版本列表
-nvm install latest  // 安装最新版本
-nvm install 4.8.4  // 安装指定版本node
-nvm use 10.8.0  // 使用指定node版本
-```
+【Q：react 项目中的 Single-Spa 是什么意思】
 
-![nvmInstallExample](./imgs/nvmInstallExample.png)
+A：
 
-**参考:**
-
-- [nvm，nrm 介绍及使用](https://www.jianshu.com/p/ab63d08cced4)
-- [教你如何使用 nvm](https://www.jianshu.com/p/f8e175403dfb)
-
-# NPM
-
-### 设置 NPM 镜像源
-
-```bash
-Usage:
-  npm config set <key> <value>
-  npm config get [<key>]
-  npm config delete <key>
-  npm config list [--json]
-  npm config edit
-  npm set <key> <value>
-  npm get [<key>]
-```
-
-```bash
-npm config set registry http://xx.xx.xx.xx:8888/repository/npm-group
-
-/npm i -g yarn// 以上是安装yarn
-
-yarn config set registry http://xx.xx.xx.xx:8888/repository/npm-group
-```
+Single-Spa 是一个 JavaScript 微前端框架，可以让你在同一个页面中集成多个子应用程序（如 React、Angular、Vue 等），并实现它们之间的协调和通信。使用 Single-Spa，你可以将各个子应用独立开发、独立部署，并且可以在不重新加载整个页面的情况下动态地添加、卸载或切换它们。Single-Spa 通过路由匹配和生命周期钩子等机制，能够自动管理子应用之间的依赖关系、初始化顺序、状态共享等问题，大大简化了微前端的开发和维护工作。Single-Spa 可以与各种主流框架和构建工具集成，包括 React、Angular、Vue、Webpack、Rollup 等。

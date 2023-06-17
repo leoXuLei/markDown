@@ -30,7 +30,6 @@
   ![](./imgs/git-tools-git-graph-useExample3.png)
   ![](./imgs/git-tools-git-graph-useExample4.png)
 
-
 # 开发
 
 - `commit hook`钩子中规定的 commit 信息中的类型
@@ -171,6 +170,46 @@ The requested URL returned error: 429
 
 **【解决方法】：**
 `WPH`管理员打开，继续`git push`，多试几次就行。
+
+## 新 clone 的项目大量文件报 Warn`Delete CR`
+
+**【问题描述】**
+
+```bash
+Delete `␍`eslint (prettier/prettier)
+```
+
+**【产生原因】**
+
+`git config --system` 中有个默认配置`core.autocrlf: true`。
+
+windows 电脑`git clone`代码的时候，autocrlf 选项默认为 true，克隆下来的文件每行会被自动转成以 CRLF 结尾，若对文件不做任何修改，commit 执行 eslint 的时候就会提示你删除 CR。
+
+因此最根本的办法就是对 git 的 autocrlf 配置属性进行修改。在命令行中运行以下代码：
+
+```bash
+git config --global core.autocrlf false
+```
+
+现在 VScode，Notepad++编辑器都能够自动识别文件的换行符是 LF 还是 CRLF。 如果你用的是 windows，文件编码是 UTF-8 且包含中文，最好全局将 autocrlf 设置为 false。
+
+**【解决方法】**
+
+对 git 的 autocrlf 配置属性进行修改。
+
+```bash
+git config --global core.autocrlf false
+```
+
+然后`git config --global --list`查看，确认是否修改成功。
+
+然后删除刚刚 clone 的项目，重新 clone，发现问题解决。
+
+**【参考链接】**
+
+- [Delete `␍`eslint(prettier/prettier) 错误的解决方案](https://juejin.cn/post/6844904069304156168#comment)
+- [解决 Delete `␍`eslint(prettier/prettier)问题](https://juejin.cn/post/7094832364055969822)
+- [解决 VSCode 报 Delete `␍`eslint(prettier/prettier)问题](https://juejin.cn/post/6979958982291292190#heading-5)
 
 # macbook
 
