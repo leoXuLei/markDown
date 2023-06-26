@@ -203,6 +203,12 @@ recipeDetail 的长 number 解析又有问题了，Cells 字段，如果值过�
 
 # Tips
 
+# 自带 screenshot 截图
+
+【参考链接】
+
+- [如何用 Chrome 进行截图(无需插件)](https://zhuanlan.zhihu.com/p/122816433)
+- [电脑上网页截图，一个 Chrome 就够了](https://sspai.com/post/56833)
 ## 接口返回数据可以搜索
 
 接口数据可以搜索，点开对象，点击空白处`ctrl + F`
