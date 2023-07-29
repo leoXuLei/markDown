@@ -325,6 +325,32 @@ type ModeOption = (typeof ModeOptions)[number];
 // type ModeOption = "default" | "multiple" | "tags" | "combobox"
 ```
 
+**【TS 如何取出字符串数组每个元素组成的联合类型？】**
+
+**【询问 Gpt，回答是可以的】**
+
+可以使用 TypeScript 中的 "typeof" 和 "keyof" 关键字来取出字符串数组中每个元素组成的联合类型，示例代码如下：
+
+```tsx
+const arr = ["foo", "bar", "baz"];
+
+type ArrType = typeof arr[number]; // 'foo' | 'bar' | 'baz'
+
+type ArrKeyType = keyof typeof arr; // number | "length"
+```
+
+其中，typeof arr 取得了 arr 变量的类型，而 number 作为索引类型可以获取到数组中的每一个元素类型。keyof typeof arr 则是获取 arr 的属性键名的联合类型，包括 number 类型和 length 属性。
+
+**【实际自测：不可以，】**
+
+```tsx
+const RADIO_OPTIONS = ["timeBar", "configuration"];
+
+type RadioOptions = keyof typeof RADIO_OPTIONS; // keyof string[]
+type TRadioOptions = typeof RADIO_OPTIONS; // string[]
+type RadioValue = TRadioOptions[number]; // string
+```
+
 # 问题
 
 ## `.d.ts`全局类型文件中声明的枚举，没法当作 map 在运行时使用

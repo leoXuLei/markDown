@@ -1,3 +1,128 @@
+# git rebase 变基
+
+```bash
+git checkout bugFix
+# git rebase 之前如果有 `unstaged changes` 需要comit or stash them。否则没法git rebase
+git rebase master
+
+# 如果有多个冲突，多次执行 git rebase --continue
+git rebase --continue
+# 恢复到执行 git rebase 前的状态
+git rebase --abort
+
+
+# 下面两步，正常是在gitlab提个MR，而不是在本地操作master（一般也操作不了）
+git checkout master
+git merge bugFix
+```
+
+## 一直使用`git merge`的开发分支改用`git rebase`后本地分支和远程分支在两条线上了
+
+**【问题描述】**
+
+由于自己的开发分支之前都是执行 `git merge`，所以改成用 `git rebase` 后，会出现本地的`branch_xulei`分支已经变基成功，但是远程的`branch_xulei`分支还在原本的分支线上，此时没法直接 push 到远程，必须要同步才行。此时本地的`branch_xulei`分支变基成功后确实是干净了，但是远程的`branch_xulei`分支之前的提交历史都在，此时如果同步，不就把历史都带过来了嘛，跟我用`git rebase`的初衷有违背。
+
+**【解决方法】**
+
+先删除远程的`branch_xulei`分支，然后直接推送本地的`branch_xulei`分支，同时会新建同名远程分支，此时`branch_xulei`分支完全就是干净的提交记录了。
+
+**【操作记录】**
+
+1. 下图是刚在`branch_xulei`分支，执行完`git rebase mster`后的`git Graph`图。
+   ![](./imgs/gitRebase/gitRebase-example-1.png)
+
+2. 然后发现不小心执行了`git pull`命令，拉取了远程的`origin/branch_xulei`分支，即目前的`branch_xulei`分支有了 rebase 前后两份需求的提交 commit（如下图中的`45cc6f0c`提交和`19bfe7c3`提交）。如下图。
+
+![](./imgs/gitRebase/gitRebase-example-2.png)
+
+3. 所以继续执行`git reset HEAD^ # 恢复成上次提交的版本`，回退刚刚的`git pull`操作。如下图。
+   ![](./imgs/gitRebase/gitRebase-example-3.png)
+
+4. 然后删除远程`origin/branch_xulei`分支，然后直接推送本地的`branch_xulei`分支，同时会新建同名远程分支。
+5. 然后提个`MR`到主分支。`MR`合并后，拉取最新代码，此时`git Graph`图如下图。
+   ![](./imgs/gitRebase/gitRebase-example-5.png)
+6. 然后命令行输入`git merge 主分支`，`branch_xulei`分支即可跟主分支在同一个 commit 位置了，然后就可以开始下一次需求的开发提交了。
+
+PS：处理后，后续每次需求完成后提交代码 rebase 应该都会正常了。
+
+## `git rebase` 遇到冲突
+
+1. 如下图，开发分支`branch_xulei`分支上有三次 commmit。
+   ![](./imgs/gitRebase/gitRebase-example-conflict-1.png)
+2. 如下图，执行`git rebase 主分支`命令后，根据`get Graph`图可以看到，`apply 第一个commit 1f4619d0`已经成功，然后提示在 `apply commit c027f5de` 时有三个文件冲突，三个冲突文件在`合并更改`Tab 下。
+   ![](./imgs/gitRebase/gitRebase-example-conflict-2.png)
+
+3. 解决完三个冲突文件的冲突后点击暂存后，如下图。
+
+![](./imgs/gitRebase/gitRebase-example-conflict-3.png)
+
+4. 当时没有注意到`更改`Tab 下有两个删除的文件，也直接点击暂存了，如下图。
+   ![](./imgs/gitRebase/gitRebase-example-conflict-4.png)
+
+5. 提交暂存文件时，没有提交成功，而是命令行出现下图界面，
+
+   - `interactive rebase in process; onto 73ca4e43`：（正在进行交互式变基；到 73ca4e43 commit：即主分支）。
+   - `Last commands done (2 commits done)`：最后完成的命令(完成 2 次提交)
+   - `Next command to do (1 remaining command)`：下一个要执行的命令(剩下的 1 个命令)
+   - `changes to be committed`：要提交的更改。 - 两个删除文件和两个新增文件。
+     ![](./imgs/gitRebase/gitRebase-example-conflict-5.png)
+
+6. 结束后，确实`rebase`成功了，但是发现 4 中提到的合并冲突中的两个被删除的文件，本来是不该删除的，所以执行命令`git rebase --abort (恢复到执行 git rebase 前的状态)`，从头开始重新`git rebase`，即保留那两个被删除的文件。
+
+- 但是不知道咋操作成如下图了？
+
+![](./imgs/gitRebase/gitRebase-example-conflict-6.png)
+
+## `git merge` 和 `git rebase` 对比
+
+如下图，可以发现：
+
+- 红色提交线：如果`branch_xulei`分支一直采用`git merge`方式拉取合并基准分支的代码，
+  - `Git Graph`图中会出现两条线并行的情况，`branch_xulei`分支是一条无限长的直线（一直有新需求开发的情况下），每次需求开发完成会发现，基准分支会合并到开发分支一次（本地执行`git merge master`），基准分支会合并到开发分支一次（gitlab 提 MR：Merge requests），即一次需求开发两条并行线之间有两条连接线，一条接入一条接出。
+- 绿色提交线：如果`branch_xulei`分支一直采用`git rebase`方式拉取合并基准分支的代码，
+  - `Git Graph`图中，基准分支是一条无限长的直线，而`branch_xulei`分支每做一次需求，有多少次 commit，`branch_xulei`分支的分叉线就有多长，然后会再合并到基准分支。
+
+![](./imgs/gitRebase/gitRebase-example-4.png)
+
+## `git rebase` 正确使用
+
+- 从基准分支新建`feature_xulei`开发分支。
+- 需求完成后，先`git pull`拉取最新基准分支代码，然后`git rebase`，有冲突解决冲突。
+- 然后去 gitlab 提 MR，从`feature_xulei`开发分支到基准分支。此时本地最新`Git Graph`如下图一。
+- a：此时在`Git Graph`基准分支上右键，有两个选项。
+
+  - `Merge into current branch`，点击后有三个 checkbox 选项
+    - [ ] `Create a new commit even if fast-forward is possible`。若勾选，**即使可以快速合并也会有个新的 commit**。不勾选如果没有额外的提交则会快速合并。**因此不建议勾选**。
+    - [ ] `Squash Commits`
+    - [ ] `No Commit`
+  - `Rebase current branch on branch..`
+    - Are you sure you want to rebase feature_xulei (the current branch) on branch master?
+
+- b: 直接在命令行输入：`git merge master`，相当于快进合并（`fast-forward merge`）
+- c: 直接在命令行输入：`git rebase master`，也相当于快进合并
+
+  - `Successfully rebased and updated refs/heads/feature_xulei.`
+
+- 总结：**a 不勾选`Create a new commit even if fast-forward is possible` 和 b 和 c 之后效果一样。提交记录是清晰的**，如下图。
+
+- 然后再推送到远程，此时基准分支和开发分支在同一个 commit 节点。
+
+![](./imgs/gitRebase/gitRebase-example-6.png)
+![](./imgs/gitRebase/gitRebase-example-7.png)
+![](./imgs/gitRebase/gitRebase-example-8.png)
+
+### 解释
+
+`Create a new commit even if fast-forward is possible`:
+
+意思是即使可以使用快进（`fast-forward`）方式，也要创建一个新的提交。
+
+在 Git 中，当你将分支合并到目标分支时，如果目标分支没有额外的提交，Git 可以简单地将目标分支指向被合并分支的提交，这个过程称为快进合并（`fast-forward merge`）。这种情况下，不会创建新的提交节点，只是移动了分支指针。
+
+然而，如果设置了"Create a new commit even if fast-forward is possible"的选项，**即使可以使用快进合并，Git 也会强制创建一个新的提交。这样做可以保持合并历史的一致性，确保每次合并都生成一个新的提交节点，无论是否发生了快进合并**。
+
+这个选项通常用于需要明确跟踪每次合并操作的情况，或者在工作流中需要保留合并历史的完整性时。
+
 # 分支管理
 
 - master 是线上稳定分支、develop 是开发分支

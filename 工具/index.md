@@ -27,27 +27,10 @@
 | `⌘ + option + Y` | 语雀新建临时笔记 |
 | `⌘ + .`          |      iTerm2      |
 
-# VPN
-
-- [速蛙云](https://i.ok3.icu/IHJ)
-
 # 壁纸桌面
 
 - [彼岸图网](https://pic.netbian.com/4kdongman/)
 - [陆萱萱](https://pic.netbian.com/4kmeinv/index_15.html)
-
-# 影音工具
-
-- [录屏制作 gif-ScreentoGif](https://pc.qq.com/detail/13/detail_23913.html)
-- [mac 录屏制作 Gif](https://www.jianshu.com/p/7a54d47b6aa0)
-- [录制-ApowerREC]()
-
-## QQ 录屏快捷键
-
-屏幕截图 Ctrl + Alt+ A
-屏幕识图 Ctrl + Alt + 0
-屏幕录制 Ctrl + Alt+ S
-截图时隐藏当前窗口
 
 - [Mac 版 QQ 的 OCR 文字识别功能究竟有多好用？](https://www.jianshu.com/p/a5e30639ed39)
 
@@ -74,3 +57,26 @@
 使用时，首先在 GitHub 上面新建一个笔记仓库，公开或私密都可以。然后使用 `github.dev` 编辑完，再推送回仓库。换到其它机器时，就先从仓库获取文档的最新版本，简直是完美的解决方案。
 
 更棒的是，GitHub 提供了一个快捷入口。 打开 GitHub 仓库主页，按一下小数点`（.）`这个键， 页面就会自动跳转到 VS Code 编辑环境，真是太方便了。
+
+# 电脑软件
+
+## 文件管理
+
+- [Everything 基于名称快速定位文件和文件夹](https://www.voidtools.com/zh-cn/)
+
+## VPN
+
+- [速蛙云](https://i.ok3.icu/IHJ)
+
+# 影音工具
+
+- [录屏制作 gif-ScreentoGif](https://pc.qq.com/detail/13/detail_23913.html)
+- [mac 录屏制作 Gif](https://www.jianshu.com/p/7a54d47b6aa0)
+- [录制-ApowerREC]()
+
+## QQ 录屏快捷键
+
+- 屏幕截图 `Ctrl + Alt+ A`
+- 屏幕识图 `Ctrl + Alt + 0`
+- 屏幕录制 `Ctrl + Alt+ S`
+- 截图时隐藏当前窗口

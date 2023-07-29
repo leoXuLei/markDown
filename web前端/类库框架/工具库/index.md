@@ -1,8 +1,8 @@
-## CSS 库
+# CSS 库
 
-## JS 库
+# JS 库
 
-### `Moment.js`
+## `Moment.js`
 
 [在线时间戳转年月日时分秒](http://www.metools.info/code/c31.html)
 [官网](http://momentjs.cn/docs/)
@@ -64,7 +64,7 @@ useEffect(() => {
 }, []);
 ```
 
-### `bignumber.js`: 处理数据运算
+## `bignumber.js`: 处理数据运算
 
 ```js
 import BigNumber from "bignumber.js";
@@ -209,7 +209,41 @@ y.toFixed(5); // '3.45600'
 
 - [bignumber.js API](https://www.jianshu.com/p/f5d3e379744c?rjxgcFrom=http%3A%2F%2Frjxgc.com&fromSiteName=190Tech)
 
-### `path-to-regexp`: url 的正则表达式
+## `big.js`: 大数值精确计算
+
+"big.js" 是一个用于处理大数值精确计算的 JavaScript 库。它提供了一些常用的 API 来执行高精度计算。以下是一些 big.js 常用的 API：
+
+1. 创建 Big 对象：
+
+`new Big(value)`: 使用字符串、数字或另一个 Big 对象创建一个新的 Big 对象。
+
+2. 基本操作：
+
+- `plus(n)`: 将当前 Big 对象与 n 相加。别名：`add` +
+- `minus(n)`: 从当前 Big 对象中减去 n。别名：`sub` -
+- `times(n)`: 将当前 Big 对象乘以 n。 别名：`mul` \*
+- `div(n)`: 将当前 Big 对象除以 n。
+- `mod(n)`: 返回当前 Big 对象对 n 取模的结果。 即`%`，取余数，如`10%3===1`
+- `pow(n)`: 将当前 Big 对象提升到指定幂次 n。
+- `neg()`：用于获取当前 Big 对象的相反数，并返回结果的新实例。相反数是指与原数值大小相等但符号相反的数。如`Big(5).neg()===-5`
+
+3. 比较和判断：
+
+- `eq(n)`: 判断当前 Big 对象是否等于 n。
+- `gt(n)`: 判断当前 Big 对象是否大于 n。
+- `gte(n)`: 判断当前 Big 对象是否大于等于 n。
+- `lt(n)`: 判断当前 Big 对象是否小于 n。
+- `lte(n)`: 判断当前 Big 对象是否小于等于 n。
+
+4. 转换和格式化：
+
+- `toFixed(dp)`: 返回当前 Big 对象的字符串表示，固定小数位数为 dp。
+- `toExponential(dp)`: 返回当前 Big 对象的指数表示，小数位数为 dp。
+- `toPrecision(sd)`: 返回当前 Big 对象的字符串表示，有效位数为 sd。
+
+这些只是 big.js 提供的一部分 API。你可以参考 big.js 的文档来了解更多关于该库的功能和用法。
+
+## `path-to-regexp`: url 的正则表达式
 
 **【引入方式】：**
 
@@ -258,30 +292,7 @@ const isRecipeDetailPage =
 
 - [url 的正则表达式：path-to-regexp](https://www.jianshu.com/p/7d2dbfdd1b0f)
 
-### `react-helmet`: 管理文档头
-
-```js
-//  "react-helmet": "^5.2.1",
-import React from "react";
-import { Helmet } from "react-helmet";
-
-class Application extends React.Component {
-  render() {
-    return (
-      <div className="application">
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>My Title</title>
-          <link rel="canonical" href="http://mysite.com/example" />
-        </Helmet>
-        ...
-      </div>
-    );
-  }
-}
-```
-
-### `qs`: url 中参数 <=> 对象 （互转）
+## `qs`: url 中参数 <=> 对象 （互转）
 
 将 url 中的参数转为对象；将对象转为 url 参数形式
 
@@ -302,40 +313,6 @@ console.log(qs.stringify(a))
 
 'name=hehe&age=10'
 ```
-
-### `react-json-view`
-
-RJV 是一个 React 组件，用于显示和编辑 javascript 数组和 JSON 对象。
-
-### `xlsx`
-
-导出 excel 表格工具的库
-
-#### 前端实现导出 excel 单元格合并
-
-优点：有很多实用方便的方法和格式转换
-缺点：调整样式只有付费版可以修改
-
-```js
-工具方法：
-aoa_to_sheet 将JS数据数组转换为工作表。
-json_to_sheet 将JS对象数组转换为工作表。
-table_to_sheet 将DOM TABLE元素转换为工作表。
-sheet_add_aoa 将JS数据数组添加到现有工作表中。
-sheet_add_json 将JS对象数组添加到现有工作表中。
-
-sheet_to_json 将工作表对象转换为JSON对象数组。
-sheet_to_csv 生成定界符分隔值输出。
-sheet_to_txt 生成UTF16格式的文本。
-sheet_to_html 生成HTML输出。
-sheet_to_formulae 生成公式列表（具有值后备）。
-```
-
-**链接：**
-
-- [前端实现导出 excel 单元格合并](https://www.jianshu.com/p/990d178fa2fc)
-- [sheetJS--github](https://github.com/sheetjs/sheetjs)
-- [纯前端利用 js-xlsx 之合并单元格(3)](https://www.jianshu.com/p/5c131c27841c)
 
 # JS 数据操作库
 
@@ -420,9 +397,152 @@ useEffect(() => {
 }, [milestones, currentMilestones]);
 ```
 
-# uuid
+# `uuid`
 
 ```jsx
 "7314c08f-444b-4df1-97eb-a2372f2fb348".replace(/[-a-z]/g, "");
 // ("731408444419723722348");
 ```
+
+# `react-helmet`: 管理文档头
+
+```js
+//  "react-helmet": "^5.2.1",
+import React from "react";
+import { Helmet } from "react-helmet";
+
+class Application extends React.Component {
+  render() {
+    return (
+      <div className="application">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>My Title</title>
+          <link rel="canonical" href="http://mysite.com/example" />
+        </Helmet>
+        ...
+      </div>
+    );
+  }
+}
+```
+
+# `react-json-view`
+
+RJV 是一个 React 组件，用于显示和编辑 javascript 数组和 JSON 对象。
+
+# `xlsx`
+
+导出 excel 表格工具的库
+
+#### 前端实现导出 excel 单元格合并
+
+优点：有很多实用方便的方法和格式转换
+缺点：调整样式只有付费版可以修改
+
+```js
+工具方法：
+aoa_to_sheet 将JS数据数组转换为工作表。
+json_to_sheet 将JS对象数组转换为工作表。
+table_to_sheet 将DOM TABLE元素转换为工作表。
+sheet_add_aoa 将JS数据数组添加到现有工作表中。
+sheet_add_json 将JS对象数组添加到现有工作表中。
+
+sheet_to_json 将工作表对象转换为JSON对象数组。
+sheet_to_csv 生成定界符分隔值输出。
+sheet_to_txt 生成UTF16格式的文本。
+sheet_to_html 生成HTML输出。
+sheet_to_formulae 生成公式列表（具有值后备）。
+```
+
+**链接：**
+
+- [前端实现导出 excel 单元格合并](https://www.jianshu.com/p/990d178fa2fc)
+- [sheetJS--github](https://github.com/sheetjs/sheetjs)
+- [纯前端利用 js-xlsx 之合并单元格(3)](https://www.jianshu.com/p/5c131c27841c)
+-
+
+# `react-color`
+
+- [ReactColor 主页](http://casesandberg.github.io/react-color/)
+
+**【Ask chatGpt】**
+Q：如何将 rgba 值转为 hex 值
+
+A:
+
+将 RGBA 颜色表示中的红绿蓝三个分量值转换为十六进制数，并将它们连接在一起形成十六进制颜色表示。具体实现方法如下：
+
+```tsx
+function rgbaToHex(r, g, b, a) {
+  // 将10进制的RGB值转换为16进制，并使用 padStart 确保每个分量都是两位数
+  const hexR = r.toString(16).padStart(2, "0");
+  const hexG = g.toString(16).padStart(2, "0");
+  const hexB = b.toString(16).padStart(2, "0");
+  // 将透明度 a 值乘以255并向下取整，然后转换为16进制数
+  const hexA = Math.floor(a * 255)
+    .toString(16)
+    .padStart(2, "0");
+  // 将四个分量的16进制值连接成一个字符串
+  return `#${hexR}${hexG}${hexB}${hexA}`;
+}
+
+// 示例用法
+const { r, g, b, a } = { r: 255, g: 0, b: 128, a: 0.5 }; // 假设这里有一个RGBA颜色表示
+const hexColor = rgbaToHex(r, g, b, a); // 转换为十六进制颜色表示
+console.log(hexColor); // 输出 "#ff008080"
+```
+
+上述代码中，rgbaToHex 函数接收四个参数 r、g、b 和 a，分别代表 RGBA 颜色表示中的红、绿、蓝和透明度分量。函数内部先将每个分量值分别转换为对应的两位数的十六进制数，并将它们连接在一起得到一个带有 # 前缀的字符串。这里的透明度分量需要乘以 255 并向下取整得到对应的 8 位 16 进制数。最后返回这个字符串作为结果。
+
+**【Ask chatGpt】**
+
+Q: react-color 的 ChromePicker 组件 onChange 回调的参数如下，每个属性是什么意思？
+
+```tsx
+<ChromePicker
+  color={color}
+  onChange={(colorResult) => {
+    console.log("colorResult", colorResult);
+    setColor(colorResult.hex);
+    props?.onChange?.(colorResult.hex);
+  }}
+/>
+```
+
+```js
+const colorResult = {
+    "hsl": {
+        "h": 202.17391304347825,
+        "s": 0.6272,
+        "l": 0.4313,
+        "a": 1
+    },
+    "hex": "#2980b3",
+    "rgb": {
+        "r": 41,
+        "g": 128,
+        "b": 179,
+        "a": 1
+    },
+    "hsv": {
+        "h": 202.17391304347825,
+        "s": 0.7708947885939036,
+        "v": 0.70181136,
+        "a": 1
+    },
+    "oldHue": 202.17391304347825,
+    "source": "rgb"
+}tsx
+```
+
+A:
+
+该回调函数的参数对象包含以下属性：
+
+- hsl（HSL 颜色表示），其中 h 表示色相，s 表示饱和度，l 表示明度，a 表示不透明度。
+- hex（十六进制颜色表示）。
+- rgb（RGB 颜色表示），其中 r 表示红色分量，g 表示绿色分量，b 表示蓝色分量，a 表示不透明度。
+- hsv（HSV 颜色表示），其中 h 表示色相，s 表示饱和度，v 表示亮度，a 表示不透明度。
+- oldHue（前一个色相值）。
+- source（当前颜色选择器的来源）。

@@ -25,8 +25,8 @@ Webpack4 相对于之前的版本，有了较多的变化，
 
 **其它命令：**
 
-- yarn 查看所有版本
-  `npm view yarn versions`
+- 查看依赖已发布的所有历史版本（只要是 package.json 中装过的依赖，哪怕是私有 npm 包都能查询到）
+  `npm view electron versions`
 
 - yarn 更新到最新版
   `npm install yarn@latest -g`
@@ -1834,6 +1834,29 @@ module.exports = {
 ```
 
 例如，这里我们忽略掉 js 目录下的 other.js 文件，使用 npm run build 构建，可以看到 dist/js 下不会出现 other.js 文件。 CopyWebpackPlugin 还提供了很多其它的参数，如果当前的配置不能满足你，可以查阅文档进一步修改配置。
+
+## `require.context`
+
+源码出处：supportal 项目`sources-webpack://-src/models/index.js`
+
+由于 models 目录下有几十个 js 文件，为了在`src/models/index.js`中省去引入大量的同级文件，使用了`require.context`自动加载同级的非`index.js`文件。
+
+```js
+// Use require.context to require reducers automatically
+// Ref: https://webpack.github.io/docs/context.html
+const context = require.context("./", false, /\.js$/);
+const keys = context.keys().filter((item) => item !== "./index.js");
+
+const models = [];
+for (let i = 0; i < keys.length; i += 1) {
+  models.push(context(keys[i]));
+}
+
+export default models;
+```
+
+- [一张图带你了解 webpack 的 require.context](https://segmentfault.com/a/1190000019723837)
+- [记录 require.context()使用方法及项目实战](https://juejin.cn/post/6844903841700249608)
 
 # 参考链接
 

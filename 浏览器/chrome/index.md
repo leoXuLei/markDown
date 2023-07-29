@@ -203,12 +203,13 @@ recipeDetail 的长 number 解析又有问题了，Cells 字段，如果值过�
 
 # Tips
 
-# 自带 screenshot 截图
+## 自带 screenshot 截图
 
 【参考链接】
 
 - [如何用 Chrome 进行截图(无需插件)](https://zhuanlan.zhihu.com/p/122816433)
 - [电脑上网页截图，一个 Chrome 就够了](https://sspai.com/post/56833)
+
 ## 接口返回数据可以搜索
 
 接口数据可以搜索，点开对象，点击空白处`ctrl + F`
@@ -221,5 +222,84 @@ recipeDetail 的长 number 解析又有问题了，Cells 字段，如果值过�
 ## 空格键自动触发上一次的点击事件
 
 在 chrome 浏览器访问网页，点击一个按钮事件后，不停的点击空格键，会不停的自动触发刚刚按钮的点击事件。
+
+## 元素按住拖动时`Elements`新增的元素如何查看其 DOM 结构和样式
+
+**【问题描述】**
+
+在使用依赖`react-sortable-hoc`实现趋势组件项目-`趋势分屏右侧表格支持行拖拽到左侧分屏数列功能`时，在元素按住拖动时`Elements`中能发现`<body>`体内最后新增了元素`<tr>`（记为`draggingTr`），且元素拖动过程中`<tr>`的样式`transfrom: translate3d(-40px, 72px, 0px)`一直随着拖动位置改变而改变`translate3d`的 x/y 值。说明`draggingTr`就是看到的`拖动ing行`。
+
+**【需求】**
+想查看下`draggingTr`的 DOM 结构，以及样式。但是由于拖动过程中没法松开鼠标，即没法在`Elements`中选中查看。
+
+**【实现思路】**
+借用`setTimeOut`异步任务来在拖动过程中去找到`draggingTr`，暂存其 DOM 结构以及样式。
+
+```js
+let dragingEleInfoObj = {};
+
+// 控制台运行setTimeout后再开始拖动表格行
+setTimeout(() => {
+  dragingEleInfoObj.ele = document.body.lastChild;
+  dragingEleInfoObj.eleComputedStyle = JSON.stringify(
+    getComputedStyle(tempObj.ele)
+  );
+}, 5000);
+```
+
+打印`dragingEleInfoObj`如下。
+
+```js
+// dragingEleInfoObj.ele
+<tr
+  data-row-key="var://CM6.PID1.RRL.VALUE"
+  style="box-sizing: border-box; height: 24px; left: 380px; pointer-events: none; position: fixed; top: 258px; width: 631px; transform: translate3d(-19px, 38px, 0px);"
+  class="table-row-dragging"
+>
+  <td class="table-cell drag-visible table-cell-row-hover">
+    <span
+      role="img"
+      aria-label="menu"
+      class="anticon anticon-menu"
+      style="color: rgb(153, 153, 153); cursor: grab;"
+    >
+      <svg
+        viewBox="64 64 896 896"
+        focusable="false"
+        data-icon="menu"
+        width="1em"
+        height="1em"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="xxx"></path>
+      </svg>
+    </span>
+  </td>
+  <td
+    class="table-cell drag-visible table-cell-ellipsis table-cell-row-hover"
+    title="var://CM6.PID1.RRL.VALUE"
+  >
+    var://CM6.PID1.RRL.VALUE
+  </td>
+  <td
+    class="table-cell drag-visible table-cell-ellipsis table-cell-row-hover"
+    title=""
+  ></td>
+  <td class="table-cell drag-visible table-cell-row-hover">
+    <div style="background-color: rgb(211, 242, 97); height: 18px; border-radius: 4px;"></div>
+  </td>
+  <td class="table-cell table-cell-row-hover">
+    <div style="text-align: center; color: rgb(179, 127, 235); font-weight: 700;">
+      1
+    </div>
+  </td>
+</tr>
+```
+
+```js
+// eleComputedStyle 对象
+// JSON.parse(tempObj.eleComputedStyle)
+```
 
 # 问题

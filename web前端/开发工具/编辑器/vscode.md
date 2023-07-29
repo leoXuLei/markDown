@@ -145,6 +145,15 @@
 - [VS Code 常用快捷键总结](https://www.cnblogs.com/schut/p/10461840.html)
 - [VScode 快捷键（最全）](https://www.cnblogs.com/jpfss/p/10956650.html)
 
+# **源代码管理**
+
+- 源代码`modified`的树目录中，是可以按`Shift`多选的（只能选连续的多个`modified`文件）。
+
+  - 多选后，可右键批量`放弃更改`、`暂存更改`、`stash changes`。
+
+- 【Stash】
+  - 选择 `stash Change` 后，在 `Git Graph` 会看到当前分支 A 有个暂存的分叉，此时即使去到别的分支 B，甚至在 B 上提交 commit，也是能将更改暂存的 change 取到（pop 出来）B 分支上的。
+
 # 使用
 
 - 如何重载项目：`Ctrl+shift+P`，输入`> Reload Project`
@@ -261,6 +270,26 @@ div.nav
   - create branch from: 从当前分支/commit 节点新建分支
 - Stashes: 暂存列表管理
 - Search And Compare：搜索 commit、比较不同分支/commit 节点之间的改动/提交变化
+
+**【暂存分支的提交 merge 到开发分支后提交后的提交合并历史图是怎么样的】**
+
+- 问题描述
+
+  从 `branch_xulei` 分支回到某个 commit 节点新建 `tempBranch` 分支并提交多次，再 merge 到 `branch_xulei` 分支。
+
+  然后推送到 `orgin/branch_xulei`，在别人的本地的 `Graph` 看到的提交合并历史图是什么样子？
+
+  如何测试：换个目录重新 clone 项目，打开 Graph 查看分支提交合并历史图。
+
+- 测试结果如下
+
+本地项目 Graph 查看如下图：
+![](./imgs/git-branch-commit-merge-graph-1.png)
+
+新目录 clone 项目 Graph 查看如下图：
+![](./imgs/git-branch-commit-merge-graph-2.png)
+
+即别人的本地能看到某个分支的提交 merge 进来了，但是不知道分支名。
 
 ## `Code Spell Checker`： 拼写检查
 
