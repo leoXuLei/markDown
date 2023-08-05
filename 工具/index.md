@@ -61,8 +61,8 @@
 # 电脑软件
 
 ## 文件管理
-
-- [Everything 基于名称快速定位文件和文件夹](https://www.voidtools.com/zh-cn/)
+- 资源快速搜索
+  - [Everything 基于名称快速定位文件和文件夹](https://www.voidtools.com/zh-cn/)
 
 ## VPN
 

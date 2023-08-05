@@ -334,7 +334,7 @@ type ModeOption = (typeof ModeOptions)[number];
 ```tsx
 const arr = ["foo", "bar", "baz"];
 
-type ArrType = typeof arr[number]; // 'foo' | 'bar' | 'baz'
+type ArrType = (typeof arr)[number]; // 'foo' | 'bar' | 'baz'
 
 type ArrKeyType = keyof typeof arr; // number | "length"
 ```
@@ -349,6 +349,36 @@ const RADIO_OPTIONS = ["timeBar", "configuration"];
 type RadioOptions = keyof typeof RADIO_OPTIONS; // keyof string[]
 type TRadioOptions = typeof RADIO_OPTIONS; // string[]
 type RadioValue = TRadioOptions[number]; // string
+```
+
+# 枚举转为 联合类型（字符串）
+
+```ts
+enum EnumRecipeStatus {
+  /** 工作项 */
+  workItem = "workItem",
+  /** 原始需求 */
+  originalTask = "originalTask",
+  /** 审批项 */
+  approvalItem = "approvalItem",
+  /** 负责人 */
+  owner = "owner",
+}
+
+export type TRecipeStatus = keyof typeof EnumRecipeStatus;
+```
+
+```tsx
+// 测试如下：
+const recipeStatueOne: TRecipeStatus = "workItem";
+
+// 有TS报错，悬浮提示如下
+// const recipeStatueTwo: "workItem" | "originalTask" | "approvalItem" | "owner"
+// 类型“"originalTaskq"”不可分配给类型“"workItem" | "originalTask" | "approvalItem" | "owner"”。你的意思是“"originalTask"”?ts(2820)
+const recipeStatueTwo: TRecipeStatus = "originalTaskq";
+
+console.log("recipeStatueOne :>> ", recipeStatueOne); // workItem
+console.log("recipeStatueTwo :>> ", recipeStatueTwo); // originalTaskq
 ```
 
 # 问题

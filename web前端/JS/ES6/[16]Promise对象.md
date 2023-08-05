@@ -1363,6 +1363,24 @@ Promise.try(() => database.users.get({id: userId}))
 
 # 实战
 
+## promise 包装
+
+各种获取/处理操作都可以通过返回一个 promise 构造函数来包装成 promise。
+
+```ts
+getProjectName(): Promise<string | null> {
+    return new Promise<string | null>((resolve, reject) => {
+      getCurrentRun()
+        .then((res) => {
+          resolve(res?.result?.data?.projectName || null);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    });
+  }
+```
+
 ## 父子组件异步任务先后执行问题
 
 - `async` 配合 `await`
@@ -1467,6 +1485,8 @@ const saveAllTabsData = useMemoizedFn(() => {
 
 如果中间某次请求返回数据很慢是最后一次才返回并执行回调的，界面的数据就会渲染成这次的，造成界面 input 输入内容后的预期渲染结果跟实际渲染结果不一致的问题。
 
+**【解决方法一】**
+
 ```tsx
 // 利用useRef.current 可以保存状态且更新不导致reRender的特点，即类似于class组件外部上面设置的一个变量一样。
 const countNumRef = useRef < number > 0;
@@ -1511,6 +1531,8 @@ useEffect(() => {
   // fetchProjectList不能放在useEffect依赖项中，否则会一直调用fetchProjectList，因为其是个useCallback函数
 }, [visible]);
 ```
+
+**【解决方法二】**
 
 ```jsx
 // 不通过计数来确保渲染结果是最后一次接口调用返回的数据，而是通过记录上次请求的参数来判断也是可行的，且更简单

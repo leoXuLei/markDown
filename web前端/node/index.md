@@ -331,3 +331,8 @@ Single-spa 还提供了丰富的插件和工具库，用于简化前端应用程
 A：
 
 Single-Spa 是一个 JavaScript 微前端框架，可以让你在同一个页面中集成多个子应用程序（如 React、Angular、Vue 等），并实现它们之间的协调和通信。使用 Single-Spa，你可以将各个子应用独立开发、独立部署，并且可以在不重新加载整个页面的情况下动态地添加、卸载或切换它们。Single-Spa 通过路由匹配和生命周期钩子等机制，能够自动管理子应用之间的依赖关系、初始化顺序、状态共享等问题，大大简化了微前端的开发和维护工作。Single-Spa 可以与各种主流框架和构建工具集成，包括 React、Angular、Vue、Webpack、Rollup 等。
+
+# 参考链接
+
+- [nodejs 官网](https://nodejs.cn/)
+- [包管理 NPM 官网链接-查询依赖说明/用法/仓库地址/介绍主页](https://www.npmjs.com/package/typescript)
