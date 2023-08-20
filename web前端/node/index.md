@@ -204,7 +204,7 @@ npm config set registry http://xx.xx.xx.xx:8888/repository/npm-group
 yarn config set registry http://xx.xx.xx.xx:8888/repository/npm-group
 ```
 
-## UMD
+## UMD:通用模块定义
 
 **【ask chatGpt】**
 
@@ -212,15 +212,29 @@ yarn config set registry http://xx.xx.xx.xx:8888/repository/npm-group
 
 A:
 
-"UMD" 是 "Universal Module Definition" 的缩写，通常翻译为 "通用模块定义"。它是一种 JavaScript 模块规范，旨在使模块能够在多个环境中运行，包括浏览器、Node.js 和 AMD (Asynchronous Module Definition)等模块加载器。
+"UMD" 是 "Universal Module Definition" 的缩写，**通常翻译为 "通用模块定义"。它是一种 JavaScript 模块规范，旨在使模块能够在多个环境中运行，包括浏览器、Node.js 和 AMD (Asynchronous Module Definition)等模块加载器**。
 
-UMD 模块定义允许开发者编写可以在不同的 JavaScript 环境中使用的代码，并且可以在 CommonJS、AMD 和全局变量（global）等多种模块系统中使用。这种灵活性使 UMD 成为一种流行的模块规范之一，特别适用于需要同时支持浏览器和 Node.js 等环境的项目。
+UMD 模块定义**允许开发者编写可以在不同的 JavaScript 环境中使用的代码，并且可以在 CommonJS、AMD 和全局变量（global）等多种模块系统中使用**。这种灵活性使 UMD 成为一种流行的模块规范之一，特别适用于需要同时支持浏览器和 Node.js 等环境的项目。
 
 【Q: react 项目中，UMD 是什么意思】
 
 A:
 
 UMD 模块既可以作为 CommonJS 模块（使用 require()），也可以作为 AMD 模块（使用 define()）来加载，还可以通过 script 标签在浏览器中直接引入。这使得 UMD 成为编写可移植性高的 JavaScript 库和组件的一种常见方式。在 React 中，许多库和插件都采用了 UMD 规范进行打包和发布。
+
+
+## CommonJS 和 ES6
+
+在 Node.js 中，有两种常见的模块系统：CommonJS 和 ES6。两者的区别在于模块定义和引入方式不同，在使用时需要注意兼容性。
+
+
+strip-ansi 和 strip-ansi-cjs 是两个不同的 npm 依赖包，它们的区别在于：
+
+- strip-ansi：
+    使用 ES6 模块系统（即使用 import/export 语法）。在 package.json 文件中设置 "type": "module"。
+
+- strip-ansi-cjs：
+    使用 CommonJS 模块系统（即使用 require/module.exports 语法）。在 package.json 文件中没有设置 "type" 字段，因此默认使用 CommonJS 模块系统。
 
 # 问题
 
@@ -310,6 +324,92 @@ tyarn start
 
 可能是防火墙未关闭
 
+# 实战
+
+## 开发环境搭建-安装指定版本Node
+1. 先在`应用与程序`卸载本机直接用安装包安装的`node.js`应用。然后`node_nvm`安装包文件夹，安装nvm，因为同级的`settings`中设置了`root`和`path`，其中`root`是D盘nvm目录下，所以安装路径选择（`安装程序将把NVM for Windows安装到以下文件夹。要继续，请点击“下一步”。如果您想选择其他文件夹，请点击“浏览”。`）要选择`D:\nvm`。
+```bash
+node_nvm
+---- .npmrc
+---- .yarnrc
+---- nvm-setup
+---- settings
+```
+
+```bash
+# node_nvm/settings  安装前保留最后两行即可，前面的删除
+
+
+# root: D:\NVM\nvm
+# arch: 64
+# proxy: none
+# originalpath: .
+# originalversion: 
+
+# 下面是设置安装node和npm的镜像地址
+node_mirror: http://10.10.23.14:6007/node/
+npm_mirror: http://10.10.23.14:6007/npm/
+
+```
+
+
+第二路径选择的是`Node.js`路径，默认是`C:\Program Files\nodejs`，也可以换成`D:\nodejs`。
+```bash
+# 安装过程第二个路径选择如下
+
+Set Node.js symlink。
+  The active version of Node.js will always be available here. 
+  
+Select the floder in which Setup should create the symlink, then click Next. The directory will automatically be added to your system path
+
+# 设置Node.js符号链接。活动版本的Node.js将始终在此处可用。选择应在其中创建符号链接的文件夹，然后点击“下一步”。该目录将自动添加到您的系统路径中。
+```
+
+2. 将`192.168.22.24`机器C盘用户文件夹下的`.npmrc`和`.yarnrc`复制到`1.26`机器的C盘用户文件夹下。
+
+3. 全局安装`yarn`
+
+```bash
+npm i yarn@1.22.18 -g
+```
+
+### 全局安装`yarn`成功，但是没法使用yarn相关命令
+
+1. 安装指定版本的yarn，且是指定版本安装。
+```bash
+> npm install yarn@1.22.18 -g
+
+> yarn@1.22.18 preinstall D:\node_global\node_modules\yarn
+> :; (node ./preinstall.js > /dev/null 2>&1 || true)
+
+D:\node_global\yarn -> D:\node_global\node_modules\yarn\bin\yarn.js
+D:\node_global\yarnpkg -> D:\node_global\node_modules\yarn\bin\yarn.js
++ yarn@1.22.18
+added 1 package in 0.528s
+```
+
+2. 安装完成后查询yarn版本提示如下，是没有正确设置系统环境变量导致的。
+   解决方法：`控制面板\系统和安全\系统-更改设置\高级-环境变量-系统变量`。选中`Path`编辑，添加`D:\node_global`。（通过与`22.24`机器的系统变量比较发现少了`D:\node_global`）。
+```bash
+> yarn -v 
+
+yarn : 无法将“yarn”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。请检查名称的拼写，如果包括路径，请确保路径正确，然后再试一次。
+所在位置 行:1 字符: 1
+```
+
+3. 添加系统环境变量后，再次查询yarn版本提示如下，老问题了，是`执行策略`的问题，照着之前解决即可。
+```bash
+> yarn -v 
+yarn : 无法加载文件 D:\node_global\yarn.ps1，因为在此系统上禁止运行脚本
+# 再次查询版本，提示在系统上禁止运行脚本，这个问题之前遇到过。
+```
+
+4.  再次查询yarn版本，成功。
+
+```bash
+> yarn -v 
+1.22.18
+```
 # 依赖
 
 ## Single-spa
