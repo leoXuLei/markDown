@@ -203,6 +203,28 @@ recipeDetail 的长 number 解析又有问题了，Cells 字段，如果值过�
 
 # Tips
 
+## source 中转译后的代码如何查询搜索变量名
+
+如下所示，代码转译后的 api 大多都变了，但是函数调用的`参数对象的 key` 没有变，可以在文件中直接搜索，方便定位。
+
+```tsx
+he = Object(N["a"])((e, a) => {
+  var n = e.tagName,
+    r = e.propertyName,
+    i = e.propertyValue;
+  L(
+    {
+      tagName: n,
+      propertyName: r,
+      propertyValue: i,
+    },
+    a
+  ).then(() => {
+    var e;
+  });
+});
+```
+
 ## 自带 screenshot 截图
 
 【参考链接】

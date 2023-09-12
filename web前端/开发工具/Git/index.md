@@ -155,32 +155,6 @@ PS：处理后，后续每次需求完成后提交代码 rebase 应该都会正�
   ![](./imgs/git-tools-git-graph-useExample3.png)
   ![](./imgs/git-tools-git-graph-useExample4.png)
 
-# 开发
-
-- `commit hook`钩子中规定的 commit 信息中的类型
-
-```bash
-type must be one of
-[
-  bug,
-  feat,
-  fix,
-  docs,
-  style,
-  refactor, # 重构
-  test,
-  chore, # 杂活
-  revert,
-  merge,
-  cid,
-  del,
-  pub
-] [type-enum]
-```
-
-# ssh
-
-- [git - Mac 生成 SSH key(示例代码)](https://www.136.la/shida/show-392932.html)
 
 # .gitignore
 
@@ -336,17 +310,65 @@ git config --global core.autocrlf false
 - [解决 Delete `␍`eslint(prettier/prettier)问题](https://juejin.cn/post/7094832364055969822)
 - [解决 VSCode 报 Delete `␍`eslint(prettier/prettier)问题](https://juejin.cn/post/6979958982291292190#heading-5)
 
+## `git rebase`时提示Permission denied
+
+**【提示如下】**
+
+```bash
+git rebase Next_V1
+error: unable to create file package.json: Permission denied
+```
+
+**【解决方法】**
+- `git rebase --abort`撤销rebase
+- 然后在`Windows PowerShell(管理员)`中重新rebase。提示成功
+  - `Successfully rebased and updated refs/heads/branch_xulei_ECS_Next.`
+
 # macbook
 
 - [MAC 上 Git 安装与 GitHub 基本使用](https://www.jianshu.com/p/7edb6b838a2e)
 
+- [git - Mac 生成 SSH key(示例代码)](https://www.136.la/shida/show-392932.html)
+
 # 其它
+
+## commit 提交信息格式
+
+- `commit hook`钩子中规定的 commit 信息中的类型
+
+```bash
+type must be one of
+[
+  bug,
+  feat,
+  fix,
+  docs,
+  style,
+  refactor, # 重构
+  test,
+  chore, # 杂活
+  revert,
+  merge,
+  cid,
+  del,
+  pub
+] [type-enum]
+```
 
 ## 提交代码不走 precommit 校验
 
 ```powerShell
 git commit -m '' --no-verify
 # yarn run precommit // 这是手动运行precmomit
+```
+
+## 通过HTTP方式clone的项目如何改为SSH方式
+
+clone with HTTP 方式如何修改为 clone with SSH
+
+
+```bash
+git remote set-url origin 远程仓库地址（SSH地址） # 也可以先删除origin后再添加
 ```
 
 # 工具

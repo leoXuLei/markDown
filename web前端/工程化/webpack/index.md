@@ -1855,8 +1855,31 @@ for (let i = 0; i < keys.length; i += 1) {
 export default models;
 ```
 
-- [一张图带你了解 webpack 的 require.context](https://segmentfault.com/a/1190000019723837)
-- [记录 require.context()使用方法及项目实战](https://juejin.cn/post/6844903841700249608)
+- 参考链接
+  - [一张图带你了解 webpack 的 require.context](https://segmentfault.com/a/1190000019723837)
+  - [记录 require.context()使用方法及项目实战](https://juejin.cn/post/6844903841700249608)
+
+## Merge webpack 配置时的数组会 concat
+
+**【问题背景】**
+
+趋势项目`webpack.config.sspa.js`中会合并`defaultConfig.externals`，如果在下面代码中不注释`// ...defaultConfig.externals`，则会导致最终的 externals 配置数组，含有两份`defaultConfig.externals`数组的元素（打印发现），所以注释掉才能正常。
+
+
+**【结论】**
+
+即 webpack 配置合并时如果发现两份配置的`externals`都是数组，则进行 concat。
+
+```jsx
+{
+  externals: [
+      // ...defaultConfig.externals,
+      ...(isExternalSupcond
+        ? [/^@supcon\/supcond2/]
+        : []),
+    ],
+}
+```
 
 # 参考链接
 

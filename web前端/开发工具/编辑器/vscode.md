@@ -134,7 +134,7 @@
 - `Ctrl+Shift+G`： 显示 Git
 - `Ctrl+Shift+D`： 显示 Debug
 - `Ctrl+Shift+U`： 显示 Output
-- `Shift + alt + R`：在左侧目录Tree中，可以快速打开当前选中文件所在文件夹（资源管理器）
+- `Shift + alt + R`：在左侧目录 Tree 中，可以快速打开当前选中文件所在文件夹（资源管理器）
 
 ## 其它
 
@@ -162,6 +162,14 @@
 - 如何`ESLint`重启 ESLint 服务器：`Ctrl+shift+P`，输入`>restart`
 
 # 插件
+
+## Tips
+
+**【vsix 安装的插件如何给另一个机器用】**
+
+- 打开 A 机器 VSCode 的插件安装目录：`C:\Users\xulei\.vscode\extensions`。
+- 复制`目标插件名文件夹`到 B 机器 VSCode 的插件安装目录。
+- 在 B 机器 VSCode 的扩展中能够看到新复制的插件，但是是灰色 `disabled` 的，需要重启 VSCode 才能生效。
 
 ## `snippets` 代码片段
 

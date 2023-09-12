@@ -172,6 +172,8 @@ nvm list/ls     // 本机中所有的node的版本列表
 nvm install latest  // 安装最新版本
 nvm install 4.8.4  // 安装指定版本node
 nvm use 10.8.0  // 使用指定node版本
+
+nvm list available // nvm 查询可安装的 Node 版本
 ```
 
 ![nvmInstallExample](./imgs/nvmInstallExample.png)
