@@ -110,12 +110,16 @@
 - `Ctrl+Shift+F`： 整个文件夹中查找
 
 - 按包含文件夹或者排除文件夹来搜索
+
   - 第一行：搜索的关键词
   - 第二行：包含的文件：想在哪个文件夹中搜索，不填就是全局项目
     - 例子：如`blocks/`
   - 第三行：排除的文件：想排除的文件/文件夹，多个用逗号隔开`,`
     - 例子：排除文件夹如`blocks/teams,,blocks/spaces`
     - 例子：排除文件如`.scss`
+
+- Tips
+  - 全局搜索和页面内搜索的搜索输入框，**支持上下箭头选择历史搜索内容**。
 
 ### 代码
 
@@ -154,6 +158,19 @@
 
 - 【Stash】
   - 选择 `stash Change` 后，在 `Git Graph` 会看到当前分支 A 有个暂存的分叉，此时即使去到别的分支 B，甚至在 B 上提交 commit，也是能将更改暂存的 change 取到（pop 出来）B 分支上的。
+
+# 功能
+
+## `选择缩进`
+
+vscode 中右下角`选择缩进`配置，功能有：
+
+- `使用空格缩进（Indent Using Spaces）`
+- `使用Tab缩进（Indent Using Tabs）`
+- `从内容中检测缩进方式（Detect Indentation from Content）`
+- `将缩进转换为空格（Convert Indentation to Spaces）`（转换文件）
+- `将缩进转换为制表符（Convert Indentation to Tabs）`（转换文件）
+- `裁剪尾随空格（Trim Trailing Whitespace）`（转换文件）
 
 # 使用
 
@@ -362,8 +379,6 @@ export const uniqueListFieldValue = (list: IPlainObject[], key: string) => {
 - [VSCode 自动格式化 md 文档](https://www.jianshu.com/p/4d5529848104)
 
 # Tip
-
-- 全局搜索和页面内搜索的搜索输入框，支持上下箭头选择历史搜索内容。
 
 # 参考链接
 

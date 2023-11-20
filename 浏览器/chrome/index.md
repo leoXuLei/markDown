@@ -201,49 +201,8 @@ recipeDetail 的长 number 解析又有问题了，Cells 字段，如果值过�
     },
 ```
 
-# Tips
+# Tips-代码
 
-## source 中转译后的代码如何查询搜索变量名
-
-如下所示，代码转译后的 api 大多都变了，但是函数调用的`参数对象的 key` 没有变，可以在文件中直接搜索，方便定位。
-
-```tsx
-he = Object(N["a"])((e, a) => {
-  var n = e.tagName,
-    r = e.propertyName,
-    i = e.propertyValue;
-  L(
-    {
-      tagName: n,
-      propertyName: r,
-      propertyValue: i,
-    },
-    a
-  ).then(() => {
-    var e;
-  });
-});
-```
-
-## 自带 screenshot 截图
-
-【参考链接】
-
-- [如何用 Chrome 进行截图(无需插件)](https://zhuanlan.zhihu.com/p/122816433)
-- [电脑上网页截图，一个 Chrome 就够了](https://sspai.com/post/56833)
-
-## 接口返回数据可以搜索
-
-接口数据可以搜索，点开对象，点击空白处`ctrl + F`
-![联调Tips](./imgs/chrome-control-preview-search.png)
-
-## 报错信息有开发文件路径可打断点
-
-报错信息如果有开发文件的话，直接点击进去，在代码中点击左侧即可打断点。
-
-## 空格键自动触发上一次的点击事件
-
-在 chrome 浏览器访问网页，点击一个按钮事件后，不停的点击空格键，会不停的自动触发刚刚按钮的点击事件。
 
 ## 元素按住拖动时`Elements`新增的元素如何查看其 DOM 结构和样式
 
@@ -323,5 +282,23 @@ setTimeout(() => {
 // eleComputedStyle 对象
 // JSON.parse(tempObj.eleComputedStyle)
 ```
+
+## 空格键自动触发上一次的点击事件
+
+在 chrome 浏览器访问网页，点击一个按钮事件后，不停的点击空格键，会不停的自动触发刚刚按钮的点击事件。
+
+# Tips-工具
+
+## 自带 screenshot 截图
+
+【参考链接】
+
+- [如何用 Chrome 进行截图(无需插件)](https://zhuanlan.zhihu.com/p/122816433)
+- [电脑上网页截图，一个 Chrome 就够了](https://sspai.com/post/56833)
+
+## 接口返回数据可以搜索
+
+接口数据可以搜索，点开对象，点击空白处`ctrl + F`
+![联调Tips](./imgs/chrome-control-preview-search.png)
 
 # 问题

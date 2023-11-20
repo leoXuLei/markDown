@@ -388,3 +388,26 @@ flags = flags ^ mask;
 ```javascript
 flags = ~flags;
 ```
+
+
+# Tips
+
+## `if (~idx) {}` === `if (idx !== -1) {}`
+
+
+```js
+const idx = res?.children?.findIndex(
+  (it) => it.ParamName === defaultDynamicPar
+);
+
+// 等价于 if (idx !== -1)
+if (~idx) {
+  setSelectIdxs([idx]);
+  setDynamicPar(res?.children?.[idx]);
+}
+setDynamicParList(res);
+```
+
+在这段代码中，**`~idx` 是一个位操作符，用于判断 idx 的值是否为-1。它等价于 `idx !== -1`**。使用`~（取反）操作符`对 idx 进行取反运算后，若结果为非零值，则表示 idx 不等于-1，否则表示 idx 等于-1。
+
+这种使用~来表示不等于-1 的惯用写法可以用于条件判断，因为 JavaScript 中的位操作符将负数转换为补码形式，且-1 的二进制表示为全 1 的形式（例如 32 位整数的-1 表示为 `11111111 11111111 11111111 11111111`）。所以，如果 idx 为非零值（即不等于-1），`~idx` 的结果将是一个负数或者一个非零的正数。判断`~idx` 是否为真，可以用作检查 idx 是否不等于-1 的简便方式。

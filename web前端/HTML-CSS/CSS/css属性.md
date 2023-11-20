@@ -92,6 +92,7 @@
 简写：`background: color img repeat attachment position`
 
 - **`background-color`：背景颜色**
+  - 若DOM元素本身没有设置背景色，那么其使用的背景色是从`离其最近的且设置了背景色的祖先元素`那里继承的。
 - **`background-image`：要使用的背景图片**
   把图像设置为背景平铺重复显示，以覆盖整个元素实体.
 - **`background-repeat`：设置背景图像是否及如何重复。**

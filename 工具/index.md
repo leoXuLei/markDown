@@ -27,6 +27,14 @@
 | `⌘ + option + Y` | 语雀新建临时笔记 |
 | `⌘ + .`          |      iTerm2      |
 
+# Windows快捷键
+
+- 文件资源管理器
+  - `Ctrl + shift + N`：当前目录新建文件夹
+  - `Ctrl + N`：复制新窗口打开当前目录
+  - `Ctrl + D`：删除选中文件，移动到回收站
+  - `Ctrl + W`：关闭窗口
+
 # 壁纸桌面
 
 - [彼岸图网](https://pic.netbian.com/4kdongman/)
