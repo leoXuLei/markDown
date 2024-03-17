@@ -212,3 +212,9 @@
 # 致谢
 
 感谢您花时间阅读我的简历，期待能有机会和您共事。
+
+
+# 链接
+
+- [Web前端程序员简历模板](https://github.com/geekcompany/ResumeSample/blob/master/web.md)
+- [程序员简历(比较好看的格式)](https://www.ppt118.com/words/search/?keyword=%E5%BC%80%E5%8F%91%E7%AE%80%E5%8E%86)
