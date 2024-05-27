@@ -46,6 +46,8 @@ ChatGPT 能做些什么 ChatGPT 可以用于多种任务和应用，例如
 - [ChatGPT 官方入口 chat.openai.com（需要翻墙，3.5 免费用，4.0 需要花钱）](https://chat.openai.com/)
   - [如何使用 4.0](https://help.openai.com/en/articles/7102672-how-can-i-access-gpt-4)
     - [fomepay 虚拟卡官网](https://gpt.fomepay.com/#/)
+- 3.5 还是 4.0
+  - 暂时先试用免费的 3.5，后续如果有需求，照着下面的配置教程做即可。（20240427）
 - chatGPT 配置使用教程
 
   - [Openai API 收费标准和计算方式，一个中文汉字算多少 Token - 清风的文章 - 知乎](https://zhuanlan.zhihu.com/p/674219091)
