@@ -227,127 +227,138 @@ class ElectronicSignModal extends PureComponent<
 
 ## 命令式加载组件
 
-### 命令式加载电子签名组件
+命令式加载电子签名组件实例见`project/监控/index.md`
 
-**【命令式加载的源码】**
+# 组件之间跨层级调用其函数的新思路
 
-```tsx
-// src/components/electronicSign.tsx
-
-import ReactDOM from "react-dom";
-import React, { useCallback, useState, useMemo } from "react";
-import { injectIntl } from "react-intl";
-import { ConfigProvider, theme } from "@supcon/supcond2";
-import enUS from "@supcon/supcond2/locale/en_US";
-import zhCN from "@supcon/supcond2/locale/zh_CN";
-import ElectronicSignModal, {
-  IEleSignModalParams,
-} from "./electronicSignModal";
-
-import { getLocale } from "../utils/api";
-
-const electronicSign = (props: IEleSignModalParams) => {
-  return new Promise((resolve, reject) => {
-    const nodeWrapper = document.createElement("div");
-    nodeWrapper.classList.add("electronic-sign-wrapper");
-    const nodeInner = document.createElement("div");
-    nodeWrapper.appendChild(nodeInner);
-    document.body.appendChild(nodeWrapper);
-
-    const lang = getLocale();
-
-    // 起始这种写法用<ConfigProvider />包裹后也能正常使用，但是用React.createPortal多套了一层，比较麻烦
-    // ReactDOM.render(
-    //   <div>
-    //     {ReactDOM.createPortal(
-    //       <ConfigProvider
-    //         theme={{
-    //           algorithm: theme.compactAlgorithm,
-    //         }}
-    //         locale={lang !== "zh-CN" ? enUS : zhCN}
-    //       >
-    //         <ElectronicSignModal
-    //           isZHCN={lang === "zh-CN"}
-    //           {...props}
-    //           onOk={(values) => {
-    //             resolve(values);
-    //           }}
-    //           onSignFailed={(err) => {
-    //             reject(err);
-    //           }}
-    //           onClose={() => {
-    //             ReactDOM.unmountComponentAtNode(nodeWrapper);
-    //             nodeWrapper.remove();
-    //           }}
-    //         />
-    //       </ConfigProvider>,
-    //       nodeInner
-    //     )}
-    //   </div>,
-    //   nodeWrapper
-    // );
-
-    ReactDOM.render(
-      <ConfigProvider
-        theme={{
-          algorithm: theme.compactAlgorithm,
-        }}
-        locale={lang !== "zh-CN" ? enUS : zhCN}
-      >
-        <ElectronicSignModal
-          isZHCN={lang === "zh-CN"}
-          {...props}
-          onOk={(values) => {
-            resolve(values);
-          }}
-          onSignFailed={(err) => {
-            reject(err);
-          }}
-          onClose={() => {
-            ReactDOM.unmountComponentAtNode(nodeWrapper);
-            nodeWrapper.remove();
-          }}
-        />
-      </ConfigProvider>,
-      nodeWrapper
-    );
-  });
-};
-
-export default electronicSign;
-```
-
-**【命令式加载调用如下】**
+将函数和变量缓存至某个静态文件中。
 
 ```ts
-class GlobalBasicAPI {
-  public static singleton = new GlobalBasicAPI();
-  private constructor() {}
+// ../utils
 
-  // 打开电子签名（单签）弹窗
-  singleSign(params: TEleSignParams): Promise<any> {
-    return electronicSign({
-      ...params,
-      signLevel: 1,
+const changePwdObj = {
+  needChangePwd: false,
+  registered: false,
+  exec: () => void 0,
+};
+
+export const registerChangePwd = (cb: () => void) => {
+  if (typeof cb !== "function") return;
+  changePwdObj.registered = true;
+  changePwdObj.exec = cb;
+};
+
+export const unRegisterChangePwd = () => {
+  changePwdObj.registered = false;
+  changePwdObj.exec = () => {};
+};
+
+export const globalChangePwd = () => {
+  if (changePwdObj.registered) changePwdObj.exec();
+};
+
+export const setNeedChangePwd = (flag: any) => {
+  changePwdObj.needChangePwd = !!flag;
+};
+
+export const getNeedChangePwd = () => {
+  return changePwdObj.needChangePwd;
+};
+```
+
+```tsx
+// ./rightContent
+
+class RightContent extends PureComponent {
+  componentDidMount() {
+    // 向utils相关对象中注册回调函数，功能为打开密码修改表单
+    registerChangePwd(() => {
+      this.handleVisibleClick("changePwd", true);
+      this.setState({
+        changePwdCancel: "false",
+        changePwdMask: "true",
+      });
     });
   }
 
-  // 打开电子签名（双签）弹窗
-  dualSign(params: TEleSignParams): Promise<any> {
-    return electronicSign({
-      ...params,
-      signLevel: 2,
-    });
+  componentWillUnmount() {
+    // 向utils相关对象中注册回调函数，功能为数据重置
+    unRegisterChangePwd();
   }
+}
+```
 
-  // 打开二次确认弹窗
-  secConfirm(params: TSecConfirmParams): Promise<any> {
-    const { confirmContent, ...rest } = params;
-    return electronicSign({
-      ...rest,
-      isSecondaryConfirm: true,
-      signReason: confirmContent,
-    });
+```tsx
+// src/pages/main/index
+
+export default function Main() {
+  useEffect(() => {
+    const needsUpdatePwd =
+      localStorage.getItem("password-needs-update") === "true";
+    if (getNeedChangePwd() || needsUpdatePwd) {
+      globalChangePwd();
+      setNeedChangePwd(false);
+    }
+  }, []);
+}
+```
+
+```tsx
+// ../../login/loginForm.tsx
+
+// 调用登录接口
+
+userLogin({ ...params }).then((res) => {
+  const { code = -1, modifyPassword = false } = res;
+  if (code === 0) {
+    // xxx
+    setNeedChangePwd(modifyPassword);
+  }
+});
+```
+
+```tsx
+// ../pages/header/index
+
+class Header extends React.Component<any, any> {
+  // ws消息回调
+  private onWsMessage(msg: any) {
+    const {
+      data: { passwordRemainingDays = -1 },
+    } = wsMsg;
+    if (passwordRemainingDays > 0) {
+      Modal.confirm({
+        title: "密码即将过期",
+        content: "您的密码即将过期，请及时修改",
+        okText: "更新",
+        cancelText: "稍后",
+        onOk: () => {
+          globalChangePwd();
+        },
+      });
+    } else if (passwordRemainingDays === 0) {
+      Modal.confirm({
+        title: "密码已过期",
+        content: "您的密码已经过期，请及时修改",
+        okText: "更新",
+        cancelText: "退出",
+        onOk: () => {
+          globalChangePwd();
+        },
+        onCancel: () => {
+          this.ws?.sendMsg(
+            JSON.stringify({
+              type: "UserLogout",
+              logInfo: { function: "logout" },
+            })
+          );
+          logout().then(() => {
+            this.props.exitOpenSource();
+            this.props.navigate("/user/login");
+          });
+        },
+      });
+    }
   }
 }
 ```

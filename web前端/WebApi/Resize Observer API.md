@@ -129,6 +129,53 @@ const ProcessProcedure: FC<IProcessProcedureProps> = () => {
 };
 ```
 
+## 实例二：ResizeObserver 选中 Y 轴功能失效
+
+```tsx
+componentDidMount() {
+  this.resizeObserver = new ResizeObserver(
+    debounce(entries => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        console.log('entry.contentRect', entry.contentRect);
+        this.handleResize(width, height);
+      }
+    }, 150)
+  );
+  if (this.parentElement) {
+    this.resizeObserver.observe(this.parentElement);
+  }
+}
+```
+
+ask GPT
+
+Q: entry.contentRect 都有哪些属性
+
+A：
+
+entry.contentRect 是 ResizeObserver 回调函数中的一个参数，它是一个 DOMRectReadOnly 对象，表示被观察元素的内容矩形（即可见区域）的尺寸和位置信息。DOMRectReadOnly 对象具有以下属性：
+
+- x：矩形左边相对于视口左边的距离。
+- y：矩形顶部相对于视口顶部的距离。
+- width：矩形的宽度。
+- height：矩形的高度。
+- top：矩形顶部相对于视口顶部的距离，与 y 属性相同。
+- right：矩形右边相对于视口左边的距离，计算方式为 x + - width。
+- bottom：矩形底部相对于视口顶部的距离，计算方式为 y + height。
+- left：矩形左边相对于视口左边的距离，与 x 属性相同。
+
+这些属性提供了关于被观察元素可见区域的位置和尺寸信息。在给定的代码示例中，使用 entry.contentRect 对象提取了 width 和 height 属性的值来处理尺寸变化。
+
+Q：MouseEvent 返回的 layerX，layerY 是什么属性
+A：
+
+在过去的旧版浏览器中，MouseEvent 对象确实具有 layerX 和 layerY 属性。这些属性表示鼠标事件相对于触发事件的元素（目标元素）的水平和垂直偏移值。
+
+然而，请注意，layerX 和 layerY 属性已经被废弃，不建议在现代浏览器中使用。它们存在一些兼容性问题，并且不是 W3C 标准的一部分。
+
+相反，在现代浏览器中，通常使用 event.clientX 和 event.clientY 属性来获取鼠标事件相对于视口的坐标。要计算相对于目标元素的坐标，可以结合使用 getBoundingClientRect() 方法和这些坐标值，如之前所示的代码示例中所述。请参考上面的回答以了解更多详细信息。
+
 # 参考链接
 
 - [JavaScript API ResizeObserver 使用示例](https://www.jb51.net/article/255896.htm)

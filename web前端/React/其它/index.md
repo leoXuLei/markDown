@@ -21,6 +21,22 @@ export default class App extends Component {
 }
 ```
 
+# `import { flushSync } from 'react-dom'`
+
+```js
+flushSync(() => {
+  setLoading(false);
+  setShowProgress(true);
+});
+```
+
+这段代码是使用 React 中的 flushSync 函数来同步地执行两个更新状态的操作。**在 React 中，更新状态是异步的，意味着在调用 setState 或者 useState 的更新函数后，并不会立即执行状态更新，而是将状态更新加入到队列中，在下一个渲染周期才会真正更新状态**。
+
+**flushSync 函数可以用来同步地执行更新状态的操作，即在 flushSync 函数内部的操作将会立即执行，并在当前同步任务中完成，而不会被放入更新队列中延迟执行**。在这个例子中，flushSync 函数内部执行了两个操作：首先，调用 setLoading(false)将 loading 状态设置为 false；然后，调用 setShowProgress(true)将 showProgress 状态设置为 true。
+
+使用 flushSync 函数可以确保两个状态更新操作之间的关系在同一个同步任务中得到执行，这对于某些特定的场景和需求可能是有用的。但需要谨慎使用，因为过度使用 flushSync 可能会影响 React 的性能和正常的更新流程。
+
+
 # React 开发者工具安装及使用
 
 `React developer tools`

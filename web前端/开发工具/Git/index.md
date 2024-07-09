@@ -155,7 +155,6 @@ PS：处理后，后续每次需求完成后提交代码 rebase 应该都会正�
   ![](./imgs/git-tools-git-graph-useExample3.png)
   ![](./imgs/git-tools-git-graph-useExample4.png)
 
-
 # .gitignore
 
 ## 规则
@@ -310,7 +309,7 @@ git config --global core.autocrlf false
 - [解决 Delete `␍`eslint(prettier/prettier)问题](https://juejin.cn/post/7094832364055969822)
 - [解决 VSCode 报 Delete `␍`eslint(prettier/prettier)问题](https://juejin.cn/post/6979958982291292190#heading-5)
 
-## `git rebase`时提示Permission denied
+## `git rebase`时提示 Permission denied
 
 **【提示如下】**
 
@@ -320,8 +319,9 @@ error: unable to create file package.json: Permission denied
 ```
 
 **【解决方法】**
-- `git rebase --abort`撤销rebase
-- 然后在`Windows PowerShell(管理员)`中重新rebase。提示成功
+
+- `git rebase --abort`撤销 rebase
+- 然后在`Windows PowerShell(管理员)`中重新 rebase。提示成功
   - `Successfully rebased and updated refs/heads/branch_xulei_ECS_Next.`
 
 # macbook
@@ -362,14 +362,18 @@ git commit -m '' --no-verify
 # yarn run precommit // 这是手动运行precmomit
 ```
 
-## 通过HTTP方式clone的项目如何改为SSH方式
+## 通过 HTTP 方式 clone 的项目如何改为 SSH 方式
 
 clone with HTTP 方式如何修改为 clone with SSH
-
 
 ```bash
 git remote set-url origin 远程仓库地址（SSH地址） # 也可以先删除origin后再添加
 ```
+
+# Tips
+
+- 同一个 Gitlab 仓库有两个不同分支，分别对应不同业务方/项目，且两分支已经分离并相互独立前进了几年了，如何同时运行两个分支。
+  - 解决方法：新建个文件夹，切换分支后，当成两个不同的项目，这样就不需要来回切换分支，来回 yarn 了。
 
 # 工具
 

@@ -358,6 +358,43 @@ const lastest = produce(subCards, (draft) => {
 });
 ```
 
+### 问题
+
+> （1）报错`Cannot add property 2, object is not extensible`
+
+**【描述】**
+
+详细报错信息如下：
+
+```bash
+index.ts:211 Uncaught TypeError: Cannot add property 2, object is not extensible
+    at Array.push (<anonymous>)
+    at dfs (index.ts:211:1)
+    at dfs (index.ts:154:1)
+    at dfs (index.ts:245:1)
+    at dfs (index.ts:245:1)
+    at TeachingSchedulingService.permuteTeachingScheduling (index.ts:273:1)
+    at new TeachingSchedulingService (index.ts:52:1)
+```
+
+**【产生原因】**
+
+使用 immer 处理数组后，处理后的数组会变成不可扩展（non-extensible）的数组。所以再改变该数组（如新增元素`push`），会报错如上。
+
+**【解决方法】**
+
+使用 immer 处理数组后再将原数组每个元素重新映射。如下。
+
+```js
+// 使用 immer 进行深拷贝（并重新映射每个元素的属性），拷贝一份当前排课方案，加入解集res
+const deepCopiedPath = produce(path.slice(), (draft) => {
+  // 当前排课方案按照courseSchedulingKey属性排序
+  return draft.sort((a, b) =>
+    a?.courseSchedulingKey?.localeCompare(b?.courseSchedulingKey, "zh")
+  );
+}).map((item) => ({ ...item }));
+```
+
 ## `immutability-helper`
 
 ```jsx
@@ -396,6 +433,10 @@ useEffect(() => {
   setHasModified(!deepEqual(milestones, currentMilestones));
 }, [milestones, currentMilestones]);
 ```
+
+# `Ramda`：函数式编程库
+
+- [Ramda 官网\_\_一款实用的 JavaScript 函数式编程库](https://ramda.cn/docs/#isNil)
 
 # `uuid`
 

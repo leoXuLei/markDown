@@ -2035,3 +2035,26 @@ outer: for (let i = 0; i < 5; i++) {
 // 内-->0
 // 内-->1
 ```
+
+## 判断两个基本类型数组是否相等：元素只是顺序不同
+
+考虑到实际场景中对于值的唯一性维护，因此数组中理论上不会存在相同的值，因此我们可以这么实现：
+
+```js
+const isArrEqual = (arr1, arr2) => {
+  return arr1.length === arr2.length && arr1.every((ele) => arr2.includes(ele));
+};
+
+isArrEqual(
+  [1, "b", false, undefined, null, NaN],
+  [1, null, "b", undefined, false, NaN]
+); // true
+```
+
+注意，**上述实现是考虑到特殊场景不会让数组有重复项，因此可以这么实现，但如果数组有重复元素上述实现就不可行**，比如这个例子就不 OK：
+
+```js
+isArrEqual([1, 1], [1, null]); // true
+```
+
+**针对这种情况还是得考虑将两个数组进行排序，再按数组完全相等的思路对每一位进行对比**。

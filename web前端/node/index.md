@@ -438,3 +438,4 @@ Single-Spa 是一个 JavaScript 微前端框架，可以让你在同一个页面
 
 - [nodejs 官网](https://nodejs.cn/)
 - [包管理 NPM 官网链接-查询依赖说明/用法/仓库地址/介绍主页](https://www.npmjs.com/package/typescript)
+- [七天学会NodeJS是阿里巴巴国际站前端技术部编写的开源文档，用于学习 Node.js。](https://www.w3cschool.cn/nodejsguide/3c8i1nfw.html)

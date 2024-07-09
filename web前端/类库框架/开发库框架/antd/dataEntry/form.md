@@ -32,3 +32,32 @@ const rules = [
   },
 ];
 ```
+
+# `<Input.Password />`密码输入框直接回车确认
+
+**【实现方法】**
+
+控件设置`onPressEnter`属性即可，回车触发确认提交。
+
+```tsx
+onSubmit = () => {
+  return new Promise((resolve, reject) => {
+    let password = "";
+    this.formRef.current.validateFields().then((values) => {
+      password = values.password;
+      values.password = values.password ? encrypt(values.password) : "";
+      const operationLog = {
+        ...this.props.operationLog,
+        user: values.userName,
+      };
+      return checkPwd(values, operationLog);
+    });
+  });
+};
+
+return (
+  <Form.Item name="password" label={passwordLabel}>
+    <Input.Password placeholder={passwordLabel} onPressEnter={this.onSubmit} />
+  </Form.Item>
+);
+```

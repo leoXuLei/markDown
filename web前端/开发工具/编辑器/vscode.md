@@ -53,11 +53,18 @@
 - `Ctrl+\`： 拆分编辑器，当前编辑文件复制出一个新的编辑器（类似于`Chrome`中的窗口复制）
 - `Ctrl+1 Ctrl+2 Ctrl+3`： 切换左中右 3 个编辑器的快捷键
 - `Ctrl+k` 然后按 Left 或 Right： 编辑器换位置，
+- `Ctrl+Alt+左右箭头`：当前文件移动到左右打开
 
 ## 代码编辑
 
 - `Ctrl+S`： 保存当前文件
 - `Ctrl+K+S`： 保存所有未保存文件
+
+### 预览
+
+- **当前文件按函数名全部折叠/展开**
+  - 折叠：`Ctrl+K 松开 Ctrl+0`
+  - 展开：`Ctrl+K 松开 Ctrl+J`
 
 ### 格式调整
 
@@ -76,6 +83,7 @@
 ### 光标相关
 
 - `Alt + 左键单击`： 多光标，依次选定多个光标，同时编辑，适合多行光标在不同位置的
+- `Alt + 左右箭头`：==**左右移动光标历史所在处（来回看属性定义和使用及其方便）**==
 - `Alt+Shift+鼠标左键`： 选取区域多行同时编辑，适合多行光标在相同位置的
 - `Alt+Shift+I`： 在选定的每一行的末尾插入光标
 - `shift + 左右←→`： 移动光标选择字符
@@ -171,6 +179,54 @@ vscode 中右下角`选择缩进`配置，功能有：
 - `将缩进转换为空格（Convert Indentation to Spaces）`（转换文件）
 - `将缩进转换为制表符（Convert Indentation to Tabs）`（转换文件）
 - `裁剪尾随空格（Trim Trailing Whitespace）`（转换文件）
+
+## Debug 代码
+
+- ps: 是 React 项目，启动会有`App running at: - Local: http://localhost:8000`提示。
+
+> **【流程】**
+
+- 1.点击`运行和调试`（快捷键：`Ctrl+Shift+D`），添加调试文件的配置，配置如下：
+
+  ```json
+  {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        // 类型选择chrome
+        "type": "pwa-chrome",
+        "request": "launch",
+        "name": "Launch Chrome against localhost",
+        "url": "http://localhost:8000",
+        "webRoot": "${workspaceFolder}"
+      }
+    ]
+  }
+  ```
+
+- 2.项目源码中找到目标所在位置，在文件每一行的行号的左侧点击即可新增断点。
+
+- 3.点击`左上角调试按钮-绿色右指向三角`(快捷键：`F5`)，会新开个 Chrome 的 Tab 页打开`"http://localhost:8000"`，同时开始`调试程序`。
+
+  - 此时打开 Chrome 的开发者工具，也能够看到代码中设置好的断点。
+
+- 4.左侧底部可看到断点列表，可批量激活/反激活断点。同时可以观察调试控制台，可以输出`console`。
+
+> **【与 chrome 中 debug 对比】**
+
+- 直接 Chrome 访问`http://localhost:8000`也能 Debug，为何还要在 Vscode 中 Debug。
+
+  - 编辑器设置断点比较方便，编辑器文件中的跳转、搜索等也能使用。
+
+- Vscode 中 Debug 缺点
+  - 悬浮显示、api 计算值显示等没有 Chrome 开发者工具中 Debug 方便
+  - 悬浮对象上显示的属性，不管是否原型属性，颜色都一样，不像 Chrome 原型上的属性颜色会有区别，方便识别。
+
+> **【实践】**
+
+- Vscode 和 Chrome 配合使用
+  - Vscode 来设置断点
+  - 查看简单对象时，Vscode 看，查看复杂对象时，Chrome 看。
 
 # 使用
 

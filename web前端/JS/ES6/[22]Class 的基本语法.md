@@ -1166,3 +1166,29 @@ var y = new Rectangle(3, 4); // 正确
 ```
 
 上面代码中，`Shape`类不能被实例化，只能用于继承。
+
+# Tips
+
+## （1）私有属性的使用
+
+```tsx
+class GlobalBasicAPI {
+  private #serverTime: number | null;
+
+  private constructor() {
+    this.#serverTime = null;
+  }
+
+  // 设置服务器系统时间
+  setserverTime(latestTime: number) {
+    this.#serverTime = latestTime;
+  }
+
+  // 获取服务器系统时间
+  getserverTime(): Promise<string | null> {
+    return new Promise<string | null>((resolve, reject) => {
+      resolve(this.#serverTime);
+    });
+  }
+}
+```

@@ -297,9 +297,8 @@ let unknown = getProperty(person, "unknown"); // error, 'unknown' is not in 'nam
 ```
 
 ### 索引类型和字符串索引签名
-> **keyof操作符会将一个对象类型(注意这里是类型并不是值)的key组成联合类型返回。**
 
-
+> **keyof 操作符会将一个对象类型(注意这里是类型并不是值)的 key 组成联合类型返回。**
 
 `keyof` 和 `T[K]` 与字符串索引签名进行交互。 如果你有一个带有字符串索引签名的类型，那么 `keyof T` 会是 string。 并且 `T[string]` 为索引签名的类型：
 
@@ -312,6 +311,7 @@ let value: Map<number>["foo"]; // number
 ```
 
 > **实例：**
+
 ```jsx
 export interface IFilterArgs {
   bugTypes?: IOption[]
@@ -433,6 +433,7 @@ interface Person {
 ```
 
 #### Partial：属性可选
+
 ```ts
 /**
  * Make all properties in T optional：将T中的所有属性设为可选
@@ -441,15 +442,14 @@ type Partial<T> = {
   [P in keyof T]?: T[P];
 };
 ```
-可以看出 TS 源码中这样定义 Partial ：它接受传入的一个泛型类型 T ，==使用 in 关键字遍历传入的 T 类型==，重新定义了一个相同的类型，不过新的类型所有的 key 变成了可选类型。
 
+可以看出 TS 源码中这样定义 Partial ：它接受传入的一个泛型类型 T ，==使用 in 关键字遍历传入的 T 类型==，重新定义了一个相同的类型，不过新的类型所有的 key 变成了可选类型。
 
 ```ts
 // 使用如下：
 type PersonPartial = Partial<Person>;
 // PersonPartial === { name?: string; age?: number }
 ```
-
 
 需要==额外注意的是当使用 Partial 时仅仅会将第一层变为可选，当存在多层嵌套时并不会递归转化==。
 
@@ -470,14 +470,15 @@ type DeepPartial<T> = {
 type PartialPerson = DeepPartial<Person>;
 
 const person1: PartialPerson = {
-  name: '19Qingfeng',
+  name: "19Qingfeng",
   age: 24,
   detail: {
-    company: 'Tencent',
+    company: "Tencent",
     // 即使我们不输入school也无关紧要
   },
 };
 ```
+
 #### Required：属性必选
 
 ```ts
@@ -495,11 +496,9 @@ type RequiredPerson = Required<Person>;
 // RequiredPerson === { name: string; age: number }
 ```
 
-
-同样 Required 表示将传入的类型中的属性全部转为必选，它和 Parital 正好相反，同样不支持嵌套。它仅仅会将T的第一层属性转化为必填属性，对于嵌套属性它并不会处理。
+同样 Required 表示将传入的类型中的属性全部转为必选，它和 Parital 正好相反，同样不支持嵌套。它仅仅会将 T 的第一层属性转化为必填属性，对于嵌套属性它并不会处理。
 
 我在第一次接触到这个类型源码中的定义时也傻眼了，竟然还有 `-?` 这样的语法...没错，Required 中正是通过在属性名后使用 `-?` 定义属性为必填的。
-
 
 至于它仅会处理一层的问题，也同样可以使用递归的方式来处理：
 
@@ -543,13 +542,13 @@ type PickPerson = Pick<Person, "name">;
 // PickPerson === { name: string }
 ```
 
-#### Exclude：从联合类型 T 中排除可分配给U的那些类型
-> **用法含义**
-Exclude是进行排除联合类型T类型中满足 U 的类型从而返回新的类型，
-==**相对于下面的Omit操作符来说Omit是针对于key&value/接口形式的，而Exclude是针对于联合类型来操作的**==。
-Exclude 是从联合类型里面排除某一个或几个。
-Omit 是从对象属性里面排除某一个或几个属性。
+#### Exclude：从联合类型 T 中排除可分配给 U 的那些类型
 
+> **用法含义**
+> Exclude 是进行排除联合类型 T 类型中满足 U 的类型从而返回新的类型，
+> ==**相对于下面的 Omit 操作符来说 Omit 是针对于 key&value/接口形式的，而 Exclude 是针对于联合类型来操作的**==。
+> Exclude 是从联合类型里面排除某一个或几个。
+> Omit 是从对象属性里面排除某一个或几个属性。
 
 ```ts
 /**
@@ -566,7 +565,6 @@ let a: string | number;
 
 type CustomType = Exclude<typeof a, string>; // number类型
 ```
-
 
 **【分析过程】**
 
@@ -606,7 +604,8 @@ type D =
 - [TypeScript - 理清 Omit 与 Exclude 的关系与区别](https://juejin.cn/post/7091311285995831304)
 
 - [typescript 之 Exclude 和 Extract](https://juejin.cn/post/7086448143830614023#heading-3)
-#### Extract：从联合类型 T 中提取可分配给U的那些类型
+
+#### Extract：从联合类型 T 中提取可分配给 U 的那些类型
 
 ```ts
 /**
@@ -633,9 +632,8 @@ type OmitPerson = Omit<Person, "name">;
 ```
 
 #### `Record<Keys,Type>`: 构建一组具有相同类型的属性构成的类型
-> **用法含义**
-> `Record<Keys,Type>`用于构造一个新的对象类型，其属性键为Keys，属性值为Type。此实用程序可用于将一种类型的属性映射到另一种类型。
 
+> **用法含义** > `Record<Keys,Type>`用于构造一个新的对象类型，其属性键为 Keys，属性值为 Type。此实用程序可用于将一种类型的属性映射到另一种类型。
 
 ```ts
 /**
@@ -654,34 +652,37 @@ type Record<K extends keyof any, T> = {
 type RecordPerson = Record<"name" | "age", string>;
 // RecordPerson === { name: string; age: string }
 ```
+
 看看它的源码本质上很简单，就是==遍历传入的泛型 K 中每一个 key 值 P ，将每一个 P 作为 key 传入的 T 作为值类型重新组成一个对象类型==。
+
 > **实例**
 
 ```ts
-type keys = 'name' | 'title' | 'hello';
+type keys = "name" | "title" | "hello";
 
 interface values {
   name: string;
   label?: number;
 }
 
-// Record内置类型可以将 传入的keys联合类型遍历作为key 
+// Record内置类型可以将 传入的keys联合类型遍历作为key
 // 为每一个key的value赋值为 values从而形成一个全新的对象类型返回
 const b: Record<keys, values> = {
   name: {
-    name: 'wang',
+    name: "wang",
     label: 1,
   },
   title: {
-    name: 'hellp',
+    name: "hellp",
   },
   hello: {
-    name: 'nihao',
+    name: "nihao",
   },
 };
 ```
 
 同样我们常用 Record 类型在遍历上，比如：
+
 ```ts
 // Record 常用遍历对象返回新的类型时使用
 function mapping<K extends string | number | symbol, V, R>(
@@ -697,42 +698,86 @@ function mapping<K extends string | number | symbol, V, R>(
   return result;
 }
 
-mapping({ name: '19Qingfeng', company: 'Tencent' }, (key, value) => {
+mapping({ name: "19Qingfeng", company: "Tencent" }, (key, value) => {
   return key + value;
 });
 ```
 
-
 #### `Parameters<T>`
-> **用法含义**
-> `Parameters<T>`用于获得函数的参数类型组成的元组类型
 
-
+> **用法含义** > `Parameters<T>`用于获得函数的参数类型组成的元组类型
 
 ```ts
 // 源码
-type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any 
-  ? P : never;
+type Parameters<T extends (...args: any) => any> = T extends (
+  ...args: infer P
+) => any
+  ? P
+  : never;
 ```
 
 ```ts
 // 使用如下
-const fn = (a:string, b:number,...c: number[]) => {}
+const fn = (a: string, b: number, ...c: number[]) => {};
 
-type c = Parameters<typeof fn>
+type c = Parameters<typeof fn>;
 ```
 
 #### `ResultType`
-> **用法含义**
-> `ResultType<type>`接受传入一个函数类型为泛型，返回值为函数的返回类型。
+
+> **用法含义** > `ResultType<type>`接受传入一个函数类型为泛型，返回值为函数的返回类型。
 
 ```ts
-type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+type ReturnType<T extends (...args: any) => any> = T extends (
+  ...args: any
+) => infer R
+  ? R
+  : any;
 ```
 
 ReturnType 源码中的类型定义中使用到了 extends 和 infer 关键字。
 
 ==首先使用 extends 约束了传入的泛型类型 T 必须是一个函数，同时使用 infer 关键字推断函数的返回值，当然如果传入的泛型 T 不满足约束则会返回 any==。
+
+#### `ReturnType`
+
+**【描述】**
+
+在 `TypeScript` 中，`ReturnType` 工具类型**用于获取函数的返回值类型。它接受一个函数类型作为参数，并返回这个函数类型的返回值类型**。
+
+例如，假设有一个函数 `function add(a: number, b: number): number`，我们可以使用 ReturnType 工具类型来获取这个函数的返回值类型，如下所示：
+
+```ts
+type AddReturnType = ReturnType<typeof add>;
+```
+
+在这个例子中，`AddReturnType` 将会被推断为 number，因为这个函数 add 的返回值类型是 number。
+
+ReturnType 工具类型在很多情况下都非常有用，特别是在需要从函数类型中提取返回值类型时。通过使用 ReturnType 工具类型，可以让 TypeScript 在编译时捕获潜在的类型错误，增强代码的类型安全性。
+
+**【实例】**
+
+```ts
+// control-shapes-bar\src\projects\store\index.ts
+
+import { configureStore } from "@reduxjs/toolkit";
+import attrsReducer from "./Slice/attrs";
+
+export default function configureAppStore(preloadedState = {}) {
+  const store = configureStore({
+    reducer: {
+      attrs: attrsReducer,
+    },
+    preloadedState,
+  });
+  return store;
+}
+
+type storeType = ReturnType<typeof configureAppStore>;
+export type RootState = ReturnType<storeType["getState"]>;
+export type AppDispatch = storeType["dispatch"];
+```
+
 ### 条件类型
 
 ```ts
@@ -778,25 +823,27 @@ type T24 = InstanceType<Function>; // Error
 ### 可辨识联合
 
 ### declare
-为了增加人性化程度，在IDE编写代码的时候，通常会有智能提示效果。
 
-以VScode为例子，截图如下：
+为了增加人性化程度，在 IDE 编写代码的时候，通常会有智能提示效果。
+
+以 VScode 为例子，截图如下：
 
 ![](https://www.softwhy.com/data/attachment/portal/201905/01/001707lakag6mdsg5cj6bl.jpg)
 
-当键入document.的时候，会自动弹出可能的选项，这是VScode内置的功能。
+当键入 document.的时候，会自动弹出可能的选项，这是 VScode 内置的功能。
 
-但是当编写jQuery或者其他一些库的代码时候，则没有类似的提示，非常的不方便。
+但是当编写 jQuery 或者其他一些库的代码时候，则没有类似的提示，非常的不方便。
 
-不过可以自定义或者使用已经定义好的d.ts文件来解决此问题。
+不过可以自定义或者使用已经定义好的 d.ts 文件来解决此问题。
 
-**declare可以向TypeScript域中引入一个变量，在编写代码的时候就能够实现智能提示的功能**。
+**declare 可以向 TypeScript 域中引入一个变量，在编写代码的时候就能够实现智能提示的功能**。
 
 ![](https://www.softwhy.com/data/attachment/portal/201905/01/001810m7v3il4vlgl93l4s.jpg)
 
-当输入func会出现智能提示效果；通常代码不是直接写在当前ts文件，而是集中在.d.ts文件，然后引入。
+当输入 func 会出现智能提示效果；通常代码不是直接写在当前 ts 文件，而是集中在.d.ts 文件，然后引入。
+
 ## 参考资料
 
 - [[1]typescript 进阶篇之高级类型与条件类型(Readonly, Partial, Pick, Record)](https://www.cnblogs.com/Grewer/p/10973744.html)
 - [[2]几个 TypeScript 泛型的使用场景(深度 Partial)](https://segmentfault.com/a/1190000019758521)
-- [[3]TS 高级类型 declare用法](https://www.softwhy.com/article-10172-1.html)
+- [[3]TS 高级类型 declare 用法](https://www.softwhy.com/article-10172-1.html)

@@ -401,6 +401,49 @@ $$O(n^2)$$
 1<sup>2</sup><br>
 2<sub>2</sub>
 
+# SVG
+
+- MPE 可以直接预览 SVG 效果，使用 vscode 内置原生 preview 没法预览。
+
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+
+  <path d="M 10 10 H 90 V 90 H 10 L 10 10" />
+
+  <!-- Points -->
+  <circle cx="10" cy="10" r="2" fill="red"/>
+  <circle cx="90" cy="90" r="2" fill="red"/>
+  <circle cx="90" cy="10" r="2" fill="red"/>
+  <circle cx="10" cy="90" r="2" fill="red"/>
+
+</svg>
+
+# `LaTex` 公式
+
+$$
+f(x)=\begin{cases}
+    x, & x>0, \\
+    -x, & x\leq 0.
+\end{cases}
+$$
+
+$$
+\left(1+\dfrac{1}{n}\right)^n
+$$
+
+$$
+\begin{aligned}
+a & =b+c \\
+& =d+e
+\end{aligned}
+$$
+
+$$
+\begin{bmatrix}
+    a & b \\
+    c & d
+\end{bmatrix}
+$$
+
 # 其它
 
 - [Github 做图床](https://www.jianshu.com/p/d51258ef5484)
