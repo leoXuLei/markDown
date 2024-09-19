@@ -575,10 +575,11 @@ function handledDate(date) {
   const formatedDate = `${Y}/${formatNumsLessTen(M)}/${formatNumsLessTen(D)}`;
   const Hours = date.getHours();
   const Minutes = date.getMinutes();
+  const Seconds = date.getSeconds();
   // 格式化显示年月日 时分
   const formatedTime = `${formatedDate}${"  "}${formatNumsLessTen(
     Hours
-  )}:${formatNumsLessTen(Minutes)}`;
+  )}:${formatNumsLessTen(Minutes)}:${formatNumsLessTen(Seconds)}`;
   // return formatedDate;
   return formatedTime;
 }
