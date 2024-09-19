@@ -9,7 +9,25 @@ npm -v
 
 ```
 
-## process.env
+## process
+
+**【node 中的 process 是什么-GPT】**
+
+在 Node.js 中，process 是一个全局对象，提供与当前 Node.js 进程相关的信息和控制能力。
+
+process 对象具有许多属性和方法，以下是其中一些常用的功能：
+
+- process.argv：获取命令行参数，是一个包含命令行参数的数组。
+- process.env：获取当前进程的环境变量对象。
+- process.cwd()：返回当前工作目录的路径。
+- process.exit(code)：终止当前 Node.js 进程，并将指定的退出码传递给父进程。
+- process.pid：获取当前进程的 PID（进程标识符）。
+- process.platform：获取当前操作系统平台的字符串表示。
+- process.on(event, callback)：监听特定事件，如 exit、- uncaughtException 等。
+  通过使用 process 对象，您可以获取有关当前 Node.js 进程的信息，与环境交互，以及对进程进行控制。这使得您能够编写具有更高级别的进程管理和控制的应用程序。
+  `
+
+### `process.env`
 
 **【ask gpt】**
 
@@ -22,6 +40,71 @@ const { NODE_ENV } = process.env;
 A:
 
 这行代码是将 Node.js 进程环境变量 process.env 中的 NODE_ENV 属性解构出来，并将其赋值给常量 NODE_ENV。在 Node.js 中，process.env 对象包含了所有的进程环境变量，例如操作系统类型、当前用户、路径等信息。而 NODE_ENV 环境变量通常用于指定应用程序的运行环境，例如 "development"（开发环境）、"production"（生产环境）或者 "test"（测试环境）。在应用程序中，可以根据不同的 NODE_ENV 值来加载不同的配置文件、执行不同的逻辑等，以实现不同环境下的运行效果。
+
+
+### `process.arch` 和 `process.platform` 和 `os.arch`
+
+**【node 中 process.arch 和 process.platform 分别是什么-GPT】**
+
+在 Node.js 中，process.arch 和 process.platform 是两个全局变量，用于获取当前运行的操作系统和处理器架构信息。
+
+- 1. `process.arch`：该属性返回一个字符串，表示**当前正在运行的 Node.js 进程的处理器架构**。可能的取值包括："x64"、"arm"、"ia32"等。它反映了 Node.js 二进制文件编译时所使用的处理器架构。
+
+- 2. `process.platform`：该属性返回一个字符串，表示`当前正在运行的Node.js进程所在的操作系统平台`。可能的取值包括："win32"、"linux"、"darwin"等。它用于区分不同的操作系统平台。
+
+这些信息对于编写跨平台的 Node.js 应用程序或根据特定平台进行条件执行非常有用。通过检查这些属性，您可以根据当前的操作系统和处理器架构来执行相应的操作或处理逻辑。
+
+【nodejs 中文网】
+
+- `process.arch`: 为其编译 Node.js 二进制文件的操作系统 CPU 架构。 可能的值是： `'arm'、'arm64'、'ia32'、'mips'、'mipsel'、'ppc'、'ppc64'、's390'、's390x' 和 'x64'`。
+
+- `process.platform`：process.platform 属性返回用于标识编译 Node.js 二进制文件的操作系统平台的字符串。可能的值是：`'aix'、'darwin'、'freebsd'、'linux'、'openbsd'、'sunos'、'win32'`
+
+**【那 os.arch 又是什么】**
+
+os.arch 是 Node.js 中 os 模块提供的属性，用于获取当前操作系统的处理器架构信息。
+
+在使用 os.arch 时，它会返回一个字符串，**表示当前操作系统的处理器架构**。可能的取值包括："x64"、"arm"、"ia32"等。该值反映了当前操作系统的处理器架构，而不是 Node.js 二进制文件编译时所使用的处理器架构。
+
+与 process.arch 不同，os.arch 提供了关于当前操作系统的处理器架构的信息，而不仅限于 Node.js 进程本身的处理器架构。这对于需要根据操作系统的处理器架构执行特定操作或逻辑的应用程序非常有用。
+
+```node
+const os = require("os");
+
+// 获取当前操作系统的处理器架构
+const arch = os.arch();
+
+console.log("Current architecture:", arch);
+```
+
+【nodejs 中文网`os.arch()`】
+
+`os.arch()`：返回为其编译 Node.js 二进制文件的操作系统 CPU 架构。 可能的值为 `'arm'、'arm64'、'ia32'、'mips'、'mipsel'、'ppc'、'ppc64'、's390'、's390x'、以及 'x64'`。
+
+**返回值相当于 process.arch**。
+
+## `os`：操作系统
+
+### `os.hostname()`
+
+以字符串形式返回操作系统的主机名。例如：`xulei0001`。
+
+### `os.networkInterfaces()`
+
+返回包含已分配网络地址的网络接口的对象。
+返回对象上的每一个键都标识一个网络接口。关联的值是每个对象描述一个分配的网络地址的对象数组。
+
+### `os.release()`
+
+以字符串形式返回操作系统。例如：`10.0.16299`。
+
+### `os.type()`
+
+返回操作系统名称。例如：`Windows_NT`。
+
+### `os.version()`
+
+返回标识内核版本的字符串。例如：`Windows 10 Pro`
 
 ## nodejs 如何升级版本
 
@@ -325,6 +408,21 @@ tyarn start
 ## 6.后端本地联调时 ping 不通
 
 可能是防火墙未关闭
+
+## 7.报错`ERR_REQUIRE_ESM`
+
+ERR_REQUIRE_ESM 是 Node.js 中的一个错误类型，表示在 CommonJS 模块中尝试加载 ES6 模块。通常是由于模块系统类型不匹配或文件路径问题导致的。
+
+在 Node.js 中，有两种常见的模块系统：CommonJS 和 ES6。两者的区别在于模块定义和引入方式不同，在使用时需要注意兼容性。
+
+如果出现 ERR_REQUIRE_ESM 错误，建议检查以下几个方面：
+
+- 确认模块系统类型是否正确。如果当前模块使用 CommonJS 引入了一个 ES6 模块，则会出现这个错误。
+- 检查文件路径是否正确。请注意区分操作系统上的路径分隔符差异（Windows 上是 ""，Linux/Mac 上是 "/"）。
+- 确认所需模块已经安装并且可以正常引入。
+
+通过仔细排查以上问题，并结合具体情况进行调整，可以解决 ERR_REQUIRE_ESM 错误。
+
 
 # 实战
 
