@@ -1,0 +1,140 @@
+@prefixCls: ele-sign-modal;
+
+.@{prefixCls} {
+  .supcon2-modal-content {
+    > div {
+      background: #aaacb4;
+    }
+    .supcon2-modal-body {
+      z-index: 10;
+    }
+    .supcon2-modal-footer {
+      padding: 0;
+    }
+  }
+
+  // &-container {
+  // }
+
+  &-reason {
+    padding: 4px;
+    background: #edbc10;
+    border-radius: 4px;
+    font-size: 20px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.85);
+    line-height: 30px;
+  }
+
+  &-split {
+    width: 100%;
+    height: 1px;
+    margin: 16px 0 10px 0;
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  &-auth-box {
+    margin-bottom: -49px;
+    position: relative;
+    .supcon2-steps {
+      &-item {
+        &:last-child {
+          flex: 1;
+        }
+        .supcon2-steps-item-icon {
+          line-height: 26px;
+          border-width: 2.4px;
+        }
+        &-wait {
+          .supcon2-steps-item-icon {
+            background: #aaacb4;
+            .supcon2-steps-icon {
+              color: rgba(0, 0, 0, 0.45);
+            }
+          }
+        }
+        &-process {
+          .supcon2-steps-item-container
+            > .supcon2-steps-item-content
+            > .supcon2-steps-item-title::after {
+            background: #f0f0f2;
+          }
+        }
+      }
+
+      &-item-title::after {
+        height: 2.1px;
+      }
+    }
+  }
+
+  &-form-item {
+    width: 300px;
+    .supcon2-input-disabled {
+      color: rgba(0, 0, 0, 0.45);
+    }
+    &-disabled {
+      opacity: 0.5;
+    }
+    &-textarea {
+      textarea {
+        min-height: 60px;
+        max-height: 120px;
+        overflow-y: auto;
+      }
+    }
+    &-auth-title {
+      margin-bottom: 6px;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.45);
+    }
+    &-username {
+      padding-bottom: 10px;
+    }
+    // &-password {
+    //   // padding-bottom: 4px;
+    // }
+    &-footer-wrapper {
+      height: 48px;
+    }
+    &-footer {
+      position: absolute;
+      right: 30px;
+      bottom: 0;
+      text-align: right;
+      .supcon2-btn-primary {
+        margin-left: 10px;
+        background: #05115e;
+        &:disabled {
+          color: #fff;
+          border-color: #05115e;
+        }
+        &:hover {
+          background-color: #05115e;
+        }
+        &:not(:disabled):active {
+          background-color: #05115e;
+        }
+        &:not(:disabled):focus {
+          background-color: #05115e;
+        }
+      }
+      .supcon2-btn-default {
+        &:disabled {
+          color: rgba(0, 0, 0, 0.65);
+          background-color: #ffffff;
+        }
+      }
+    }
+  }
+
+  &-single-form-item-footer {
+    right: 0;
+  }
+
+  &-footer {
+    background: #9b9da6;
+    height: 40px;
+  }
+}
