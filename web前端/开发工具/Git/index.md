@@ -378,6 +378,7 @@ git remote set-url origin 远程仓库地址（SSH地址） # 也可以先删除
 # 工具
 
 - [vscode 代码管理菜单含义](https://segmentfault.com/q/1010000020782287)
+- [GitHub Insights Pro-专业的 GitHub 数据分析与可视化工具-查看个人活跃仓库贡献&coder排行榜&项目趋势榜](https://github-insights-pro.toolsnav.top/user/leoXuLei/)
 
 # 参考链接
 

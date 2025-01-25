@@ -137,6 +137,9 @@
 | `<font color=#008000 size=4 >color=#008000 size=4</font>` | <font color=#008000 size=4 >color=#008000 size=4</font> |
 | `<font color=#FF0000 size=4 >color=#FF0000 size=4</font>` | <font color=#FF0000 size=4 >color=#FF0000 size=4</font> |
 | `<font color=#429cc0 size=4 >color=#429cc0 size=4</font>` | <font color=#429cc0 size=4 >color=#429cc0 size=4</font> |
+| `<div style="color: #9966CC;font-weight:bold;font-size:16px">这是一段红色文本</div>` | <div style="color: #9966CC;font-weight:bold;font-size:16px">这是一段红色文本</div> |
+| `<div style="color:#F1A200;background-color:#9966CC;font-weight:bold">《Doind 进行中》</div>` | <div style="color:#F1A200;background-color:#9966CC;font-weight:bold">《Doind 进行中》</div> |
+
 
 - **字母高亮：**
 <pre>
@@ -300,6 +303,11 @@ function testFun() {
 
 :smile:
 :running:
+
+
+- 计划（理论、在文档上计划）：📝
+- 实际（实践、动手）：💪、👌
+- 比较、对战：🆚
 
 ### git 提交记录标识
 

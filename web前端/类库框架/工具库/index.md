@@ -587,3 +587,9 @@ A:
 - hsv（HSV 颜色表示），其中 h 表示色相，s 表示饱和度，v 表示亮度，a 表示不透明度。
 - oldHue（前一个色相值）。
 - source（当前颜色选择器的来源）。
+
+# 其它
+
+## `node-screenshots` 截图库
+
+[node-screenshots](https://github.com/nashaofu/node-screenshots/blob/master/README-zh_CN.md) 是一个基于XCap的原生的 node.js 截图库，支持 Mac、Windows 和 Linux 系统，且无需任何依赖。 支持截图与视频录制（待实现）。

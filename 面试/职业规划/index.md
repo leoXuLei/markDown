@@ -51,6 +51,18 @@ P10(研究员)
 
 [为何要做团队早会](https://baijiahao.baidu.com/s?id=1674901640505133985&wfr=spider&for=pc)
 
+# 工作实习
+- 刷题
+  - [掘金-面经、刷题](https://juejin.cn/backend)
+    - [我的阿里之路+Java面经考点](https://juejin.cn/post/6844903573747171336?searchId=202409262220066A389A8E2612C542CFFF)
+  - [牛客网-刷题](https://www.nowcoder.com/exam/intelligent?questionJobId=10&tagId=21002)
+  - [leetcode-算法刷题](https://leetcode.cn/problemset/)
+- 做项目练手
+  - [慕课网-后端开发课程](https://coding.imooc.com/?c=java&sort=1)
+- 简历投递
+  - 学校就业网站、企业宣讲会等。
+  - BOSS直聘
+  - [阮一峰-程序员招聘信息汇总](https://github.com/ruanyf/weekly/issues/5090)
 # 参考链接
 
 - [帆软前端篇：在大型项目中修炼内功，为极致地用户体验展开技术博弈](https://join.fanruan.com/story15)
