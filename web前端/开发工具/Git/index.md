@@ -384,3 +384,4 @@ git remote set-url origin 远程仓库地址（SSH地址） # 也可以先删除
 
 - [git 官网中文](https://git-scm.com/book/zh/v2)
 - [git 工作流程](https://www.ruanyifeng.com/blog/2015/12/git-workflow.html)
+- [图形化练习：SVN 交互式学习](https://learngitbranching.js.org/?NODEMO=1&DEMO=svn&locale=zh_CN)
